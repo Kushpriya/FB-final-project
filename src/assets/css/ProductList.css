@@ -1,0 +1,88 @@
+.product-list {
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.product-list h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.product-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-list th, .product-list td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-item.published {
+    background-color: #e8f5e9;
+}
+
+.product-item.draft {
+    background-color: #fff3e0;
+}
+
+.product-item.inactive {
+    background-color: #ffebee;
+}
+
+.product-item .action-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.product-item .icon {
+    cursor: pointer;
+    font-size: 18px;
+    margin: 0 5px;
+}
+
+.product-item .edit-icon:hover {
+    color: #4CAF50;
+}
+
+.product-item .delete-icon:hover {
+    color: #f44336;
+}
+
+
+.product-form {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.product-form div {
+    margin-bottom: 10px;
+}
+
+.product-form label {
+    margin-right: 10px;
+}
+
+.product-form input, .product-form select {
+    padding: 5px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.product-form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.product-form button:hover {
+    background-color: #45a049;
+}
