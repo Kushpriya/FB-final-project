@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { FaBars } from 'react-icons/fa'; // Import the hamburger icon
+import { FaBars, FaSearch, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import '../assets/css/Navbar.css';
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // State to manage menu toggle
-
-    const handleLoginLogout = () => {
-        setIsLoggedIn(!isLoggedIn);
-    };
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const toggleSearch = () => {
+        setIsSearchOpen(!isSearchOpen);
     };
 
     const handleOptionChange = (event) => {
@@ -21,73 +22,81 @@ const Navbar = () => {
         }
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-logo">
                 <a href="/"><img src="src/assets/Images/logo.png" alt="Logo" /></a>
-                <FaBars className="navbar-menu-icon" onClick={toggleMenu} /> {/* Hamburger icon */}
+                <FaBars className="navbar-menu-icon" onClick={toggleMenu} />
             </div>
             <ul className={`navbar-links ${isMenuOpen ? 'show' : ''}`}>
-                <li><a href="/dashboard">Dashboard</a></li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/dispatch">Product</option>
-                        <option value="/dispatch/view">View</option>
-                        <option value="/dispatch/create">Create</option>
+                    <select>
+                        <option>Product</option>
+                        <option>View</option>
+                        <option>Create</option>
                     </select>
                 </li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/orders">Orders</option>
-                        <option value="/orders/view">Load order</option>
-                        <option value="/orders/create">Delivery order</option>
-                        <option value="/orders/create">Transfer order</option>
-                        <option value="/orders/create">Extraction order</option>
+                    <select>
+                        <option>Orders</option>
+                        <option>Load</option>
+                        <option>Delivery</option>
+                        <option>Transfer</option>
+                        <option>Extraction</option>
                     </select>
                 </li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/customers">Customers</option>
-                        <option value="/customers/view">View</option>
-                        <option value="/customers/add">Add</option>
+                    <select>
+                        <option>Customers</option>
+                        <option>View</option>
+                        <option>Add</option>
                     </select>
                 </li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/operations">Solutions</option>
-                        <option value="/operations/view">View</option>
-                        <option value="/operations/manage">Manage</option>
+                    <select>
+                        <option>Solutions</option>
+                        <option>View</option>
+                        <option>Manage</option>
                     </select>
                 </li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/pricing">Pricing</option>
-                        <option value="/pricing/view">View</option>
-                        <option value="/pricing/update">Update</option>
+                    <select>
+                        <option>Dispatch</option>
+                        <option>View</option>
+                        <option>Update</option>
                     </select>
                 </li>
                 <li>
-                    <select onChange={handleOptionChange}>
-                        <option value="/reports">Products</option>
-                        <option value="/reports/view">View</option>
-                        <option value="/reports/generate">Generate</option>
+                    <select>
+                        <option>Pricing</option>
+                        <option>View</option>
+                        <option>Generate</option>
                     </select>
                 </li>
-                
-                {/* <li><a href="/tank-monitor">Tank Monitor</a></li> */}
             </ul>
-            <div className={`navbar-auth ${isMenuOpen ? 'show' : ''}`}>
-                {isLoggedIn ? (
-                    <>
-                        <a href="/profile">Profile</a>
-                        <a href="/" onClick={handleLoginLogout}>Logout</a>
-                    </>
-                ) : (
-                    <>
-                        <a href="/login" onClick={handleLoginLogout}>Login</a>
-                        <a href="/signup">Sign Up</a>
-                    </>
-                )}
+
+            <div className="navbar-search-container">
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Search or jump to..."
+                    className={`navbar-search-input ${isSearchOpen ? 'open' : ''}`}
+                />
+                <FaSearch className="navbar-search-icon" onClick={toggleSearch} />
+            </div>
+
+            <div className="navbar-auth">
+                <a href="/login">
+                    Sign In
+                </a>
+                <a href="/signup">
+                  Sign Up
+                </a>
             </div>
         </nav>
     );

@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 .navbar {
     display: flex;
@@ -27,20 +28,45 @@
     margin: 0 10px;
 }
 
-.navbar-links li a, .navbar-auth a, .navbar-links select {
-    color: #f5f3f3;
-    text-decoration: none;
-    background: none;
-    border: none;
+.navbar-links select {
+    font-size: 15px;
+    color: #fff; 
+    margin-left: 0; 
     padding: 5px;
-    border-radius: 3px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
 }
 
-.navbar-links select {
-    margin-left: 5px;
-    font-size: 15px;
-    color: #eaeaea;
-    /* background-color: #444; */
+.navbar-links select option {
+    background-color: #565656; 
+    color: #fff; 
+}
+
+.navbar-search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: auto; 
+}
+
+.navbar-search-input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    color: #333;
+    background-color: #fff;
+}
+
+.navbar-search-icon {
+    font-size: 18px;
+    color: #c7c5c5;
+    cursor: pointer;
+    position: absolute;
+    right: 10px; 
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .navbar-menu-icon {
@@ -49,6 +75,27 @@
     cursor: pointer;
 }
 
+.navbar-auth a {
+    color: #f5f3f3;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-auth a:hover {
+    background-color: #f5f3f3; 
+    color: #565656; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+    border: 1px solid #ccc; 
+}
+
+.auth-icon {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -81,6 +128,19 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    .navbar-search-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .navbar-search-input {
+        width: calc(100% - 40px); 
+    }
+
+    .navbar-search-icon {
+        right: 10px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -96,5 +156,13 @@
         margin: 10px 0;
         width: 100%;
         text-align: left;
+    }
+
+    .navbar-search-input {
+        width: calc(100% - 20px); 
+    }
+
+    .navbar-search-icon {
+        right: 10px;
     }
 }
