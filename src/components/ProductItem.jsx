@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import '../assets/css/ProductList.css'
 
 const ProductItem = ({ product, onEdit, onDelete }) => {
     return (

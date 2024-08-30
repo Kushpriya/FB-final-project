@@ -15,12 +15,12 @@ const Navbar = () => {
         setIsSearchOpen(!isSearchOpen);
     };
 
-    const handleOptionChange = (event) => {
-        const value = event.target.value;
-        if (value) {
-            window.location.href = value;
-        }
-    };
+    // const handleOptionChange = (event) => {
+    //     const value = event.target.value;
+    //     if (value) {
+    //         window.location.href = value;
+    //     }
+    // };
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -91,7 +91,7 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-auth">
-                <a href="/login">
+                <a href="/signin">
                     Sign In
                 </a>
                 <a href="/signup">

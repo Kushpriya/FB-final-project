@@ -1,88 +1,155 @@
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height to ensure the content fits */
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #1e1e1e; /* Dark background for content */
+}
+
+.navbar {
+    background-color: #333;
+    padding: 10px;
+    /* Additional styling for the navbar */
+}
+
 .product-list {
-    width: 80%;
-    margin: auto;
-    margin-top: 20px;
-    border-collapse: collapse;
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
 }
 
-.product-list h2 {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.product-list table {
+.product-table {
     width: 100%;
+    color: #fff;
+    background-color: #333;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.product-list th, .product-list td {
+.product-table th, .product-table td {
+    padding: 10px;
+    border: 1px solid #444;
+}
+
+.product-table th {
+    background-color: #222;
+}
+
+.product-item {
+    background-color: #1e1e1e;
+}
+
+
+.product-item {
+    color: #fff; /* Text color */
+    background-color: #222; /* Background color for rows */
+    border-bottom: 1px solid #333; /* Border between rows */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.product-item:hover {
+    background-color: #333; /* Highlight row on hover */
+}
+
+.product-item td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.product-item.published {
-    background-color: #e8f5e9;
-}
-
-.product-item.draft {
-    background-color: #fff3e0;
-}
-
-.product-item.inactive {
-    background-color: #ffebee;
 }
 
 .product-item .action-icons {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-.product-item .icon {
+.icon {
     cursor: pointer;
-    font-size: 18px;
-    margin: 0 5px;
+    font-size: 16px;
+    transition: color 0.3s;
 }
 
-.product-item .edit-icon:hover {
-    color: #4CAF50;
+.edit-icon {
+    color: #4caf50; /* Green for edit icon */
 }
 
-.product-item .delete-icon:hover {
-    color: #f44336;
+.edit-icon:hover {
+    color: #66bb6a; /* Lighter green on hover */
+}
+
+.delete-icon {
+    color: #f44336; /* Red for delete icon */
+}
+
+.delete-icon:hover {
+    color: #ef5350; /* Lighter red on hover */
 }
 
 
 .product-form {
-    margin: 20px 0;
+    background-color: #333; /* Dark background */
+    color: #fff; /* Light text color */
     padding: 20px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .product-form div {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .product-form label {
-    margin-right: 10px;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.product-form input, .product-form select {
-    padding: 5px;
+.product-form input,
+.product-form select {
     width: 100%;
-    max-width: 300px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #222;
+    color: #fff;
+}
+
+.product-form input:focus,
+.product-form select:focus {
+    border-color: #555;
+    outline: none;
 }
 
 .product-form button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #6a6c6a; /* Green button */
+    color: #fff;
     border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 .product-form button:hover {
-    background-color: #45a049;
+    background-color: #434443; /* Darker green on hover */
+}
+
+.product-form .form-group {
+    margin-bottom: 15px;
+}
+
+.product-form .form-group label {
+    font-size: 16px;
+}
+
+.product-form .form-group input,
+.product-form .form-group select {
+    font-size: 14px;
 }
