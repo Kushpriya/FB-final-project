@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../assets/css/Dashboard.css';
-import { FaBars, FaTachometerAlt, FaUser, FaCog, FaSignOutAlt, FaBox, FaList, FaUsers } from 'react-icons/fa';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import Slider from '../components/Slider';
 
 const data = [
   { name: 'Jan', value: 1000 },
@@ -20,83 +19,11 @@ const data = [
 ];
 
 function Dashboard() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const navigate = useNavigate();
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-  const handleSelectChange = (event) => {
-    const value = event.target.value;
-    switch (value) {
-      case 'ProductList':
-        navigate('/products');
-        break;
-      default:
-        break;
-    }
-  };
-
 
   return (
-    <div className={`dashboard-container ${isSidebarOpen ? '' : 'sidebar-closed'}`}>
-      <div className={`sidebar ${isSidebarOpen ? '' : 'closed'}`}>
-        <button className="sidebar-toggle" onClick={toggleSidebar}>
-          <FaBars />
-        </button>
-        <ul>
-          <li>
-            <FaTachometerAlt className="sidebar-icon" />
-            {isSidebarOpen && <span>Dashboard</span>}
-          </li>
-          <li>
-            <FaUser className="sidebar-icon" />
-            {isSidebarOpen && <span>Profile</span>}
-          </li>
-          <li className="settings-title">
-            <FaCog className="sidebar-icon" />
-            {isSidebarOpen && <span>Settings</span>}
-
-          </li>
-          <li>
-            <FaBox className="sidebar-icon" />
-            <select className={`dropdown ${isSidebarOpen ? '' : 'hidden'}`} onChange={handleSelectChange}>
-              <option value="">Product</option>
-              <option value="ProductList">Product List</option>
-              {/* <option>Create</option> */}
-            </select>
-          </li>
-          <li>
-            <FaList className="sidebar-icon" />
-            <select className={`dropdown ${isSidebarOpen ? '' : 'hidden'}`} onChange={handleSelectChange}>
-              <option>Orders</option>
-              <option>Load</option>
-              <option>Delivery</option>
-              <option>Transfer</option>
-              <option>Extraction</option>
-            </select>
-          </li>
-          <li>
-            <FaUsers className="sidebar-icon" />
-            <select className={`dropdown ${isSidebarOpen ? '' : 'hidden'}`} onChange={handleSelectChange}>
-              <option>Customers</option>
-              <option>List</option>
-              <option>Add</option>
-            </select>
-          </li>
-          <li className="logout">
-            <FaSignOutAlt className="sidebar-icon" />
-            {isSidebarOpen && <span>Logout</span>}
-          </li>
-        </ul>
-      </div>
-      <div className={`main-content ${isSidebarOpen ? '' : 'shifted'}`}>
-        <div className="navbar">
-          <div className="navbar-icon">🔍</div>
-          <div className="navbar-icon">🔔</div>
-          <div className="navbar-icon">👤</div>
-        </div>
         <div className="dashboard">
+    <Slider />
+
           <h2 className="dashboard-title">Analytics Dashboard</h2>
           <div className="dashboard-cards">
             <div className="card">
@@ -133,8 +60,6 @@ function Dashboard() {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
-    </div>
   );
 }
 

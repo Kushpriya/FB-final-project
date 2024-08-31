@@ -1,101 +1,93 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e; /* Dark background color */
-    margin: 0;
-    padding: 0;
-  }
-  
-  .pricing-container {
-    max-width: 900px;
-    margin: 50px auto;
-    background: #2e2e2e; /* Dark background color for container */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Slightly more intense shadow */
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-  }
-  
-  .tabs span {
-    cursor: pointer;
-    color: #ccc; /* Lighter text color for dark theme */
-    padding: 10px;
-  }
-  
-  .tabs .active {
-    color: #fff; /* Active tab color */
-    border-bottom: 2px solid #ff4500; /* Highlight color */
-  }
-  
-  .plans {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
+
+.pricing-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+}
+
+.plans {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin: 80px auto;
+}
+
+.plan-card {
+  background-color: #2b2b2b;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  max-width: 300px; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  text-align: center;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+.popular-badge {
+  color: #000000;
+  padding: 5px 10px;
+  border-radius: 50px;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+}
+
+.plan-card h3 {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.plan-card h1 {
+  font-size: 2.5rem;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.plan-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.plan-card ul li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #cccccc;
+}
+
+.plan-card button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.plan-card button:hover {
+  background-color: #0056b3;
+}
+
+.plan-card.popular {
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
   .plan-card {
-    background: #3e3e3e; /* Dark background color for cards */
-    padding: 20px;
-    border-radius: 8px;
-    width: 30%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Slightly more intense shadow */
-    text-align: center;
-    position: relative;
+    max-width: 100%;
   }
-  
-  .plan-card h3 {
-    margin: 10px 0;
-    color: #fff; /* Light text color for dark theme */
-  }
-  
-  .plan-card h1 {
-    font-size: 24px;
-    margin: 10px 0;
-    color: #ff4500; /* Accent color */
-  }
-  
-  .plan-card button {
-    background-color: #ff4500; /* Button background color */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease; /* Smooth transition */
-  }
-  
-  .plan-card button:hover {
-    background-color: #e03e00; /* Darker shade on hover */
-  }
-  
-  .plan-card ul {
-    list-style: none;
-    padding: 0;
-    color: #ccc; /* Lighter text color for dark theme */
-  }
-  
-  .plan-card ul li {
-    margin: 5px 0;
-  }
-  
-  .popular-badge {
-    background-color: #ff4500;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12px;
-  }
-  
-  .plan-card.popular {
-    border: 2px solid #ff4500; /* Accent border for popular plan */
-  }
-  
+}

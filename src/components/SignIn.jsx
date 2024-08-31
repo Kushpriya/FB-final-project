@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaLock, FaTimes, FaBuilding } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaBuilding } from 'react-icons/fa';
 import '../assets/css/SignIn.css';
 
-const Login = () => {
+const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [organization, setOrganization] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errors, setErrors] = useState({ email: '', password: '' });
 
-    const validateLogin = (event) => {
+    const validateSignIn = (event) => {
         event.preventDefault();
 
         const regxEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -30,16 +30,16 @@ const Login = () => {
         setErrors({ email: emailError, password: passwordError });
 
         if (isValid) {
-            handleLogin(email, password);
+            handleSignIn(email, password);
         }
     };
 
-    const handleLogin = (email, password) => {
+    const handleSignIn = (email, password) => {
         const storedEmail = localStorage.getItem('userEmail');
         const storedPassword = localStorage.getItem('userPassword');
 
         if (email === storedEmail && password === storedPassword) {
-            alert('Login successful!');
+            alert('SignIn successful!');
             window.location.href = '/'; 
         } else {
             alert('Incorrect Email or Password');
@@ -51,41 +51,44 @@ const Login = () => {
     };
 
     return (
-        <div className="login-wrapper">
-            <div className="form-box login active">
-                <h2>Login</h2>
-                <form id="login-form" onSubmit={validateLogin}>
-                    <div className="input-box">
-                        <span className="icon"><FaEnvelope /></span>
+        <div className="signin-wrapper">
+            <div className="signin-logo-container">
+                <img src="/src/assets/Images/signup.png" alt="Logo" className="signin-logo" /> {/* Adjust the path to your logo */}
+            </div>
+            <div className="signin-form-box">
+                <h2>SignIn</h2>
+                <form id="signin-form" onSubmit={validateSignIn}>
+                    <div className="signin-input-box">
+                        <span className="signin-icon"><FaEnvelope /></span>
                         <input
                             type="email"
-                            id="login-email"
+                            id="signin-email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        <label htmlFor="login-email">Email</label>
-                        {errors.email && <div className="error-message">{errors.email}</div>}
+                        <label htmlFor="signin-email">Email</label>
+                        {errors.email && <div className="signin-error-message">{errors.email}</div>}
                     </div>
-                    <div className="input-box">
-                        <span className="icon">< FaLock /></span>
+                    <div className="signin-input-box">
+                        <span className="signin-icon">< FaLock /></span>
                         <input
                             type={isPasswordVisible ? 'text' : 'password'}
-                            id="login-password"
+                            id="signin-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <span className="eye-icon" onClick={togglePasswordVisibility}>
+                        <span className="signin-eye-icon" onClick={togglePasswordVisibility}>
                             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
                         </span>
-                        <label htmlFor="login-password">Password</label>
-                        {errors.password && <div className="error-message">{errors.password}</div>}
+                        <label htmlFor="signin-password">Password</label>
+                        {errors.password && <div className="signin-error-message">{errors.password}</div>}
                     </div>
-                    <div className="input-box">
-                        <span className="icon"><FaBuilding /></span>
+                    <div className="signin-input-box">
+                        <span className="signin-icon"><FaBuilding /></span>
                         <select
-                            id="signup-organization"
+                            id="signin-organization"
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                             required
@@ -98,15 +101,15 @@ const Login = () => {
                         </select>
                     </div>
 
-                    <div className="remember-forgot">
+                    <div className="signin-remember-forgot">
                         <label>
                             <input type="checkbox" /> Remember me
                         </label>
                         <a href="/forgot-password">Forgot Password?</a>
                     </div>
-                    <button type="submit" className="btn">Login</button>
-                    <div className="login-register">
-                        <p>Don't have an account? <a href="/signup" className="toggle-form">Sign up</a></p>
+                    <button type="submit" className="signin-btn">SignIn</button>
+                    <div className="signin-register">
+                        <p>Don't have an account? <a href="/signup" className="signin-toggle-form">Sign up</a></p>
                     </div>
                 </form>
             </div>
@@ -114,4 +117,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignIn;

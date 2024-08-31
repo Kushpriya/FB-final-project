@@ -1,77 +1,153 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/ProductList.css';
 
+const categories = [
+    'Electronics',
+    'Furniture',
+    'Clothing',
+    'Books',
+    'Toys',
+    'Sports',
+    'Others'
+];
+
 const ProductForm = ({ addProduct, product }) => {
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [status, setStatus] = useState('Published');
-    const [totalSales, setTotalSales] = useState(0);
-    const [totalRevenue, setTotalRevenue] = useState('');
-    const [createdAt, setCreatedAt] = useState(new Date().toLocaleString());
+    const [formState, setFormState] = useState({
+        name: '',
+        price: '',
+        status: 'Available',
+        totalSales: '',
+        category: '',
+        createdAt: '' // This will be updated automatically
+    });
 
     useEffect(() => {
         if (product) {
-            setName(product.name);
-            setPrice(product.price);
-            setStatus(product.status);
-            setTotalSales(product.totalSales);
-            setTotalRevenue(product.totalRevenue);
-            setCreatedAt(product.createdAt);
+            setFormState({
+                name: product.name || '',
+                price: product.price || '',
+                status: product.status || 'Available',
+                totalSales: product.totalSales || '',
+                category: product.category || '',
+                createdAt: product.createdAt || new Date().toISOString().slice(0, 10) // Default to current date
+            });
+        } else {
+            setFormState(prevState => ({
+                ...prevState,
+                createdAt: new Date().toISOString().slice(0, 10) // Set current date
+            }));
         }
     }, [product]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newProduct = {
-            id: product?.id || Date.now(),
-            name,
-            price,
-            status,
-            totalSales,
-            totalRevenue,
-            createdAt,
-        };
-        addProduct(newProduct);
-        clearForm();
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormState(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
-    const clearForm = () => {
-        setName('');
-        setPrice('');
-        setStatus('Published');
-        setTotalSales(0);
-        setTotalRevenue('');
-        setCreatedAt(new Date().toLocaleString());
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const { name, price, status, totalSales, category, createdAt } = formState;
+        if (name && price && status && totalSales && category) {
+            addProduct({ ...formState, createdAt }); // Include createdAt in the form data
+            setFormState({
+                name: '',
+                price: '',
+                status: 'Available',
+                totalSales: '',
+                category: '',
+                createdAt: new Date().toISOString().slice(0, 10) // Reset createdAt to current date
+            });
+        } else {
+            alert('Please fill out all fields.');
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="product-form">
-            <div>
-                <label>Product Name:</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-            <div>
-                <label>Price:</label>
-                <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} required />
-            </div>
-            <div>
-                <label>Status:</label>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} required>
-                    <option value="Published">Published</option>
-                    <option value="Draft">Draft</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-            </div>
-            <div>
-                <label>Total Sales:</label>
-                <input type="number" value={totalSales} onChange={(e) => setTotalSales(e.target.value)} required />
-            </div>
-            <div>
-                <label>Total Revenue:</label>
-                <input type="text" value={totalRevenue} onChange={(e) => setTotalRevenue(e.target.value)} required />
-            </div>
-            <button type="submit">{product ? "Update Product" : "Add Product"}</button>
-        </form>
+        <div className="product-form-container">
+            <h2>{product ? 'Edit Product' : 'Add Product'}</h2>
+            <form className="product-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="name">Product Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter product name"
+                        value={formState.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="price">Price</label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        placeholder="Enter price"
+                        value={formState.price}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="status">Status</label>
+                    <select
+                        id="status"
+                        name="status"
+                        value={formState.status}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="Available">Available</option>
+                        <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="totalSales">Total Sales</label>
+                    <input
+                        type="number"
+                        id="totalSales"
+                        name="totalSales"
+                        placeholder="Enter total sales"
+                        value={formState.totalSales}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="category">Category</label>
+                    <select
+                        id="category"
+                        name="category"
+                        value={formState.category}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select Category</option>
+                        {categories.map((cat) => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
+                </div>
+                {/* <div className="form-group">
+                    <label htmlFor="createdAt">Created At</label>
+                    <input
+                        type="date"
+                        id="createdAt"
+                        name="createdAt"
+                        value={formState.createdAt}
+                        readOnly
+                    /> */}
+                {/* </div> */}
+                <button type="submit" className="submit-button">
+                    {product ? 'Update Product' : 'Add Product'}
+                </button>
+            </form>
+        </div>
     );
 };
 

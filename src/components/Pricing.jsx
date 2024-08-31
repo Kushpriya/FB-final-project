@@ -1,10 +1,9 @@
 import React from "react";
-import "../assets/css/Pricing.css"; // Include your custom CSS here
-import Navbar from "./Navbar"; // Ensure you have a Navbar component
+import "../assets/css/Pricing.css"; 
+import Navbar from "../components/Navbar"; 
 
 const PlanCard = ({ title, price, features, buttonText, popular }) => (
   <div className={`plan-card ${popular ? "popular" : ""}`}>
-    {popular && <div className="popular-badge">MOST POPULAR</div>}
     <h3>{title}</h3>
     <h1>{price}</h1>
     <button>{buttonText}</button>
@@ -20,14 +19,6 @@ function Pricing() {
   return (
     <div className="pricing-container">
       <Navbar />
-      <div className="tabs">
-        <span>General settings</span>
-        <span>Apps</span>
-        <span>Notification</span>
-        <span className="active">Plan</span>
-        <span>Security</span>
-      </div>
-
       <div className="plans">
         <PlanCard
           title="Business"

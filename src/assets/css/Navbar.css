@@ -3,12 +3,13 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #565656;
+    background-color: #333;
     color: #fff;
     font-family: Arial, sans-serif;
 }
@@ -39,7 +40,7 @@
 }
 
 .navbar-links select option {
-    background-color: #565656; 
+    background-color: #333; 
     color: #fff; 
 }
 
@@ -61,7 +62,7 @@
 
 .navbar-search-icon {
     font-size: 18px;
-    color: #c7c5c5;
+    color: #939393;
     cursor: pointer;
     position: absolute;
     right: 10px; 
@@ -92,10 +93,9 @@
 }
 
 .auth-icon {
-    margin-right: 5px; /* Space between icon and text */
+    margin-right: 5px; 
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;

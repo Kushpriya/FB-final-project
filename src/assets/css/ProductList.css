@@ -1,25 +1,22 @@
 .product-list-container {
+
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Full height to ensure the content fits */
+    height: 100vh; 
+    background-color: #333;
 }
 
 .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: #1e1e1e; /* Dark background for content */
+    margin: 0;
+    background-color: #f44336;
+    /* flex-grow: 1; */
+    /* padding: 20px; */
 }
 
-.navbar {
-    background-color: #333;
-    padding: 10px;
-    /* Additional styling for the navbar */
-}
 
 .product-list {
-    background-color: #222;
     color: #fff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
 }
 
@@ -46,14 +43,14 @@
 
 
 .product-item {
-    color: #fff; /* Text color */
-    background-color: #222; /* Background color for rows */
-    border-bottom: 1px solid #333; /* Border between rows */
+    color: #fff; 
+    background-color: #222; 
+    border-bottom: 1px solid #333; 
     transition: background-color 0.3s, color 0.3s;
 }
 
 .product-item:hover {
-    background-color: #333; /* Highlight row on hover */
+    background-color: #333; 
 }
 
 .product-item td {
