@@ -3,7 +3,7 @@ import ProductItem from '../components/ProductItem';
 import ProductForm from '../components/ProductForm';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
 import '../assets/css/ProductList.css';
-import Navbar from '../components/Navbar';
+import Slider from '../components/Slider';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -49,8 +49,10 @@ const ProductList = () => {
     );
 
     return (
+        <>
+        <Slider/>
+
         <div className="product-list-container">
-            <Navbar />
             <div className="main-content">
                 <div className="header">
                     <h2>Products</h2>
@@ -106,6 +108,7 @@ const ProductList = () => {
                 )}
             </div>
         </div>
+        </>
     );
 };
 

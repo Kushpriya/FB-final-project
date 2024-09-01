@@ -21,10 +21,12 @@ const data = [
 function Dashboard() {
 
   return (
-        <div className="dashboard">
+    <>
     <Slider />
 
-          <h2 className="dashboard-title">Analytics Dashboard</h2>
+        <div className="dashboard">
+
+          <h2 className="dashboard-title">Dashboard</h2>
           <div className="dashboard-cards">
             <div className="card">
               <h3>Sales</h3>
@@ -60,6 +62,7 @@ function Dashboard() {
             </ResponsiveContainer>
           </div>
         </div>
+        </>
   );
 }
 

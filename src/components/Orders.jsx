@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
-import "../assets/css/Order.css"; 
+import "../assets/css/Order.css";
+import Slider from '../components/Slider'; 
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -125,7 +126,10 @@ function Orders() {
   ).length;
 
   return (
+    <>
+    <Slider />
     <div className="orders-container">
+
       <div className="header">
         <h2>Orders</h2>
         <div className="search-container">
@@ -298,6 +302,7 @@ function Orders() {
         </table>
       )}
     </div>
+    </>
   );
 }
 

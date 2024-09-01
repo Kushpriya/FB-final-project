@@ -21,7 +21,7 @@ function App() {
           <Route path="/slider" element={<Slider />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/products" element={<ProductList />} />
+          <Route path="/productlist" element={<ProductList />} />
         </Routes>
       </div>
     </Router>

@@ -40,7 +40,7 @@ const SignIn = () => {
 
         if (email === storedEmail && password === storedPassword) {
             alert('SignIn successful!');
-            window.location.href = '/'; 
+            window.location.href = '/slider'; 
         } else {
             alert('Incorrect Email or Password');
         }
