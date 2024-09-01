@@ -1,0 +1,148 @@
+.orders-container {
+    width: 90%;
+    /* margin: 20px auto; */
+    /* padding: 20px; */
+    margin-left: 130px ;
+    /* color: #f5f5f5; */
+    border-radius: 8px;
+    /* transition: margin-left 0.3s ease; */
+  }
+  
+  .orders-container.shifted {
+    margin-left: 70px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .header input {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #2e2e2e;
+    color: #f5f5f5;
+  }
+  
+  .header button {
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    background-color: #3b3c3c;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .header button:hover {
+    background-color: #0f1010;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .stats div {
+    padding: 10px 15px;
+    background-color: #343a40;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #f5f5f5;
+  }
+  
+  .order-table {
+    width: 100%;
+    /* border-collapse: collapse; */
+    margin-top: 20px;
+    background-color: #2c2c2c;
+    border-radius: 8px;
+  }
+  
+  .order-table th,
+  .order-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border: 2px solid #555;
+    /* border-bottom: 1px solid #555; */
+  }
+  
+  .order-table th {
+    background-color: #3b3c3c;
+    color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  .order-table tr:hover {
+    background-color: #3c3c3c;
+  }
+  
+  .order-table .icon {
+    cursor: pointer;
+    /* color: #1f8efa; */
+    margin-right: 8px;
+  }
+  
+  .order-table .icon:hover {
+    color: #0f1010;
+  }
+  
+  .no-orders {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    /* padding: 12px 0px; */
+
+    gap: 8px;
+    margin-top: 20px auto;
+    
+    /* justify-content: center; */
+}
+
+.status-indicator-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-pending .status-indicator-dot {
+    background-color: orange;
+}
+
+.status-delivered .status-indicator-dot {
+    background-color: green;
+}
+
+.status-cancelled .status-indicator-dot {
+    background-color: red;
+}
+
+/* .icon {
+    cursor: pointer;
+    margin: 0 5px;
+} */
+
+.edit-icon {
+    color: #007bff;
+}
+
+.delete-icon {
+    color: #dc3545;
+}

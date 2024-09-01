@@ -24,16 +24,14 @@ body.light-mode {
     height: 100vh;
     background-color: #2d2d3f;
     /* color: #ecf0f1; */
-    transition: all 0.3s;
-    overflow: hidden;
+    /* overflow: hidden; */
     transition: all 0.3s;
     /* transform: translateX(0);  */
     z-index: 1000;
 }
 
 .sidebar-container.closed {
-    width: 70px;
-    /* transform: translateX(-10px);  */
+    width: 80px;
 }
 
 .sidebar-toggle {
@@ -107,7 +105,7 @@ body.light-mode {
 }
 
 .sidebar-logout:hover {
-    background-color: #0f9e3a;
+    background-color: #7d2c1e;
 }
 
 .sidebar-logout .sidebar-icon {
@@ -117,7 +115,7 @@ body.light-mode {
 .main-content {
     margin-left: 250px;
     padding: 20px;
-
+    transition: margin-left 0.3s ease;
 }
 
 .main-content.shifted {
