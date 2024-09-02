@@ -4,12 +4,14 @@ import Navbar from './components/Navbar';
 import Pricing from './components/Pricing';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import ProductList from './components/ProductList';
 import Slider from './components/Slider';
 import Dashboard from './components/Dashboard';
 import Orders from './components/orders/Orders';
 import OrderForm from './components/orders/OrderForm';
 import OrderList from './components/orders/OrderList';
+import Products from './components/products/Products';
+import ProductList from './components/products/ProductList';
+import ProductAdd from './components/products/ProductAdd';
 
 function App() {
   return (
@@ -28,7 +30,11 @@ function App() {
             <Route path="orderlist" element={<OrderList />} />
           </Route>
           
-          <Route path="/productlist" element={<ProductList />} />
+          <Route path="/products" element={<Products />}>
+            <Route path="productadd" element={<ProductAdd />} />
+            <Route path="productlist" element={<ProductList />} />
+          </Route>
+          
         </Routes>
       </div>
     </Router>

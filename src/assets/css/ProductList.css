@@ -1,152 +1,119 @@
 .product-list-container {
-
-    display: flex;
-    flex-direction: column;
-    height: 100vh; 
-    background-color: #333;
-}
-
-.main-content {
-    margin: 0;
-    background-color: #333;
-    /* flex-grow: 1; */
-    /* padding: 20px; */
-}
-
-
-.product-list {
-    color: #fff;
-    padding: 10px;
+    padding: 20px;
+    background-color: #1e1e1e;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+}
+
+.product-list-container .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .product-table {
     width: 100%;
-    color: #fff;
-    background-color: #333;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-.product-table th, .product-table td {
-    padding: 10px;
-    border: 1px solid #444;
-}
-
 .product-table th {
-    background-color: #222;
-}
-
-.product-item {
-    background-color: #1e1e1e;
-}
-
-
-.product-item {
-    color: #fff; 
-    background-color: #222; 
-    border-bottom: 1px solid #333; 
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.product-item:hover {
-    background-color: #333; 
-}
-
-.product-item td {
+    background-color: #2e2e2e;
+    color: #ffffff;
     padding: 10px;
     text-align: left;
+    border-bottom: 2px solid #444;
 }
 
-.product-item .action-icons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.icon {
-    cursor: pointer;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-.edit-icon {
-    color: #4caf50; /* Green for edit icon */
-}
-
-.edit-icon:hover {
-    color: #66bb6a; /* Lighter green on hover */
-}
-
-.delete-icon {
-    color: #f44336; /* Red for delete icon */
-}
-
-.delete-icon:hover {
-    color: #ef5350; /* Lighter red on hover */
-}
-
-
-.product-form {
-    background-color: #333; /* Dark background */
-    color: #fff; /* Light text color */
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    margin: 0 auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.product-form div {
-    margin-bottom: 15px;
-}
-
-.product-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.product-form input,
-.product-form select {
-    width: 100%;
+.product-table td {
     padding: 10px;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background-color: #222;
-    color: #fff;
+    border-bottom: 1px solid #444;
 }
 
-.product-form input:focus,
-.product-form select:focus {
-    border-color: #555;
-    outline: none;
+.product-table tr:nth-child(even) {
+    background-color: #282828;
 }
 
-.product-form button {
-    background-color: #6a6c6a; /* Green button */
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+.product-table tr:hover {
+    background-color: #333333;
 }
 
-.product-form button:hover {
-    background-color: #434443; /* Darker green on hover */
-}
-
-.product-form .form-group {
+.product-list-container .search-input {
+    padding: 10px;
     margin-bottom: 15px;
-}
-
-.product-form .form-group label {
-    font-size: 16px;
-}
-
-.product-form .form-group input,
-.product-form .form-group select {
+    width: 100%;
     font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background-color: #2e2e2e;
+    color: #ffffff;
+}
+
+.open-form-btn,
+.edit-btn,
+.delete-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.open-form-btn {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.open-form-btn:hover {
+    background-color: #218838;
+}
+
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.status-indicator.available {
+    background-color: #28a745; 
+}
+
+.status-indicator.outofstock {
+    background-color: #ffc107; 
+}
+
+.status-indicator.discontinued {
+    background-color: #dc3545; 
+}
+
+.edit-btn, .delete-btn {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.edit-btn {
+    color: #0086b3;
+}
+
+.edit-btn:hover {
+    color: #6dc4da;
+}
+
+.delete-btn {
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    color: #c82333;
 }
