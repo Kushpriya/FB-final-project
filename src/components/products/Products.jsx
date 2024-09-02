@@ -17,7 +17,6 @@ function Products() {
     price: "",
     dateAdded: "",
     totalValue: "",
-    supplier: "",
     status: "",
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -64,7 +63,6 @@ function Products() {
       newProduct.quantity > 0 &&
       newProduct.price > 0 &&
       newProduct.dateAdded &&
-      newProduct.supplier &&
       newProduct.status
     ) {
       if (isEditing) {
@@ -92,7 +90,6 @@ function Products() {
         price: "",
         dateAdded: "",
         totalValue: "",
-        supplier: "",
         status: "",
       });
       navigate('/products/productlist'); 

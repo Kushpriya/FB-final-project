@@ -1,11 +1,8 @@
 .orders-container {
     width: 90%;
-    /* margin: 20px auto; */
-    /* padding: 20px; */
+    margin: 20px auto;
     margin-left: 130px ;
-    /* color: #f5f5f5; */
     border-radius: 8px;
-    /* transition: margin-left 0.3s ease; */
   }
   
   .orders-container.shifted {
@@ -32,22 +29,12 @@
     background-color: #2e2e2e;
     color: #f5f5f5;
   }
-  
-  .header button {
-    padding: 8px 16px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: none;
-    background-color: #3b3c3c;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .header button:hover {
-    background-color: #0f1010;
-  }
-  
+    
+ 
+.create-btn:hover {
+    background-color: #218838;
+}
+
   .stats {
     display: flex;
     justify-content: space-between;
@@ -133,11 +120,6 @@
 .status-cancelled .status-indicator-dot {
     background-color: red;
 }
-
-/* .icon {
-    cursor: pointer;
-    margin: 0 5px;
-} */
 
 .edit-icon {
     color: #007bff;

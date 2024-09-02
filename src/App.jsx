@@ -22,14 +22,14 @@ function App() {
           <Route path="/pricing" element={<Pricing/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/slider" element={<Slider />} />
+          {/* <Route path="/slider" element={<Slider />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/orders" element={<Orders />}>
             <Route path="orderform" element={<OrderForm />} />
             <Route path="orderlist" element={<OrderList />} />
           </Route>
-          
+
           <Route path="/products" element={<Products />}>
             <Route path="productadd" element={<ProductAdd />} />
             <Route path="productlist" element={<ProductList />} />

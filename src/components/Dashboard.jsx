@@ -22,7 +22,7 @@ function Dashboard() {
 
   return (
     <>
-    <Slider />
+    {/* <Slider /> */}
 
         <div className="dashboard">
 

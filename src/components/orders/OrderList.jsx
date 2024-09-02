@@ -42,7 +42,9 @@ function OrderList({
               onChange={handleSearch}
             />
           </div>
-          <button onClick={handleOpenForm}>Create Order</button>
+          <button className="create-btn" onClick={handleOpenForm}>
+            Create Order
+            </button>
         </div>
 
         <div className="stats">

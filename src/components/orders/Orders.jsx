@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../assets/css/OrderForm.css';
 import '../../assets/css/OrderList.css';
-import Slider from '../../components/Slider';
 import OrderForm from './OrderForm';
 import OrderList from './OrderList';
 
@@ -111,7 +110,7 @@ function Orders() {
     setIsEditing(true);
     setEditingOrderId(order.id);
     setNewOrder(order);
-    navigate('/orders/orderform'); // Navigate to Order Form for editing
+    navigate('/orders/orderform'); 
   };
 
   const handleDelete = (orderId) => {
@@ -123,19 +122,18 @@ function Orders() {
 
   const handleOpenForm = () => {
     setFormVisible(true);
-    setShowCloseButton(true); // Show close button
-    navigate('/orders/orderform'); // Navigate to Order Form
+    setShowCloseButton(true); 
+    navigate('/orders/orderform'); 
   };
 
   const handleCloseForm = () => {
     setFormVisible(false);
-    setShowCloseButton(false); // Hide close button
-    navigate('/orders/orderlist'); // Navigate to Order List
+    setShowCloseButton(false); 
+    navigate('/orders/orderlist'); 
   };
 
   return (
     <>
-      <Slider />
       <div className="orders-container">
         <div className="orders-content">
           {location.pathname === '/orders/orderform' && (
@@ -145,7 +143,7 @@ function Orders() {
               handleSubmit={handleSubmit}
               isEditing={isEditing}
               handleCloseForm={handleCloseForm}
-              showCloseButton={showCloseButton} // Pass showCloseButton
+              showCloseButton={showCloseButton} 
             />
           )}
           {location.pathname === '/orders/orderlist' && (
@@ -159,7 +157,7 @@ function Orders() {
               pendingOrdersCount={orders.filter(order => order.status === 'Pending').length}
               cancelledOrdersCount={orders.filter(order => order.status === 'Cancelled').length}
               deliveredOrdersCount={orders.filter(order => order.status === 'Delivered').length}
-              handleOpenForm={handleOpenForm} // Pass handleOpenForm
+              handleOpenForm={handleOpenForm} 
             />
           )}
         </div>
