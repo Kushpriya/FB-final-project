@@ -113,16 +113,18 @@ function ProductForm({ isEditing, newProduct, handleInputChange, handleSubmit, h
                             required
                         />
                     </div>
-
+                    <div className='btn'>
                     <button type="submit" className="submit-btn">
                         {isEditing ? "Update Product" : "Add Product"}
                     </button>
 
-                </form>
-
-                {showCloseButton && (
+                    {showCloseButton && (
                     <button className="close-form-btn" onClick={handleCloseForm}>Close Form</button>
                 )}
+                </div>
+                </form>
+
+               
 
             </div>
         </>

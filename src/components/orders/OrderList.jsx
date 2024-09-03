@@ -16,18 +16,6 @@ function OrderList({
     handleOpenForm,
 }) {
 
-    const getStatusClass = (status) => {
-        switch (status) {
-            case 'Pending':
-                return 'status-pending';
-            case 'Delivered':
-                return 'status-delivered';
-            case 'Cancelled':
-                return 'status-cancelled';
-            default:
-                return '';
-        }
-    };
   return (
     <>
       <Slider />
@@ -90,10 +78,10 @@ function OrderList({
                   <td>{order.client}</td>
                   <td>{order.venue}</td>
                   <td>{order.courier}</td>
-                  <td className={`status-indicator ${getStatusClass(order.status)}`}>
-                                        <span className="status-indicator-dot"></span>
-                                        {order.status}
-                                    </td>
+                  <td>
+                    <span className={`status-indicator ${order.status.toLowerCase()}`}></span>
+                    {order.status}
+                  </td>
                   <td>{order.transport}</td>
                   <td>
                     <FaEdit

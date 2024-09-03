@@ -93,32 +93,23 @@
 
   .status-indicator {
     display: inline-block;
-    align-items: center;
-    /* padding: 12px 0px; */
-
-    gap: 8px;
-    margin-top: 20px auto;
-    
-    /* justify-content: center; */
-}
-
-.status-indicator-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
 }
 
-.status-pending .status-indicator-dot {
-    background-color: orange;
+.status-indicator.delivered {
+    background-color: #28a745; 
 }
 
-.status-delivered .status-indicator-dot {
-    background-color: green;
+.status-indicator.pending {
+    background-color: #ffc107; 
 }
 
-.status-cancelled .status-indicator-dot {
-    background-color: red;
+.status-indicator.cancelled {
+    background-color: #dc3545; 
 }
 
 .edit-icon {

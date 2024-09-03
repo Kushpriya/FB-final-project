@@ -97,18 +97,19 @@ body.light-mode {
 }
 
 
-.sidebar-logout {
+.logout {
     position: absolute;
     bottom: 10px;
     width: 100%;
     cursor: pointer;
 }
 
-.sidebar-logout:hover {
-    background-color: #7d2c1e;
+.logout:hover {
+    background-color: #e94e33;
+    
 }
 
-.sidebar-logout .sidebar-icon {
+.logout .sidebar-icon {
     color: #e74c3c;
 }
 

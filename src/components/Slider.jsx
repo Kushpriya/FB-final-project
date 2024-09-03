@@ -110,7 +110,8 @@ function Sidebar({ handleOpenForm }) {
                         <FaCog className="sidebar-icon" />
                         {isSidebarOpen && <span>Settings</span>}
                     </li>
-                    <li onClick={() => navigateTo('/signout')}>
+                    
+                    <li className="logout" onClick={() => navigateTo('/signout')}>
                         <FaSignOutAlt className="sidebar-icon" />
                         {isSidebarOpen && <span>Sign out</span>}
                     </li>
