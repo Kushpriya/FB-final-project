@@ -1,5 +1,5 @@
 .orders-container {
-    width: 90%;
+    width: 100%;
     margin: 20px auto;
     margin-left: 130px ;
     border-radius: 8px;
@@ -100,7 +100,8 @@
     vertical-align: middle;
 }
 
-.status-indicator.delivered {
+.status-indicator.delivered,
+.status-indicator.success {
     background-color: #28a745; 
 }
 

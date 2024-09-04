@@ -1,12 +1,12 @@
 .product-list-container {
-    width: 95%;
+    width: 82%;
     padding: 20px;
     margin: 50px auto;
     margin-left: 270px ;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* border-radius: 8px; */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
     color: #ffffff;
-    
+    background-color: transparent;
 }
 .product-list-container.shifted {
     margin-left: 70px;

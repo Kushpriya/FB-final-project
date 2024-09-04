@@ -164,7 +164,7 @@ const SignUp = () => {
                             I agree to the terms & conditions
                         </label>
                     </div>
-                    <button type="submit" className="btn">Sign Up</button>
+                    <button type="submit" className="signup-btn">Sign Up</button>
                     <div className="login-register">
                         <p>Already have an account? <a href="/signin" className="toggle-form">Login</a></p>
                     </div>

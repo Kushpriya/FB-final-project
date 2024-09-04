@@ -18,7 +18,7 @@ function OrderForm({ isEditing, newOrder, handleInputChange, handleSubmit, handl
         <>
             <Slider />
             <div className="order-form-container">
-                <h2>{isEditing ? "Edit Order" : "Create Order"}</h2>
+                <h2>{isEditing ? "Edit delivery Order" : "Create delivery Order"}</h2>
                 <form className="order-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>
@@ -151,10 +151,10 @@ function OrderForm({ isEditing, newOrder, handleInputChange, handleSubmit, handl
                                 onChange={handleInputChange}
                                 required
                             >
-                                <option value="">Select Status</option>
+                                {/* <option value="">Select Status</option> */}
                                 <option value="Pending">Pending</option>
-                                <option value="Delivered">Delivered</option>
-                                <option value="Cancelled">Cancelled</option>
+                                {/* <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option> */}
                             </select>
                         </div>
 

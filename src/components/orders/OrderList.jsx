@@ -73,7 +73,10 @@ function OrderList({
                   <td>{order.quantity}</td>
                   <td>${parseFloat(order.price).toFixed(2)}</td>
                   <td>${parseFloat(order.total).toFixed(2)}</td>
-                  <td>{order.payment}</td>
+                  <td>
+                    <span className={`status-indicator ${order.payment.toLowerCase()}`}></span>
+                    {order.payment}
+                  </td>
                   <td>{order.date}</td>
                   <td>{order.client}</td>
                   <td>{order.venue}</td>
