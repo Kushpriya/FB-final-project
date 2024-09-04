@@ -91,8 +91,8 @@ function Sidebar({ handleOpenForm }) {
                         {isSidebarOpen && <span>Clients</span>}
                         {activeMenu === 'clients' && isSidebarOpen && (
                             <ul className="submenu">
-                                <li onClick={() => navigateTo('/add-client')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/list-client')}><FaList className="sidebar-sub-icon" /> List</li>
+                                <li onClick={() => navigateTo('/clients/clientadd')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/clients/clientlist')}><FaList className="sidebar-sub-icon" /> List</li>
                             </ul>
                         )}
                     </li>

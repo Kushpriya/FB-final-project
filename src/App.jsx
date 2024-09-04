@@ -12,6 +12,9 @@ import OrderList from './components/orders/OrderList';
 import Products from './components/products/Products';
 import ProductList from './components/products/ProductList';
 import ProductAdd from './components/products/ProductAdd';
+import Clients from './components/clients/Clients';
+import ClientList from './components/clients/ClientList';
+import ClientAdd from './components/clients/ClientAdd';
 
 function App() {
   return (
@@ -36,9 +39,11 @@ function App() {
           </Route>
 
           <Route path="/clients" element={<Clients />}>
-            <Route path="clientadd" element={<ProductAdd />} />
-            <Route path="clientlist" element={<ProductList />} />
+            <Route path="clientadd" element={<ClientAdd />} />
+            <Route path="clientlist" element={<ClientList />} />
           </Route>
+
+
           
         </Routes>
       </div>
