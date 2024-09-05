@@ -5,6 +5,8 @@ import {
     FaBox, FaList, FaUsers, FaPlus, FaTruck, FaMoon, FaSun,
     FaSearch, FaBell
 } from 'react-icons/fa';
+import { useMutation } from '@apollo/client';
+import LOGOUT_MUTATION from '../graphql/mutation/LogoutMutation';
 import '../assets/css/Slider.css';
 
 function Sidebar({ handleOpenForm }) {
@@ -14,6 +16,8 @@ function Sidebar({ handleOpenForm }) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
+
+    const [logout, { loading }] = useMutation(LOGOUT_MUTATION);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -46,6 +50,30 @@ function Sidebar({ handleOpenForm }) {
           }
     };
 
+    const handleSignOut = async () => {
+        try {
+            const { data, errors } = await logout();
+    
+            if (errors) {
+                console.error("GraphQL error:", errors);
+                alert('Sign out failed due to server error.');
+                return;
+            }
+    
+            if (data?.logout?.success) {
+                localStorage.removeItem('token');
+                alert('Successfully signed out!');
+                navigate('/signin');
+            } else {
+                alert('Sign out failed: ' + data?.logout?.message);
+            }
+        } catch (err) {
+            console.error('Network error during sign-out:', err);
+            alert('Sign out failed. Please try again later.');
+        }
+    };
+    
+
     return (
         <>
             <div className={`sidebar-container ${isSidebarOpen ? '' : 'closed'} ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -62,13 +90,13 @@ function Sidebar({ handleOpenForm }) {
                         {isSidebarOpen && <span>Profile</span>}
                     </li>
 
-                    <li onClick={() => handleMenuClick('product')}>
+                    <li onClick={() => handleMenuClick('merchandise')}>
                         <FaBox className="sidebar-icon" />
-                        {isSidebarOpen && <span>Product</span>}
-                        {activeMenu === 'product' && isSidebarOpen && (
+                        {isSidebarOpen && <span>Merchandise</span>}
+                        {activeMenu === 'merchandise' && isSidebarOpen && (
                             <ul className="submenu">
-                                <li onClick={() => navigateTo('/products/productadd')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/products/productlist')}><FaList className="sidebar-sub-icon" /> List</li>
+                                <li onClick={() => navigateTo('/merchandise/merchandiseform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/merchandise/merchandiselist')}><FaList className="sidebar-sub-icon" /> List</li>
                             </ul>
                         )}
                     </li>
@@ -111,7 +139,7 @@ function Sidebar({ handleOpenForm }) {
                         {isSidebarOpen && <span>Settings</span>}
                     </li>
                     
-                    <li className="logout" onClick={() => navigateTo('/signout')}>
+                    <li className="logout" onClick={handleSignOut} disabled={loading} >
                         <FaSignOutAlt className="sidebar-icon" />
                         {isSidebarOpen && <span>Sign out</span>}
                     </li>

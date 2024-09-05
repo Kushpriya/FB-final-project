@@ -1,35 +1,33 @@
-.product-list-container {
+.merchandise-list-container {
     width: 82%;
     padding: 20px;
     margin: 50px auto;
-    margin-left: 270px ;
-    /* border-radius: 8px; */
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+    margin-left: 270px;
     color: #ffffff;
     background-color: transparent;
 }
-.product-list-container.shifted {
-    margin-left: 70px;
-  }
 
-  .header {
+.merchandise-list-container.shifted {
+    margin-left: 70px;
+}
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
-  
-  
-  .header input {
+}
+
+.header input {
     padding: 8px;
     font-size: 16px;
     border-radius: 4px;
     border: 1px solid #555;
     background-color: #2e2e2e;
     color: #f5f5f5;
-  }
-  
-  .header button {
+}
+
+.header button {
     padding: 8px 16px;
     font-size: 16px;
     border-radius: 4px;
@@ -38,14 +36,15 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-.product-table {
+}
+
+.merchandise-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-.product-table th {
+.merchandise-table th {
     background-color: #2e2e2e;
     color: #ffffff;
     padding: 10px;
@@ -53,20 +52,20 @@
     border-bottom: 2px solid #444;
 }
 
-.product-table td {
+.merchandise-table td {
     padding: 10px;
     border-bottom: 1px solid #444;
 }
 
-.product-table tr:nth-child(even) {
+.merchandise-table tr:nth-child(even) {
     background-color: #282828;
 }
 
-.product-table tr:hover {
+.merchandise-table tr:hover {
     background-color: #333333;
 }
 
-.product-list-container .search-input {
+.merchandise-list-container .search-input {
     padding: 10px;
     margin-bottom: 15px;
     width: 100%;
@@ -88,19 +87,17 @@
     transition: background-color 0.3s ease;
 }
 
-
 .open-form-btn:hover {
     background-color: #218838;
 }
 
-.total-products{
+.total-merchandise {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 30px;
     font-size: 20px;
 }
-
 
 .status-indicator {
     display: inline-block;
@@ -112,15 +109,15 @@
 }
 
 .status-indicator.available {
-    background-color: #28a745; 
+    background-color: #28a745;
 }
 
 .status-indicator.outofstock {
-    background-color: #ffc107; 
+    background-color: #ffc107;
 }
 
 .status-indicator.discontinued {
-    background-color: #dc3545; 
+    background-color: #dc3545;
 }
 
 .edit-btn, .delete-btn, .view-btn {
@@ -134,7 +131,7 @@
 
 .view-btn {
     color: #007bff;
-  }
+}
 
 .edit-btn {
     color: #0086b3;
@@ -151,8 +148,8 @@
 .delete-btn:hover {
     color: #c82333;
 }
-  
-  .product-details-modal {
+
+.merchandise-details-modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -163,17 +160,17 @@
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-  }
-  
-  .product-details-modal h2 {
+}
+
+.merchandise-details-modal h2 {
     margin-top: 0;
-  }
-  
-  .product-details-modal p {
+}
+
+.merchandise-details-modal p {
     margin: 5px 0;
-  }
-  
-  .product-details-modal button {
+}
+
+.merchandise-details-modal button {
     margin-top: 10px;
     padding: 5px 10px;
     border: none;
@@ -181,5 +178,4 @@
     color: #fff;
     cursor: pointer;
     border-radius: 4px;
-  }
-  
+}
