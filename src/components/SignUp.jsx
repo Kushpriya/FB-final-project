@@ -51,7 +51,7 @@ const SignUp = () => {
         if (isValid && termsAgreed && organization) {
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userPassword', password);
-            localStorage.setItem('userOrganization', organization); // Store selected organization
+            localStorage.setItem('userOrganization', organization); 
             alert(`New account created successfully with ${organization}. You can now log in.`);
             window.location.href = `/signin?organization=${organization}`; 
         } else if (!termsAgreed) {
@@ -79,7 +79,7 @@ const SignUp = () => {
                 <img src="/src/assets/Images/signup.png" alt="Logo" className="logo" /> {/* Adjust the path to your logo */}
             </div>
 
-            <div className="form-box">
+            <div className="signup-form-box">
                 <h2>Sign Up</h2>
                 <form id="signup-form" onSubmit={validateSignup}>
                     <div className="input-box">
@@ -166,7 +166,7 @@ const SignUp = () => {
                     </div>
                     <button type="submit" className="signup-btn">Sign Up</button>
                     <div className="login-register">
-                        <p>Already have an account? <a href="/signin" className="toggle-form">Login</a></p>
+                        <p>Already have an account? <a href="/signin" className="toggle-form">SignIn</a></p>
                     </div>
                 </form>
             </div>

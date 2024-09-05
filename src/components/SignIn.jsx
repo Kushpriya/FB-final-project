@@ -37,7 +37,7 @@ const SignIn = () => {
   };
 
   const handleSignIn = async (loginData) => {
-    loginData.tenantId = 1; 
+    // loginData.tenantId = 1; 
     try {
       const { data } = await login({ variables: { loginData } });
       if (data?.login?.token) {
