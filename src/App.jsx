@@ -9,12 +9,12 @@ import Dashboard from './components/Dashboard';
 import Orders from './components/orders/Orders';
 import OrderForm from './components/orders/OrderForm';
 import OrderList from './components/orders/OrderList';
-import Products from './components/products/Products';
-import ProductList from './components/products/ProductList';
-import ProductAdd from './components/products/ProductAdd';
 import Clients from './components/clients/Clients';
 import ClientList from './components/clients/ClientList';
 import ClientAdd from './components/clients/ClientAdd';
+import MerchandiseForm from './components/merchandise/MerchandiseForm';
+import MerchandiseList from './components/merchandise/MerchandiseList';
+import Merchandise from './components/merchandise/Merchandise';
 
 function App() {
   return (
@@ -34,15 +34,16 @@ function App() {
             <Route path="orderlist" element={<OrderList />} />
           </Route>
 
-          <Route path="/products" element={<Products />}>
-            <Route path="productadd" element={<ProductAdd />} />
-            <Route path="productlist" element={<ProductList />} />
+          <Route path="/merchandise" element={<Merchandise />}>
+            <Route path="merchandiseform" element={<MerchandiseForm />} />
+            <Route path="merchandiselist" element={<MerchandiseList />} />
           </Route>
 
           <Route path="/clients" element={<Clients />}>
             <Route path="clientadd" element={<ClientAdd />} />
             <Route path="clientlist" element={<ClientList />} />
           </Route>
+
         </Routes>
       </div>
     </Router>
