@@ -51,8 +51,21 @@ function Sidebar({ handleOpenForm }) {
     };
 
     const handleSignOut = async () => {
+        const token = sessionStorage.getItem('token');
+    
+        console.log('Token before logout:', token);
+    
+        if (!token) {
+            alert('You are already logged out.');
+            navigate('/signin');
+            return;
+        }
+    
         try {
-            const { data, errors } = await logout();
+            const { data, errors } = await logout(); 
+    
+            console.log('Logout response data:', data);
+            console.log('Logout response errors:', errors);
     
             if (errors) {
                 console.error("GraphQL error:", errors);
@@ -61,18 +74,30 @@ function Sidebar({ handleOpenForm }) {
             }
     
             if (data?.logout?.success) {
-                localStorage.removeItem('token');
+                localStorage.removeItem('token'); 
                 alert('Successfully signed out!');
                 navigate('/signin');
             } else {
                 alert('Sign out failed: ' + data?.logout?.message);
             }
         } catch (err) {
-            console.error('Network error during sign-out:', err);
-            alert('Sign out failed. Please try again later.');
-        }
-    };
+            if (err.networkError) {
+                alert('Network issue. Please check your connection.');
+            } else if (err.graphQLErrors) {
+                const userNotLoggedIn = err.graphQLErrors.some(e => e.message.includes('User not logged in'));
     
+                if (userNotLoggedIn) {
+                    alert('You were already logged out.');
+                } else {
+                    alert('Server error: ' + err.graphQLErrors.map(e => e.message).join(', '));
+                }
+            } else {
+                alert('Sign out failed. Please try again later.');
+            }
+    
+            console.error('Network error during sign-out:', err);
+        }
+    };    
 
     return (
         <>
@@ -121,6 +146,16 @@ function Sidebar({ handleOpenForm }) {
                             <ul className="submenu">
                                 <li onClick={() => navigateTo('/clients/clientadd')}><FaPlus className="sidebar-sub-icon" /> Add</li>
                                 <li onClick={() => navigateTo('/clients/clientlist')}><FaList className="sidebar-sub-icon" /> List</li>
+                            </ul>
+                        )}
+                    </li>
+                    <li onClick={() => handleMenuClick('couriers')}>
+                        <FaUsers className="sidebar-icon" />
+                        {isSidebarOpen && <span>Couriers</span>}
+                        {activeMenu === 'couriers' && isSidebarOpen && (
+                            <ul className="submenu">
+                                <li onClick={() => navigateTo('/couriers/courierform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/couriers/courierlist')}><FaList className="sidebar-sub-icon" /> List</li>
                             </ul>
                         )}
                     </li>

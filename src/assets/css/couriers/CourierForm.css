@@ -1,0 +1,23 @@
+/* CourierForm.css */
+.courier-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 20px;
+  }
+  
+  .courier-form div {
+    margin-bottom: 15px;
+  }
+  
+  .courier-form label {
+    font-weight: bold;
+  }
+  
+  .courier-form input,
+  .courier-form textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
