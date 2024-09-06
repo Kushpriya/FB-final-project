@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import "../../assets/css/merchandise/MerchandiseList.css";
 
 function MerchandiseList({
-  merchandiseItems,  
   filteredMerchandise = [],  
   handleEdit,
   handleDelete,
@@ -18,10 +20,35 @@ function MerchandiseList({
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-
   const handleView = (merchandise) => {
     setSelectedMerchandise(merchandise);
   };
+
+  const columnDefs = [
+    { headerName: 'ID', field: 'id', sortable: true, filter: true },
+    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Category', field: 'category', sortable: true, filter: true },
+    { headerName: 'Price', field: 'price', sortable: true, filter: true, cellRenderer: (params) => `$${params.value}` },
+    { headerName: 'Created_at', field: 'dateAdded', sortable: true, filter: true, valueFormatter: ({ value }) => formatDate(value) },
+    { headerName: 'Status', field: 'status', sortable: true, filter: true, cellRenderer: StatusCellRenderer },
+    {
+      headerName: 'Actions',
+      field: 'actions',
+      cellRenderer: (params) => (
+        <div className="actions-cell">
+          <button className="view-btn" onClick={() => handleView(params.data)}>
+            <FaEye />
+          </button>
+          <button className="edit-btn" onClick={() => handleEdit(params.data)}>
+            <FaEdit />
+          </button>
+          <button className="delete-btn" onClick={() => handleDelete(params.data.id)}>
+            <FaTrash />
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -40,68 +67,20 @@ function MerchandiseList({
             Add Merchandise
           </button>
         </div>
+
         <div className="total-merchandise">
           <p>Total Merchandise: {filteredMerchandise.length}</p>
         </div>
 
-        <table className="merchandise-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Value</th>
-              <th>Created_at</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMerchandise.length > 0 ? (
-              filteredMerchandise.map((merchandise) => (
-                <tr key={merchandise.id}>
-                  <td>{merchandise.id}</td>
-                  <td>{merchandise.name}</td>
-                  <td>{merchandise.category}</td>
-                  <td>{merchandise.quantity}</td>
-                  <td>${merchandise.price}</td>
-                  <td>${merchandise.totalValue}</td>
-                  <td>{formatDate(merchandise.dateAdded)}</td>
-                  <td>
-                    <span className={`status-indicator ${merchandise.status.toLowerCase()}`}></span>
-                    {merchandise.status}
-                  </td>
-                  <td>
-                    <button
-                      className="view-btn"
-                      onClick={() => handleView(merchandise)}
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleEdit(merchandise)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(merchandise.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="10">No merchandise found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <div className="ag-theme-alpine-dark" style={{ height: 400 }}>
+          <AgGridReact
+            rowData={filteredMerchandise}
+            columnDefs={columnDefs}
+            pagination={true}
+            paginationPageSize={10}
+            domLayout="autoHeight"
+          />
+        </div>
 
         {selectedMerchandise && (
           <div className="merchandise-details-modal">
@@ -122,5 +101,15 @@ function MerchandiseList({
     </>
   );
 }
+
+const StatusCellRenderer = ({ value }) => {
+  const statusClass = value.toLowerCase();
+  return (
+    <span className={`status-indicator ${statusClass}`}>
+      <span className="indicator"></span>
+      {value}
+    </span>
+  );
+};
 
 export default MerchandiseList;
