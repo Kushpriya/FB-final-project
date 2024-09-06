@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FaBox, FaUser, FaTags, FaHashtag, FaDollarSign, FaCheckCircle } from 'react-icons/fa';
-import "../../assets/css/MerchandiseForm.css";
+import "../../assets/css/merchandise/MerchandiseForm.css";
 
 function MerchandiseForm({ isEditing, newMerchandise, handleInputChange, handleSubmit, handleCloseForm, showCloseButton }) {
     useEffect(() => {
