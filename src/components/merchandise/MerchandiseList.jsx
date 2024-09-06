@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-import "../../assets/css/MerchandiseList.css";
+import "../../assets/css/merchandise/MerchandiseList.css";
 
 function MerchandiseList({
   merchandiseItems,  

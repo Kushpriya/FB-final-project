@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/MerchandiseForm.css';
-import '../../assets/css/MerchandiseList.css';
+import '../../assets/css/merchandise/MerchandiseForm.css';
+import '../../assets/css/merchandise/MerchandiseList.css';
 import Slider from '../Slider';
 import MerchandiseAdd from './MerchandiseForm';
 import MerchandiseList from './MerchandiseList';
