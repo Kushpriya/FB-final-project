@@ -15,6 +15,9 @@ import ClientAdd from './components/clients/ClientAdd';
 import MerchandiseForm from './components/merchandise/MerchandiseForm';
 import MerchandiseList from './components/merchandise/MerchandiseList';
 import Merchandise from './components/merchandise/Merchandise';
+import Courier from './components/couriers/couriers';
+import CourierForm from './components/couriers/CourierForm';
+import CourierList from './components/couriers/CourierList';
 
 function App() {
   return (
@@ -42,6 +45,11 @@ function App() {
           <Route path="/clients" element={<Clients />}>
             <Route path="clientadd" element={<ClientAdd />} />
             <Route path="clientlist" element={<ClientList />} />
+          </Route>
+
+          <Route path="/couriers" element={<Courier />}>
+            <Route path="courierform" element={<CourierForm/>} />
+            <Route path="courierlist" element={<CourierList />} />
           </Route>
 
         </Routes>

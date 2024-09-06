@@ -149,6 +149,16 @@ function Sidebar({ handleOpenForm }) {
                             </ul>
                         )}
                     </li>
+                    <li onClick={() => handleMenuClick('couriers')}>
+                        <FaUsers className="sidebar-icon" />
+                        {isSidebarOpen && <span>Couriers</span>}
+                        {activeMenu === 'couriers' && isSidebarOpen && (
+                            <ul className="submenu">
+                                <li onClick={() => navigateTo('/couriers/courierform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/couriers/courierlist')}><FaList className="sidebar-sub-icon" /> List</li>
+                            </ul>
+                        )}
+                    </li>
                     <li onClick={() => handleMenuClick('transport')}>
                         <FaTruck className="sidebar-icon" />
                         {isSidebarOpen && <span>Transport</span>}

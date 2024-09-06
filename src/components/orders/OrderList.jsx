@@ -103,7 +103,7 @@ function OrderList({
             )}
           </tbody>
         </table>
-      </div>
+      </div>  
     </>
   );
 }
