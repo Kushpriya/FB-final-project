@@ -1,0 +1,22 @@
+.transport-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 20px;
+  }
+  
+  .transport-form div {
+    margin-bottom: 15px;
+  }
+  
+  .transport-form label {
+    font-weight: bold;
+  }
+  
+  .transport-form input,
+  .transport-form textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  

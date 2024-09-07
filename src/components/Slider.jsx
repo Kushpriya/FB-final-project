@@ -164,8 +164,8 @@ function Sidebar({ handleOpenForm }) {
                         {isSidebarOpen && <span>Transport</span>}
                         {activeMenu === 'transport' && isSidebarOpen && (
                             <ul className="submenu">
-                                <li onClick={() => navigateTo('/add-transport')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/list-transport')}><FaList className="sidebar-sub-icon" /> List</li>
+                                <li onClick={() => navigateTo('/transports/transportform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/transports/transportlist')}><FaList className="sidebar-sub-icon" /> List</li>
                             </ul>
                         )}
                     </li>

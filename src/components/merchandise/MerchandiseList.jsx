@@ -26,7 +26,7 @@ function MerchandiseList({
 
   const columnDefs = [
     { headerName: 'ID', field: 'id', sortable: true, filter: true },
-    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Merchandise', field: 'name', sortable: true, filter: true },
     { headerName: 'Category', field: 'category', sortable: true, filter: true },
     { headerName: 'Price', field: 'price', sortable: true, filter: true, cellRenderer: (params) => `$${params.value}` },
     { headerName: 'Created_at', field: 'dateAdded', sortable: true, filter: true, valueFormatter: ({ value }) => formatDate(value) },
@@ -88,12 +88,12 @@ function MerchandiseList({
             <p><strong>ID:</strong> {selectedMerchandise.id}</p>
             <p><strong>Name:</strong> {selectedMerchandise.name}</p>
             <p><strong>Category:</strong> {selectedMerchandise.category}</p>
-            <p><strong>Description:</strong> {selectedMerchandise.description}</p>
             <p><strong>Quantity:</strong> {selectedMerchandise.quantity}</p>
             <p><strong>Price:</strong> ${selectedMerchandise.price}</p>
             <p><strong>Total Value:</strong> ${selectedMerchandise.totalValue}</p>
             <p><strong>Created_at:</strong> {formatDate(selectedMerchandise.dateAdded)}</p>
             <p><strong>Status:</strong> {selectedMerchandise.status}</p>
+            <p><strong>Description:</strong> {selectedMerchandise.description}</p>
             <button onClick={() => setSelectedMerchandise(null)}>Close</button>
           </div>
         )}
