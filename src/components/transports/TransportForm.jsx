@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const vehicleTypes = [
   { value: "", label: "Select Vehicle" }, 
@@ -16,7 +16,7 @@ const statusTypes = [
   { value: "Out Of Service", label: "Out of Service" },
 ];
 
-const TransportForm = ({ addTransport }) => {
+const TransportForm = ({ addTransport, editingTransport, updateTransport }) => {
   const [transport, setTransport] = useState({
     name: "",
     vehicleType: "", 
@@ -24,6 +24,12 @@ const TransportForm = ({ addTransport }) => {
     capacity: "",
     description: "",
   });
+
+  useEffect(() => {
+    if (editingTransport) {
+      setTransport(editingTransport);
+    }
+  }, [editingTransport]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +42,13 @@ const TransportForm = ({ addTransport }) => {
       alert("Please select a vehicle type and status.");
       return;
     }
-    addTransport(transport);
+
+    if (editingTransport) {
+      updateTransport(transport);
+    } else {
+      addTransport(transport);
+    }
+
     setTransport({
       name: "",
       vehicleType: "",
@@ -93,11 +105,12 @@ const TransportForm = ({ addTransport }) => {
       <div>
         <label>Capacity</label>
         <input
-          type="text"
+          type="number"
           name="capacity"
           value={transport.capacity}
           onChange={handleInputChange}
           placeholder="Capacity"
+          required
         />
       </div>
 
@@ -111,7 +124,7 @@ const TransportForm = ({ addTransport }) => {
         ></textarea>
       </div>
 
-      <button type="submit">Add Transport</button>
+      <button type="submit">{editingTransport ? "Update Transport" : "Add Transport"}</button>
     </form>
   );
 };
