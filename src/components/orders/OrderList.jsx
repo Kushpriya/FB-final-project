@@ -1,7 +1,6 @@
 import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import "../../assets/css/OrderList.css";
-import Slider from '../../components/Slider';
+import "../../assets/css/orders/OrderList.css";
 
 function OrderList({
     orders,
@@ -18,7 +17,6 @@ function OrderList({
 
   return (
     <>
-      <Slider />
       <div className="orders-container">
         <div className="header">
           <h2>Orders</h2>
@@ -105,7 +103,7 @@ function OrderList({
             )}
           </tbody>
         </table>
-      </div>
+      </div>  
     </>
   );
 }

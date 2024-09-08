@@ -6,15 +6,26 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Slider from './components/Slider';
 import Dashboard from './components/Dashboard';
+
 import Orders from './components/orders/Orders';
 import OrderForm from './components/orders/OrderForm';
 import OrderList from './components/orders/OrderList';
+
 import Clients from './components/clients/Clients';
 import ClientList from './components/clients/ClientList';
 import ClientAdd from './components/clients/ClientAdd';
+
 import MerchandiseForm from './components/merchandise/MerchandiseForm';
 import MerchandiseList from './components/merchandise/MerchandiseList';
 import Merchandise from './components/merchandise/Merchandise';
+
+import Courier from './components/couriers/couriers';
+import CourierForm from './components/couriers/CourierForm';
+import CourierList from './components/couriers/CourierList';
+
+import Transport from './components/transports/Transport';
+import TransportForm from './components/transports/TransportForm';
+import TransportList from './components/transports/TransportList';
 
 function App() {
   return (
@@ -42,6 +53,16 @@ function App() {
           <Route path="/clients" element={<Clients />}>
             <Route path="clientadd" element={<ClientAdd />} />
             <Route path="clientlist" element={<ClientList />} />
+          </Route>
+
+          <Route path="/couriers" element={<Courier />}>
+            <Route path="courierform" element={<CourierForm/>} />
+            <Route path="courierlist" element={<CourierList />} />
+          </Route>
+
+          <Route path="/transports" element={<Transport />}>
+            <Route path="/transports/transportform" element={<TransportForm/>} />
+            <Route path="/transports/transportlist" element={<TransportList />} />
           </Route>
 
         </Routes>

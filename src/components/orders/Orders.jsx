@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/OrderForm.css';
-import '../../assets/css/OrderList.css';
+import '../../assets/css/orders/OrderForm.css';
+import '../../assets/css/orders/OrderList.css';
 import OrderForm from './OrderForm';
 import OrderList from './OrderList';
+import Slider from '../../components/Slider';
+
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -25,7 +27,7 @@ function Orders() {
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [formVisible, setFormVisible] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false); // New state
+  const [showCloseButton, setShowCloseButton] = useState(false); 
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -100,7 +102,7 @@ function Orders() {
         status: "",
         payment: "Pending",
       });
-      navigate('/orders/orderlist'); // Redirect to Order List after submission
+      navigate('/orders/orderlist'); 
     } else {
       alert("Please fill out all fields.");
     }
@@ -134,6 +136,7 @@ function Orders() {
 
   return (
     <>
+      <Slider />
       <div className="orders-container">
         <div className="orders-content">
           {location.pathname === '/orders/orderform' && (

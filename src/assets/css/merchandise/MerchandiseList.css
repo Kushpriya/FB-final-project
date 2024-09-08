@@ -1,8 +1,8 @@
 .merchandise-list-container {
-    width: 82%;
-    padding: 20px;
+    width: 85%;
+    padding: 10px;
     margin: 50px auto;
-    margin-left: 270px;
+    margin-left: 240px;
     color: #ffffff;
     background-color: transparent;
 }
@@ -100,13 +100,18 @@
 }
 
 .status-indicator {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+
+  }
+  
+  .status-indicator .indicator {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    margin-right: 8px;
-    vertical-align: middle;
-}
+    margin-right: 15px;
+  }
 
 .status-indicator.available {
     background-color: #28a745;
@@ -124,8 +129,8 @@
     padding: 8px 12px;
     margin-right: 5px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    font-size: 17px;
     background-color: transparent;
 }
 
@@ -154,8 +159,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #f4f0f0;
-    color: #161616;
+    background: #333;
+    color: #ffffff;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
