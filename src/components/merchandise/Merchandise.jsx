@@ -5,6 +5,11 @@ import '../../assets/css/merchandise/MerchandiseList.css';
 import Slider from '../Slider';
 import MerchandiseAdd from './MerchandiseForm';
 import MerchandiseList from './MerchandiseList';
+import {
+  CREATE_MERCHANDISE,
+  EDIT_MERCHANDISE,
+  DELETE_MERCHANDISE
+} from "../../graphql/mutation/MerchandiseMutation";
 
 function Merchandise() {
   const [merchandiseList, setMerchandiseList] = useState([]);

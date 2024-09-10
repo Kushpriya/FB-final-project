@@ -1,86 +1,99 @@
-/* Transport Form Styles */
-.transport-form {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  margin: 20px;
+.transport-container {
+  margin: 50px;
+  margin-left: 250px;
 }
 
-.transport-form div {
-  margin-bottom: 15px;
-}
-
-.transport-form label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-  color: #333;
-}
-
-.transport-form input,
-.transport-form select,
-.transport-form textarea {
+.transport-form-overlay {
+  position: fixed;
+  top: 50px;
+  left: 100px;
   width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #b9b9b9;
-  font-size: 16px;
-  color: #333;
-}
-
-.transport-form input:focus,
-.transport-form select:focus,
-.transport-form textarea:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.transport-form button {
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.transport-form button:hover {
-  background-color: #0056b3;
-}
-
-/* Action Icons in the AG-Grid Table */
-.action-icons {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  z-index: 1000;
+}
+
+.transport-form-container {
+  background: #1b1b1b;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.transport-form-container h2 {
+  margin-bottom: 20px;
+}
+
+.transport-form-container label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.transport-form-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.transport-form-container button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.transport-form-container button:hover {
+  background-color: #0056b3;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.action-icons {
+  display: flex;
+  gap: 20px;
 }
 
 .action-icons .view-icon,
 .action-icons .edit-icon,
 .action-icons .delete-icon {
   cursor: pointer;
-  font-size: 18px;
-  margin: 0 5px;
+  font-size: 20px;
+  margin:10px 0;
 }
 
-/* Hover Effects */
 .action-icons .view-icon:hover {
-  color: #007bff; /* Blue for View */
+  color: #007bff; 
 }
 
 .action-icons .edit-icon:hover {
-  color: #ffc107; /* Yellow for Edit */
+  color: #ffc107; 
 }
 
 .action-icons .delete-icon:hover {
-  color: #dc3545; /* Red for Delete */
+  color: #dc3545; 
 }
 
-/* Responsive Design */
 @media screen and (max-width: 768px) {
   .transport-form {
     width: 100%;
@@ -91,7 +104,6 @@
   }
 }
 
-/* Dark Mode Theme */
 body.dark-mode {
   background-color: #333;
   color: #fff;
