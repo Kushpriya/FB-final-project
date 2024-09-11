@@ -19,12 +19,12 @@ const Transport = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingTransport, setEditingTransport] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-
+  
   const { loading, error, data, refetch } = useQuery(
     vehicleTypeFilter ? GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY : GET_ALL_TRANSPORTS_QUERY,
     {
       variables: { vehicleType: vehicleTypeFilter },
-      skip: !vehicleTypeFilter,
+      skip: searchTerm !== "" && !vehicleTypeFilter,
       onError: (err) => console.error("Query Error:", err),
     }
   );
@@ -137,7 +137,8 @@ const Transport = () => {
       : data.getAllTransports
     )?.filter((transport) =>
       transport.vehicleType.toLowerCase().includes(searchTerm) ||
-      transport.status.toLowerCase().includes(searchTerm)
+      transport.status.toLowerCase().includes(searchTerm) ||
+      transport.name.toLowerCase().includes(searchTerm)
     )
     : [];
 
@@ -149,7 +150,37 @@ const Transport = () => {
     <Slider/>
     <div className="transport-container">
       <div className="filter-section">
-        <button
+
+      <div className="total-transports">
+        Total {vehicleTypeFilter ? `${vehicleTypeFilter} Transports` : "Transports"}: 
+        {Array.isArray(filteredTransports) ? filteredTransports.length : 0}
+      </div>
+
+<div>
+        <label>Filter by Vehicle Type: </label>
+        <select onChange={handleVehicleTypeChange} value={vehicleTypeFilter}>
+          <option value="">All Vehicles</option>
+          {/* {vehicleTypes.map((type) => {
+             <option key={type} value={type}></option>
+          })} */}
+          <option value="Tank">Tank</option>
+          <option value="TankWagon">Tank Wagon</option>
+          <option value="Truck">Truck</option>
+          <option value="SemiTruck">Semi Truck</option>
+        </select>
+        </div>
+        
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-input"
+        />
+
+
+
+      <button
           onClick={() => {
             setIsFormVisible(true);
             setEditingTransport(null);
@@ -157,26 +188,7 @@ const Transport = () => {
         >
           Add Transport
         </button>
-        <label>Filter by Vehicle Type: </label>
-        <select onChange={handleVehicleTypeChange} value={vehicleTypeFilter}>
-          <option value="">All Vehicles</option>
-          <option value="Tank">Tank</option>
-          <option value="Tank_wagon">Tank Wagon</option>
-          <option value="Truck">Truck</option>
-          <option value="Semi Truck">Semi Truck</option>
-        </select>
 
-        <input
-          type="text"
-          placeholder="Search by vehicle type or status..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
-
-        <div className="total-transports">
-          Total Transports: {filteredTransports.length}
-        </div>
       </div>
 
       {isFormVisible && (

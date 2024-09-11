@@ -17,11 +17,11 @@ export const GET_ALL_TRANSPORTS_QUERY = gql`
 export const GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY = gql`
 query GetAllTransportByVehicleType($vehicleType:Vehicle!) {
     getAllTransportByVehicleType(vehicleType: $vehicleType) {
-        createdAt
         id
         name
         status
         tenantId
+        createdAt
         updatedAt
         vehicleType
     }
