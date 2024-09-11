@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/css/transports/Transports.css"
+import "../../assets/css/Transports.css"
 
 const vehicleTypes = [
   { value: "", label: "Select Vehicle" },

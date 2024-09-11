@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import '../../assets/css/transports/Transports.css';
+import '../../assets/css/Transports.css';
 import { GET_ALL_TRANSPORTS_QUERY , GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY} from "../../graphql/queries/TransportQueries";
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 

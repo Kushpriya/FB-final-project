@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import TransportForm from "./TransportForm";
 import TransportList from "./TransportList";
-import '../../assets/css/transports/Transports.css';
+import '../../assets/css/Transports.css';
 import {
   GET_ALL_TRANSPORTS_QUERY,
   GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY,

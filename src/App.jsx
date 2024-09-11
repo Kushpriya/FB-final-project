@@ -13,7 +13,7 @@ import OrderList from './components/orders/OrderList';
 
 import Clients from './components/clients/Clients';
 import ClientList from './components/clients/ClientList';
-import ClientAdd from './components/clients/ClientAdd';
+import ClientForm from './components/clients/ClientForm';
 
 import MerchandiseForm from './components/merchandise/MerchandiseForm';
 import MerchandiseList from './components/merchandise/MerchandiseList';
@@ -51,7 +51,7 @@ function App() {
           </Route>
 
           <Route path="/clients" element={<Clients />}>
-            <Route path="clientadd" element={<ClientAdd />} />
+            <Route path="clientform" element={<ClientForm />} />
             <Route path="clientlist" element={<ClientList />} />
           </Route>
 
