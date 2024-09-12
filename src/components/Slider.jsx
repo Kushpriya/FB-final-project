@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    FaBars, FaTachometerAlt, FaUser, FaCog, FaBox, FaList, FaUsers, FaPlus, FaTruck,
+    FaBars, FaTachometerAlt, FaUser, FaCog, FaBox, FaList, FaUsers, FaLayerGroup,FaPlus, FaTruck,
     FaMoon, FaSun, FaSearch, FaBell
 } from 'react-icons/fa';
 import SignOut from './SignOut';
@@ -57,11 +57,22 @@ function Sidebar({ handleOpenForm }) {
                         <FaTachometerAlt className="sidebar-icon" />
                         {isSidebarOpen && <span>Dashboard</span>}
                     </li>
-                    <li onClick={() => { navigateTo('/profile'); }}>
+                    {/* <li onClick={() => { navigateTo('/profile'); }}>
                         <FaUser className="sidebar-icon" />
                         {isSidebarOpen && <span>Profile</span>}
-                    </li>
+                    </li> */}
 
+                    <li onClick={() => handleMenuClick('merchandiseCategory')}>
+                        <FaBox className="sidebar-icon" />
+                        {isSidebarOpen && <span>Merchandise Category</span>}
+                        {activeMenu === 'merchandiseCategory' && isSidebarOpen && (
+                            <ul className="submenu">
+                                <li onClick={() => navigateTo('/merchandiseCategory/categoryadd')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/merchandiseCategory/categorylist')}><FaList className="sidebar-sub-icon" /> List</li>
+                            </ul>
+                        )}
+                    </li>
+                    
                     <li onClick={() => handleMenuClick('merchandise')}>
                         <FaBox className="sidebar-icon" />
                         {isSidebarOpen && <span>Merchandise</span>}
@@ -96,6 +107,17 @@ function Sidebar({ handleOpenForm }) {
                             </ul>
                         )}
                     </li>
+                    {/* <li onClick={() => handleMenuClick('venue')}>
+                        <FaUsers className="sidebar-icon" />
+                        {isSidebarOpen && <span>Venue</span>}
+                        {activeMenu === 'venue' && isSidebarOpen && (
+                            <ul className="submenu">
+                                <li onClick={() => navigateTo('/venue/venueform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
+                                <li onClick={() => navigateTo('/venue/venuelist')}><FaList className="sidebar-sub-icon" /> List</li>
+                                <li onClick={() => navigateTo('/venue/venueview')}><FaList className="sidebar-sub-icon" /> view</li>
+                            </ul>
+                        )}
+                    </li> */}
                     <li onClick={() => handleMenuClick('couriers')}>
                         <FaUsers className="sidebar-icon" />
                         {isSidebarOpen && <span>Couriers</span>}
@@ -116,10 +138,10 @@ function Sidebar({ handleOpenForm }) {
                             </ul>
                         )}
                     </li>
-                    <li onClick={() => navigateTo('/settings')}>
+                    {/* <li onClick={() => navigateTo('/settings')}>
                         <FaCog className="sidebar-icon" />
                         {isSidebarOpen && <span>Settings</span>}
-                    </li>
+                    </li> */}
 
                     <SignOut className="logout" />
                 </ul>

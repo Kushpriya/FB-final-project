@@ -1,4 +1,5 @@
 import React from 'react';
+import '../assets/css/Slider.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import LOGOUT_MUTATION from '../graphql/mutation/LogoutMutation';
@@ -9,7 +10,7 @@ function SignOut({ className }) {
     const [logout, { loading }] = useMutation(LOGOUT_MUTATION);
 
     const handleSignOut = async () => {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
 
         console.log('Token before logout:', token);
 
