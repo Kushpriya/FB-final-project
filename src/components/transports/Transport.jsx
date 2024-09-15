@@ -29,17 +29,9 @@ const Transport = () => {
     }
   );
 
-  const [createTransport] = useMutation(CREATE_TRANSPORT, {
-    onError: (err) => console.error("Create Mutation Error:", err),
-  });
-
-  const [updateTransport] = useMutation(UPDATE_TRANSPORT, {
-    onError: (err) => console.error("Update Mutation Error:", err),
-  });
-
-  const [deleteTransport] = useMutation(DELETE_TRANSPORT, {
-    onError: (err) => console.error("Delete Mutation Error:", err),
-  });
+  const [createTransport] = useMutation(CREATE_TRANSPORT);
+  const [updateTransport] = useMutation(UPDATE_TRANSPORT);
+  const [deleteTransport] = useMutation(DELETE_TRANSPORT);
 
   const addTransport = async (transport) => {
     try {
@@ -155,8 +147,7 @@ const Transport = () => {
         Total {vehicleTypeFilter ? `${vehicleTypeFilter} Transports` : "Transports"}: 
         {Array.isArray(filteredTransports) ? filteredTransports.length : 0}
       </div>
-
-<div>
+    <div>
         <label>Filter by Vehicle Type: </label>
         <select onChange={handleVehicleTypeChange} value={vehicleTypeFilter}>
           <option value="">All Vehicles</option>

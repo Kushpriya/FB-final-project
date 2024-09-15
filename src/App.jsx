@@ -35,6 +35,8 @@ import VenueView from './components/venue/VenueView';
 import MerchandiseCategory from './components/merchandiseCategory/MerchandiseCategory';
 import MerchandiseCategoryList from './components/merchandiseCategory/MerchandiseCategoryList';
 import MerchandiseCategoryAdd from './components/merchandiseCategory/MerchandiseCategoryAdd';
+import Sidebar from './components/Sidebar';
+
 
 function App() {
   return (
@@ -84,6 +86,9 @@ function App() {
             <Route path="/transports/transportform" element={<TransportForm/>} />
             <Route path="/transports/transportlist" element={<TransportList />} />
           </Route>
+
+          {/* <Route path="/sidebar" element={<Sidebar />} /> */}
+
 
         </Routes>
       </div>

@@ -41,8 +41,11 @@ const TransportList = ({ transports, onView, onEdit, onDelete }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
+    
     const date = new Date(dateString);
-    return !isNaN(date.getTime()) ? date.toLocaleString() : 'Invalid Date';
+    return !isNaN(date.getTime())
+      ? date.toISOString().split('.')[0] + 'Z'
+      : 'Invalid Date';
   };
   
 
@@ -58,7 +61,6 @@ const TransportList = ({ transports, onView, onEdit, onDelete }) => {
 
   return (
     <div className="ag-theme-alpine-dark" style={{ height: '500px', width: '100%' }}>
-      {transports && transports.length > 0 ? (
         <AgGridReact
           rowData={transports}
           columnDefs={columns}
@@ -67,9 +69,6 @@ const TransportList = ({ transports, onView, onEdit, onDelete }) => {
           pagination={true}
           paginationPageSize={10}
         />
-      ) : (
-        <p>No transports available.</p>
-      )}
     </div>
   );
 };

@@ -1,159 +1,175 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/MerchandiseForm.css';
-import '../../assets/css/MerchandiseList.css';
-import Slider from '../Slider';
-import MerchandiseAdd from './MerchandiseForm';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+import {
+  CREATE_MERCHANDISE,
+  EDIT_MERCHANDISE,
+  DELETE_MERCHANDISE
+} from '../../graphql/mutation/MerchandiseMutation';
+import {
+  GET_ALL_MERCHANDISE_QUERY,
+  GET_MERCHANDISE_BY_CATEGORY_QUERY,
+  GET_ALL_MERCHANDISE_CATEGORIES
+} from '../../graphql/queries/MerchandiseQueries';
+import MerchandiseForm from './MerchandiseForm';
 import MerchandiseList from './MerchandiseList';
+import { FaPlus } from 'react-icons/fa';
 
-function Merchandise() {
-  const [merchandiseList, setMerchandiseList] = useState([]);
-  const [newMerchandise, setNewMerchandise] = useState({
-    id: "",
-    name: "",
-    category: "",
-    description: "",
-    quantity: 1,
-    price: "",
-    dateAdded: "",
-    totalValue: "",
-    status: "",
-  });
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingMerchandiseId, setEditingMerchandiseId] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [formVisible, setFormVisible] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false);
+export default function Merchandise() {
+  const [categoryId, setCategoryId] = useState(null);
+  const [selectedMerchandise, setSelectedMerchandise] = useState(null);
+  const [viewMerchandise, setViewMerchandise] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [rowData, setRowData] = useState([]);
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredMerchandise = merchandiseList.filter(
-    (merchandise) =>
-      merchandise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      merchandise.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
+  const { loading: merchandiseLoading, error: merchandiseError, data: merchandiseData, refetch } = useQuery(
+    categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY,
+    { variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }
   );
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewMerchandise((prevMerchandise) => {
-      const updatedMerchandise = { ...prevMerchandise, [name]: value };
+  const [createMerchandise] = useMutation(CREATE_MERCHANDISE);
+  const [updateMerchandise] = useMutation(EDIT_MERCHANDISE);
+  const [deleteMerchandise] = useMutation(DELETE_MERCHANDISE);
 
-      if (name === "quantity" || name === "price") {
-        const quantity = name === "quantity" ? value : updatedMerchandise.quantity;
-        const price = name === "price" ? value : updatedMerchandise.price;
-        updatedMerchandise.totalValue = quantity * price;
-      }
+  useEffect(() => {
+    if (merchandiseData) {
+      setRowData(categoryId ? merchandiseData.getMerchandiseByCategory : merchandiseData.getAllMerchandises);
+    }
+  }, [merchandiseData, categoryId]);
 
-      return updatedMerchandise;
-    });
+  const toggleFormVisibility = () => {
+    setShowForm(!showForm);
+    setSelectedMerchandise(null); 
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      newMerchandise.name &&
-      newMerchandise.category &&
-      newMerchandise.description &&
-      newMerchandise.quantity > 0 &&
-      newMerchandise.price > 0 &&
-      newMerchandise.dateAdded &&
-      newMerchandise.status
-    ) {
-      if (isEditing) {
-        setMerchandiseList((prevMerchandiseList) =>
-          prevMerchandiseList.map((merchandise) =>
-            merchandise.id === editingMerchandiseId ? { ...newMerchandise, id: editingMerchandiseId } : merchandise
-          )
-        );
-        setIsEditing(false);
-        setEditingMerchandiseId(null);
-      } else {
-        const newId = merchandiseList.length + 1;
-        setMerchandiseList((prevMerchandiseList) => [
-          ...prevMerchandiseList,
-          { ...newMerchandise, id: newId },
-        ]);
-      }
-
-      setNewMerchandise({
-        id: "",
-        name: "",
-        category: "",
-        description: "",
-        quantity: 1,
-        price: "",
-        dateAdded: "",
-        totalValue: "",
-        status: "",
+  const handleCreate = async (merchandise) => {
+    try {
+      await createMerchandise({
+        variables: {
+          merchandiseCategoryId: merchandise.merchandiseCategoryId,
+          merchandiseInfo: {
+            name: merchandise.name,
+            price: parseFloat(merchandise.price),
+            status: merchandise.status,
+            unit: merchandise.unit,
+            description: merchandise.description,
+          },
+        },
+        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
       });
-      navigate('/merchandise/merchandiselist'); 
-    } else {
-      alert("Please fill out all fields.");
+      refetch();
+      toggleFormVisibility();
+      alert('Merchandise created successfully.');
+    } catch (err) {
+      console.error('Error creating merchandise:', err);
+      alert('Error creating merchandise. Please try again.');
     }
   };
 
-  const handleEdit = (merchandise) => {
-    setIsEditing(true);
-    setEditingMerchandiseId(merchandise.id);
-    setNewMerchandise(merchandise);
-    navigate('/merchandise/merchandiseform'); 
-  };
-
-  const handleDelete = (merchandiseId) => {
-    const confirmed = window.confirm("Are you sure you want to delete this merchandise?");
-    if (confirmed) {
-      setMerchandiseList(merchandiseList.filter((merchandise) => merchandise.id !== merchandiseId));
+  const handleEdit = async (id, merchandiseInfo) => {
+    try {
+      await updateMerchandise({
+        variables: {
+          merchandiseId: id,
+          merchandiseInfo: {
+            name: merchandiseInfo.name,
+            price: parseFloat(merchandiseInfo.price),
+            status: merchandiseInfo.status,
+            unit: merchandiseInfo.unit,
+            description: merchandiseInfo.description,
+          },
+        },
+        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
+      });
+      refetch();
+      setSelectedMerchandise(null);
+      toggleFormVisibility();
+      alert('Merchandise updated successfully.');
+    } catch (err) {
+      console.error('Error updating merchandise:', err);
+      alert('Error updating merchandise. Please try again.');
     }
   };
 
-  const handleOpenForm = () => {
-    setFormVisible(true);
-    setShowCloseButton(true);
-    navigate('/merchandise/merchandiseform'); 
+  const handleDelete = async (merchandiseId) => {
+    try {
+      await deleteMerchandise({
+        variables: { merchandiseId },
+        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
+      });
+      refetch();
+      alert('Merchandise deleted successfully.');
+    } catch (err) {
+      console.error('Error deleting merchandise:', err);
+      alert('Error deleting merchandise. Please try again.');
+    }
   };
 
-  const handleCloseForm = () => {
-    setFormVisible(false);
-    setShowCloseButton(false);
-    navigate('/merchandise/merchandiselist'); 
+  const handleView = (merchandise) => {
+    setViewMerchandise(merchandise);
   };
+
+  if (categoriesLoading || merchandiseLoading) 
+    return <p>Loading...</p>;
+  if (categoriesError || merchandiseError) 
+    return <p>Error: {categoriesError?.message || merchandiseError?.message}</p>;
+
+  const categories = categoriesData?.getAllMerchandiseCategories || [];
 
   return (
-    <>
-      <Slider />
-      <div className="merchandise-container">
-        <div className="merchandise-content">
-          {location.pathname === '/merchandise/merchandiseform' && (
-            <MerchandiseAdd
-              newMerchandise={newMerchandise}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-              isEditing={isEditing}
-              handleCloseForm={handleCloseForm}
-              showCloseButton={showCloseButton}
-            />
-          )}
-          {location.pathname === '/merchandise/merchandiselist' && (
-            <MerchandiseList
-              merchandiseList={merchandiseList}
-              filteredMerchandise={filteredMerchandise}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-              handleSearch={handleSearch}
-              searchTerm={searchTerm}
-              handleOpenForm={handleOpenForm}
-            />
-          )}
-        </div>
+    <div className="merchandise-container">
+      <div className="merchandise-header">
+        <h2>Merchandise List</h2>
+        <button className="merchandise-add-btn" onClick={toggleFormVisibility}>
+          <FaPlus />
+        </button>
       </div>
-    </>
+      <div className="filter-section">
+        <label htmlFor="category-select">Select Category:</label>
+        <select
+          id="category-select"
+          value={categoryId || ''}
+          onChange={(e) => setCategoryId(e.target.value || null)}
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        {showForm && (
+          <MerchandiseForm
+            handleCreate={handleCreate}
+            handleEdit={handleEdit}
+            selectedMerchandise={selectedMerchandise}
+            setSelectedMerchandise={setSelectedMerchandise}
+            toggleFormVisibility={toggleFormVisibility}
+          />
+        )}
+        {viewMerchandise && (
+          <div className="view-details">
+            <h3>Merchandise Details</h3>
+            <p><strong>Name:</strong> {viewMerchandise.name}</p>
+            <p><strong>Price:</strong> {viewMerchandise.price}</p>
+            <p><strong>Status:</strong> {viewMerchandise.status}</p>
+            <p><strong>Unit:</strong> {viewMerchandise.unit}</p>
+            <p><strong>Description:</strong> {viewMerchandise.description}</p>
+            <button onClick={() => setViewMerchandise(null)}>Close</button>
+          </div>
+        )}
+        <MerchandiseList
+          rowData={rowData}
+          handleEdit={(merchandise) => {
+            setSelectedMerchandise(merchandise);
+            setShowForm(true);
+          }}
+          handleDelete={handleDelete}
+          handleView={handleView}
+        />
+      </div>
+    </div>
   );
 }
-
-export default Merchandise;

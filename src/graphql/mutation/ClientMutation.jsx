@@ -1,45 +1,49 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_CLIENT = gql`
-mutation CreateClient($name:String!) {
-    createClient(input: {
-        name:$name
-    }) {
-        message
-        client {
-            id
-            name
-        }
+ mutation CreateClient($input: CreateClientInput!) {
+    createClient(input: $input) {
+      client {
+        id
+        name
+        address
+        createdAt
+        email
+        phone
+        updatedAt
+      }
+      clientMutationId
+      errors
     }
-}
-
+  }
 `;
 
-export const UPDATE_CLIENT = gql`
-mutation EditClient($clientId:ID!,$clientName:String!) {
-    editClient(input: {
-        clientId:$clientId
-        clientName:$clientName
-    }) {
-        message
+export const EDIT_CLIENT = gql`
+mutation EditClient($clientId: ID!, $clientInfo: ClientInput!) {
+    editClient(input: { clientId: $clientId, clientInfo: $clientInfo }) {
+        errors
         client {
             id
             name
+            address
+            createdAt
+            email
+            phone
+            updatedAt
         }
+        clientMutationId
     }
 }
-
 `;
 
 
 export const DELETE_CLIENT = gql`
-mutation DeleteClient($clientId:ID!) {
-    deleteClient(input: {
-        clientId:$clientId
-    }) {
-        message
+ mutation DeleteClient($clientId: ID!, $clientMutationId: String!) {
+    deleteClient(input: { clientId: $clientId, clientMutationId: $clientMutationId }) {
+      message
+      errors
+      clientMutationId
     }
-}
-
+  }
 `;
 

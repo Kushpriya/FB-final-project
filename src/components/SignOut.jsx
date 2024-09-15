@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/css/Slider.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import LOGOUT_MUTATION from '../graphql/mutation/LogoutMutation';
@@ -13,7 +12,6 @@ function SignOut({ className }) {
         const token = localStorage.getItem('token');
 
         console.log('Token before logout:', token);
-
         if (!token) {
             alert('You are already logged out.');
             navigate('/signin');

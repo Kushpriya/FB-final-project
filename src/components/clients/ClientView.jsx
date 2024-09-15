@@ -1,4 +1,3 @@
-// src/components/ClientView.jsx
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CLIENT_BY_ID } from "../../graphql/queries/ClientQueries";
@@ -24,8 +23,11 @@ const ClientView = ({ clientId, onClose }) => {
           <div>
             <p><strong>ID:</strong> {client.id}</p>
             <p><strong>Name:</strong> {client.name}</p>
-            <p><strong>Created At:</strong> {client.createdAt}</p>
-            <p><strong>Updated At:</strong> {client.updatedAt}</p>
+            <p><strong>Address:</strong> {client.address}</p>
+            <p><strong>Email:</strong> {client.email}</p>
+            <p><strong>Phone:</strong> {client.phone}</p>
+            <p><strong>Created At:</strong> {new Date(client.createdAt).toLocaleDateString()}</p>
+            <p><strong>Updated At:</strong> {new Date(client.updatedAt).toLocaleDateString()}</p>
           </div>
         ) : (
           <p>No client data available.</p>

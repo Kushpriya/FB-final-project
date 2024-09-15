@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
  export const CREATE_MERCHANDISE = gql`
- mutation CreateMerchandise($merchandiseCategoryId:ID!,$merchandiseInfo:MakeMerchandiseInput!) {
+mutation CreateMerchandise($merchandiseCategoryId:ID!,$merchandiseInfo:MakeMerchandiseInput!) {
     createMerchandise(
         input: {
             merchandiseCategoryId:$merchandiseCategoryId
@@ -26,7 +26,7 @@ import { gql } from "@apollo/client";
  `;
 
  export const EDIT_MERCHANDISE = gql`
- mutation UpdateMerchandise($merchandiseInfo:MakeMerchandiseInput!,$merchandiseId:ID!) {
+mutation UpdateMerchandise($merchandiseInfo:MakeMerchandiseInput!,$merchandiseId:ID!) {
     updateMerchandise(
         input: {
             merchandiseInfo: $merchandiseInfo

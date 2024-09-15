@@ -1,137 +1,104 @@
-import React, { useEffect } from 'react';
-import { FaBox, FaUser, FaTags, FaHashtag, FaDollarSign, FaCheckCircle } from 'react-icons/fa';
-import "../../assets/css/MerchandiseForm.css";
+import React, { useState, useEffect } from 'react';
+import '../../assets/css/Merchandise.css';
 
-function MerchandiseForm({ isEditing, newMerchandise, handleInputChange, handleSubmit, handleCloseForm, showCloseButton }) {
-    useEffect(() => {
-        if (!isEditing && !newMerchandise.dateAdded) {
-            const now = new Date();
-            const formattedDate = now.toISOString().split('T')[0]; 
-            const formattedTime = now.toTimeString().split(' ')[0]; 
-            const dateTime = `${formattedDate} ${formattedTime}`; 
-            handleInputChange({ target: { name: 'dateAdded', value: dateTime } });
-        }
-    }, [isEditing, newMerchandise.dateAdded, handleInputChange]);
+export default function MerchandiseForm({ handleCreate, handleEdit, selectedMerchandise, setSelectedMerchandise, toggleFormVisibility }) {
+  const initialFormData = {
+    name: '',
+    price: '',
+    status: '',
+    unit: '',
+    description: '',
+    merchandiseCategoryId: '',
+  };
 
-    return (
-        <>
-            <div className="merchandise-form-wrapper">
-                <h2>{isEditing ? "Edit Merchandise" : "Create Merchandise"}</h2>
-                <form className="merchandise-form" onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label>
-                            <FaBox className="input-icon" /> Merchandise Name
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="merchandise-form-input"
-                            placeholder="Merchandise Name"
-                            value={newMerchandise.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
+  const [formData, setFormData] = useState(selectedMerchandise || initialFormData);
 
-                    <div className="input-row">
-                        <div className="input-group">
-                            <label>
-                                <FaTags className="input-icon" /> Category
-                            </label>
-                            <select
-                                name="category"
-                                className="merchandise-form-select"
-                                value={newMerchandise.category}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="">Select Category</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Furniture">Furniture</option>
-                                <option value="Books">Books</option>
-                                <option value="Beauty">Beauty</option>
-                            </select>
-                        </div>
+  useEffect(() => {
+    if (selectedMerchandise) {
+      setFormData(selectedMerchandise);
+    }
+  }, [selectedMerchandise]);
 
-                        <div className="input-group">
-                            <label>
-                                <FaHashtag className="input-icon" /> Quantity
-                            </label>
-                            <input
-                                type="number"
-                                name="quantity"
-                                className="merchandise-form-input"
-                                placeholder="Quantity"
-                                value={newMerchandise.quantity}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                    </div>
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-                    <div className="input-row">
-                        <div className="input-group">
-                            <label>
-                                <FaDollarSign className="input-icon" /> Price
-                            </label>
-                            <input
-                                type="number"
-                                name="price"
-                                className="merchandise-form-input"
-                                placeholder="Price"
-                                value={newMerchandise.price}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (selectedMerchandise) {
+      handleEdit(selectedMerchandise.id, formData);
+    } else {
+      handleCreate(formData);
+    }
+    setFormData(initialFormData); 
+    setSelectedMerchandise(null);
+    toggleFormVisibility(); 
+  };
 
-                        <div className="input-group">
-                            <label>
-                                <FaCheckCircle className="input-icon" /> Status
-                            </label>
-                            <select
-                                name="status"
-                                className="merchandise-form-select"
-                                value={newMerchandise.status}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="">Select Status</option>
-                                <option value="Available">Available</option>
-                                <option value="OutofStock">Out of Stock</option>
-                                <option value="Discontinued">Discontinued</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="input-group">
-                        <label>
-                            <FaUser className="input-icon" /> Description
-                        </label>
-                        <textarea
-                            name="description"
-                            className="merchandise-form-textarea"
-                            placeholder="Description"
-                            value={newMerchandise.description}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-buttons">
-                        <button type="submit" className="btn-submit">
-                            {isEditing ? "Update Merchandise" : "Add Merchandise"}
-                        </button>
-
-                        {showCloseButton && (
-                            <button className="btn-close" onClick={handleCloseForm}>Close Form</button>
-                        )}
-                    </div>
-                </form>
-            </div>
-        </>
-    );
+  return (
+    <div className="merchandise-form-container">
+      <h2 className="merchandise-form-title">
+        <button className="close-button" onClick={toggleFormVisibility}>X</button>
+        {selectedMerchandise ? 'Edit Merchandise' : 'Create Merchandise'}
+      </h2>
+      <form onSubmit={handleSubmit}>
+        <label className="merchandise-form-label">Name:</label>
+        <input
+          className="merchandise-form-input"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <label className="merchandise-form-label">Price:</label>
+        <input
+          className="merchandise-form-input"
+          type="number"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          required
+        />
+        <label className="merchandise-form-label">Status:</label>
+        <select
+          className="merchandise-form-select"
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+        >
+          <option value="available">Available</option>
+          <option value="out_of_stock">Out of Stock</option>
+        </select>
+        <label className="merchandise-form-label">Unit:</label>
+        <input
+          className="merchandise-form-input"
+          type="text"
+          name="unit"
+          value={formData.unit}
+          onChange={handleChange}
+          required
+        />
+        <label className="merchandise-form-label">Description:</label>
+        <textarea
+          className="merchandise-form-textarea"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+        <label className="merchandise-form-label">Category ID:</label>
+        <input
+          className="merchandise-form-input"
+          type="text"
+          name="merchandiseCategoryId"
+          value={formData.merchandiseCategoryId}
+          onChange={handleChange}
+          required
+        />
+        <button className="merchandise-form-submit-btn" type="submit">
+          {selectedMerchandise ? 'Update Merchandise' : 'Create Merchandise'}
+        </button>
+      </form>
+    </div>
+  );
 }
-
-export default MerchandiseForm;

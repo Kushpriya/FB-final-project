@@ -49,7 +49,7 @@ const TransportForm = ({ addTransport, editingTransport, updateTransport, onClos
   return (
     <div className="transport-form-overlay">
       <div className="transport-form-container">
-        <button className="close-button" onClick={onClose}>X</button>  {/* onClose function applied here */}
+        <button className="close-button" onClick={onClose}>X</button>  
         <h2>{editingTransport ? "Edit Transport" : "Add Transport"}</h2>
         <form onSubmit={handleSubmit}>
           <label>Name</label>

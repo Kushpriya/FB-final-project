@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import ClientForm from "./ClientForm";
 import ClientList from "./ClientList";
@@ -9,65 +9,70 @@ import {
 } from "../../graphql/queries/ClientQueries";
 import {
   CREATE_CLIENT,
-  UPDATE_CLIENT,
+  EDIT_CLIENT,
   DELETE_CLIENT,
 } from "../../graphql/mutation/ClientMutation"; 
+import { FaPlus } from 'react-icons/fa';
 
-const Client = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [editingClient, setEditingClient] = useState(null);
-  const [isFormVisible, setIsFormVisible] = useState(false);
+export default function Client() {
+  const [selectedClient, setSelectedClient] = useState(null);
   const [viewingClientId, setViewingClientId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [rowData, setRowData] = useState([]);
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_CLIENTS, {
     onError: (err) => console.error("Query Error:", err),
   });
 
-  const [createClient] = useMutation(CREATE_CLIENT, {
-    onError: (err) => console.error("Create Mutation Error:", err),
-    onCompleted: () => {
-      refetch();
-      // setIsFormVisible(false);
-    },
-  });
+  const [createClient] = useMutation(CREATE_CLIENT);
+  const [updateClient] = useMutation(EDIT_CLIENT);
+  const [deleteClient] = useMutation(DELETE_CLIENT);
 
-  const [updateClient] = useMutation(UPDATE_CLIENT, {
-    onError: (err) => console.error("Update Mutation Error:", err),
-    onCompleted: () => {
-      refetch();
-      // setEditingClient(null);
-      // setIsFormVisible(false);
-    },
-  });
+  useEffect(() => {
+    if (data) {
+      setRowData(data.getAllClients);
+    }
+  }, [data]);
 
-  const [deleteClient] = useMutation(DELETE_CLIENT, {
-    onError: (err) => console.error("Delete Mutation Error:", err),
-    onCompleted: () => refetch(),
-  });
-
-  const addClient = async (client) => {
+  const toggleFormVisibility = () => {
+    console.log("Toggling form visibility");
+    setShowForm(prev => !prev);
+    setSelectedClient(null); 
+  };
+  
+  const handleCreate = async (client) => {
     try {
-      await createClient({ variables: { name: client.name } });
+      console.log("Creating client:", client);
+      await createClient({ variables: { input: client } });
+      refetch();
     } catch (err) {
       console.error("Error creating client:", err);
       alert("An error occurred while creating the client.");
     }
   };
 
-  const handleUpdate = async (client) => {
+  const handleEdit = async (client) => {
+    const { __typename, id, createdAt, updatedAt, ...clientInfo } = client;
+  
     try {
-      await updateClient({ variables: { clientId: client.id, clientName: client.name } });
+      console.log("Editing client:", clientInfo);
+      await updateClient({ variables: { clientId: id, clientInfo } });
+      refetch();
     } catch (err) {
       console.error("Error updating client:", err);
       alert("An error occurred while updating the client.");
     }
   };
+  
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this client?")) return;
 
     try {
+      console.log("Deleting client with ID:", id);
       await deleteClient({ variables: { clientId: id } });
+      refetch();
     } catch (err) {
       console.error("Error deleting client:", err);
       alert("An error occurred while deleting the client.");
@@ -75,12 +80,8 @@ const Client = () => {
   };
 
   const handleView = (client) => {
+    console.log("Viewing client:", client);
     setViewingClientId(client.id);
-  };
-
-  const handleEdit = (client) => {
-    setEditingClient(client);
-    setIsFormVisible(true);
   };
 
   const handleSearch = (e) => {
@@ -98,9 +99,11 @@ const Client = () => {
 
   return (
     <>
-      {/* <Slider /> */}
       <div className="client-container">
         <div className="filter-section">
+          <button className="client-add-btn" onClick={toggleFormVisibility}>
+            <FaPlus />
+          </button>
           <input
             type="text"
             placeholder="Search"
@@ -108,30 +111,23 @@ const Client = () => {
             onChange={handleSearch}
             className="search-input"
           />
-          <button
-            onClick={() => {
-              setIsFormVisible(true);
-              setEditingClient(null);
-            }}
-          >
-            Add Client
-          </button>
         </div>
 
-        {isFormVisible && (
+        {showForm && (
           <ClientForm
-            addClient={addClient}
-            editingClient={editingClient}
-            updateClient={handleUpdate}
-            onClose={() => setIsFormVisible(false)}
+            handleCreate={handleCreate}
+            handleEdit={handleEdit}
+            selectedClient={selectedClient}
+            setSelectedClient={setSelectedClient}
+            toggleFormVisibility={toggleFormVisibility}
           />
         )}
 
         <ClientList
           clients={filteredClients}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          handleView={handleView}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
 
         {viewingClientId && (
@@ -143,6 +139,4 @@ const Client = () => {
       </div>
     </>
   );
-};
-
-export default Client;
+}

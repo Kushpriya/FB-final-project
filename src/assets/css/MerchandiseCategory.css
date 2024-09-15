@@ -74,6 +74,8 @@
   width: 100%;
   background-color: #28a745;
   color: white;
+  height: 50px;
+  border-radius: 10px;
 }
 
 .category-form-container button[type="submit"]:hover {

@@ -1,0 +1,161 @@
+.merchandise-container {
+    padding: 1rem;
+  }
+  
+  .merchandise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .merchandise-add-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .merchandise-add-btn:hover {
+    background-color: #218838;
+  }
+  
+  .view-details {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .view-details .close-button {
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+  }
+  
+.merchandise-list-container {
+    margin: 20px;
+    background-color: #1e1e2f; /* Dark theme */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .merchandise-list-title {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .merchandise-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 8px;
+    color: #ffffff;
+  }
+  
+  .merchandise-action-btn:hover {
+    color: #61dafb; /* Highlight action buttons on hover */
+  }
+  
+  .merchandise-status-available {
+    color: #32cd32; /* Green for Available */
+    font-weight: bold;
+  }
+  
+  .merchandise-status-out-of-stock {
+    color: #ff6347; /* Red for Out of Stock */
+    font-weight: bold;
+  }
+  
+  .view-details {
+    background-color: #252540;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .view-details h3 {
+    color: #61dafb;
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .view-details p {
+    color: #bdbdbd;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  
+  /* MerchandiseForm.css */
+.merchandise-form-container {
+    background-color: #2b2b3c;
+    padding: 20px;
+    border-radius: 8px;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+  }
+  
+  .merchandise-form-title {
+    color: #61dafb;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .merchandise-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+
+.close-button {
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 50%;
+  }
+  
+  .merchandise-form-input,
+  .merchandise-form-textarea,
+  .merchandise-form-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #353545;
+    color: #ffffff;
+    font-size: 14px;
+  }
+  
+  .merchandise-form-input:focus,
+  .merchandise-form-textarea:focus,
+  .merchandise-form-select:focus {
+    border-color: #61dafb;
+    outline: none;
+  }
+  
+  .merchandise-form-button {
+    background-color: #61dafb;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .merchandise-form-button:hover {
+    background-color: #53c4e6;
+  }
+  

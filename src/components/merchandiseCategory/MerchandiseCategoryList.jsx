@@ -21,8 +21,8 @@ const MerchandiseCategoryList = ({ categories, onView, onEdit, onDelete }) => {
   ];
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
-      {categories.length ? (
+    <div className="ag-theme-alpine-dark" style={{ height: 400, width: "100%" }}>
+      {categories.length > 0 ?  (
         <AgGridReact
           rowData={categories}
           columnDefs={columnDefs}
