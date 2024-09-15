@@ -1,62 +1,45 @@
 import React from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import '../../assets/css/ClientList.css';
+import '../../assets/css/Clients.css';
+import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa'; 
+import { AgGridReact } from 'ag-grid-react';
 
-import { FaUserCircle, FaEdit, FaTrash } from "react-icons/fa";
+const columnDefs = (handleView, handleEdit, handleDelete) => [
+  { headerName: 'ID', field: 'id', sortable: true },
+  { headerName: 'Name', field: 'name', sortable: true },
+  { headerName: 'Email', field: 'email', sortable: true },
+  { headerName: 'Address', field: 'address', sortable: true },
+  { headerName: 'Phone', field: 'phone', sortable: true },
+  { headerName: 'Created At', field: 'createdAt', sortable: true, valueFormatter: (params) => new Date(params.value).toLocaleDateString() },
+  { headerName: 'Updated At', field: 'updatedAt', sortable: true, valueFormatter: (params) => new Date(params.value).toLocaleDateString() },
+  {
+    headerName: 'Actions',
+    field: 'actions',
+    cellRenderer: (params) => (
+      <>
+        <button onClick={() => handleView(params.data)} className="client-action-btn">
+          <FaEye title="View" />
+        </button>
+        <button onClick={() => handleEdit(params.data)} className="client-action-btn">
+          <FaEdit title="Edit" />
+        </button>
+        <button onClick={() => handleDelete(params.data.id)} className="client-action-btn">
+          <FaTrashAlt title="Delete" />
+        </button>
+      </>
+    ),
+    width: 200,
+  },
+];
 
-const ClientList = ({ rowData, onEditClient, onDeleteClient }) => {
-  const columnDefs = [
-    { headerName: "ID", field: "id", sortable: true, filter: true },
-    {
-      headerName: "Profile",
-      field: "profile",
-      cellRendererFramework: () => <FaUserCircle className="profile-icon" />,
-    },
-    {
-      headerName: "Name",
-      field: "firstName",
-      valueGetter: (params) =>
-        `${params.data.firstName} ${params.data.lastName}`,
-    },
-    { headerName: "Email", field: "email", sortable: true, filter: true },
-    { headerName: "Phone", field: "phone", sortable: true, filter: true },
-    { headerName: "Location", field: "address", sortable: true, filter: true },
-    { headerName: "Company", field: "companyName", sortable: true, filter: true },
-    { headerName: "Orders", field: "orders", sortable: true },
-    { headerName: "Amount Spent", field: "amountSpent", sortable: true },
-    {
-      headerName: "Email Subscription",
-      field: "emailSubscription",
-      cellRendererFramework: (params) => {
-        const subscription = params.value;
-        let colorClass = "";
-        if (subscription === "Subscribed") colorClass = "subscribed";
-        if (subscription === "Not subscribed") colorClass = "not-subscribed";
-        if (subscription === "Pending") colorClass = "pending";
-        return <span className={colorClass}>{subscription}</span>;
-      },
-    },
-    {
-      headerName: "Actions",
-      field: "id",
-      cellRendererFramework: (params) => (
-        <>
-          <button onClick={() => onEditClient(params.data.id)}>
-            <FaEdit />
-          </button>
-          <button onClick={() => onDeleteClient(params.data.id)}>
-            <FaTrash />
-          </button>
-        </>
-      ),
-    },
-  ];
-
+const ClientList = ({ clients, handleView, handleEdit, handleDelete }) => {
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} />
+    <div className="ag-theme-alpine-dark" style={{ height: '150px', width: '100%' }}>
+      <AgGridReact
+        rowData={clients}
+        columnDefs={columnDefs(handleView, handleEdit, handleDelete)}
+        pagination
+        paginationPageSize={10}
+      />
     </div>
   );
 };

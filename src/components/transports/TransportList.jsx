@@ -1,104 +1,74 @@
 import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import '../../assets/css/transports/Transports.css';
+import '../../assets/css/Transports.css';
+import { GET_ALL_TRANSPORTS_QUERY , GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY} from "../../graphql/queries/TransportQueries";
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
+
 
 const TransportList = ({ transports, onView, onEdit, onDelete }) => {
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
 
-  // Column definitions
+  const { loading, error, data } = useQuery(GET_ALL_TRANSPORTS_QUERY);
+
   const columns = [
-    { 
-      headerName: "Name", 
-      field: "name", 
-      sortable: true, 
-      filter: true, 
-      checkboxSelection: true, // Allows row selection
-      floatingFilter: true      // Adds a filter row beneath the header
-    },
-    { 
-      headerName: "Vehicle Type", 
-      field: "vehicleType", 
-      sortable: true, 
-      filter: true,
-      floatingFilter: true 
-    },
-    { 
-      headerName: "Status", 
-      field: "status", 
-      sortable: true, 
-      filter: true,
-      floatingFilter: true 
-    },
-    { 
-      headerName: "Capacity", 
-      field: "capacity", 
-      sortable: true, 
-      filter: "agNumberColumnFilter", // Number-specific filter
-      floatingFilter: true 
-    },
-    { 
-      headerName: "Description", 
-      field: "description", 
-      sortable: true, 
-      filter: true,
-      floatingFilter: true 
+    { headerName: "#", field: "id", sortable: true, filter: true },
+    { headerName: "Name", field: "name", sortable: true, filter: true },
+    { headerName: "Vehicle Type", field: "vehicleType", sortable: true, filter: true },
+    { headerName: "Status", field: "status", sortable: true, filter: true },
+    {
+      headerName: "Created At",
+      field: "created_at",
+      sortable: true,
+      filter: "agDateColumnFilter",
+      valueFormatter: (params) => formatDate(params.value), 
     },
     {
       headerName: "Actions",
       field: "actions",
       cellRenderer: (params) => (
         <div className="action-icons">
-          <FaEye
-            className="view-icon"
-            onClick={() => onView(params.data)}
-            title="View Transport"
-          />
-          <FaEdit
-            className="edit-icon"
-            onClick={() => onEdit(params.data)}
-            title="Edit Transport"
-          />
-          <FaTrashAlt
-            className="delete-icon"
-            onClick={() => onDelete(params.data)}
-            title="Delete Transport"
-          />
+          <FaEye className="view-icon" onClick={() => onView(params.data)} />
+          <FaEdit className="edit-icon" onClick={() => onEdit(params.data)} />
+          <FaTrashAlt className="delete-icon" onClick={() => onDelete(params.data.id)} />
         </div>
       ),
-      width: 150,
     },
   ];
 
-  // Handles the API once the grid is ready
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    
+    const date = new Date(dateString);
+    return !isNaN(date.getTime())
+      ? date.toISOString().split('.')[0] + 'Z'
+      : 'Invalid Date';
+  };
+  
+
   const onGridReady = (params) => {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
   };
 
-  // Pagination configuration
-  const defaultColDef = {
-    resizable: true,  // Columns can be resized
-    flex: 1,          // Automatically adjust columns width
-    minWidth: 100,
-  };
+  if (loading) return <p>Loading transports...</p>;
+  if (error) return <p>Error loading transports: {error.message}</p>;
+
+  // const transports = data?.getAllTransport || [];
 
   return (
-    <div className="ag-theme-alpine-dark" style={{ height: "500px", width: "100%" }}>
-      <AgGridReact
-        rowData={transports}
-        columnDefs={columns}
-        defaultColDef={defaultColDef}
-        pagination={true}              // Enables pagination
-        paginationPageSize={10}        // Number of rows per page
-        rowSelection="multiple"        // Allows selecting multiple rows
-        onGridReady={onGridReady}      // Ensures grid API is set up correctly
-        animateRows={true}             // Smooth row animations
-        domLayout="autoHeight"         // Adjusts the grid height dynamically
-      />
+    <div className="ag-theme-alpine-dark" style={{ height: '500px', width: '100%' }}>
+        <AgGridReact
+          rowData={transports}
+          columnDefs={columns}
+          defaultColDef={{ flex: 1, minWidth: 150 }}
+          onGridReady={onGridReady}
+          pagination={true}
+          paginationPageSize={10}
+        />
     </div>
   );
 };

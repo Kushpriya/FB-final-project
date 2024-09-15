@@ -1,54 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState} from 'react';
+import {useNavigate } from 'react-router-dom';
 import {
-    FaBars, FaTachometerAlt, FaUser, FaCog, FaBox, FaList, FaUsers, FaLayerGroup,FaPlus, FaTruck,
-    FaMoon, FaSun, FaSearch, FaBell
-} from 'react-icons/fa';
+    FaBars, FaTachometerAlt,FaBox, FaList, FaUsers,FaPlus, FaTruck,} from 'react-icons/fa';
 import SignOut from './SignOut';
-import '../assets/css/Slider.css';
+import '../assets/css/Sidebar.css';
 
-function Slider({ handleOpenForm }) {
+function Sidebar({ handleOpenForm }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [isDarkMode, setIsDarkMode] = useState(true);
     const [activeMenu, setActiveMenu] = useState(null);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-    };
-
     const handleMenuClick = (menu) => {
         setActiveMenu(activeMenu === menu ? null : menu);
     };
 
-    const toggleSearch = () => {
-        setIsSearchOpen(!isSearchOpen);
-    };
-
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
-
-    useEffect(() => {
-        document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
-    }, [isDarkMode]);
-
     const navigateTo = (path) => {
         navigate(path);
-        if (path === '/orders/orderform') {
             handleOpenForm();
-        }
     };
 
     return (
         <>
-            <div className={`sidebar-container ${isSidebarOpen ? '' : 'closed'} ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+            <div className={`sidebar-container ${isSidebarOpen ? '' : 'closed'} `}>
                 <button className="sidebar-toggle" onClick={toggleSidebar}>
                     <FaBars />
                 </button>
@@ -107,7 +84,7 @@ function Slider({ handleOpenForm }) {
                             </ul>
                         )}
                     </li>
-                    <li onClick={() => handleMenuClick('venue')}>
+                    {/* <li onClick={() => handleMenuClick('venue')}>
                         <FaUsers className="sidebar-icon" />
                         {isSidebarOpen && <span>Venue</span>}
                         {activeMenu === 'venue' && isSidebarOpen && (
@@ -117,7 +94,7 @@ function Slider({ handleOpenForm }) {
                                 <li onClick={() => navigateTo('/venue/venueview')}><FaList className="sidebar-sub-icon" /> view</li>
                             </ul>
                         )}
-                    </li>
+                    </li> */}
                     <li onClick={() => handleMenuClick('couriers')}>
                         <FaUsers className="sidebar-icon" />
                         {isSidebarOpen && <span>Couriers</span>}
@@ -145,31 +122,9 @@ function Slider({ handleOpenForm }) {
 
                     <SignOut className="logout" />
                 </ul>
-            </div>
-
-            <div className={`main-content ${isSidebarOpen ? '' : 'shifted'}`}>
-                <div className={`nav_side ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                    <button className="theme-toggle" onClick={toggleTheme}>
-                        {isDarkMode ? <FaSun /> : <FaMoon />}
-                    </button>
-                    <div className="nav_side-right">
-                        <div className="nav_side-search-container">
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={handleSearchChange}
-                                placeholder="Search or jump to..."
-                                className={`nav_side-search-input ${isSearchOpen ? 'open' : ''}`}
-                            />
-                            <FaSearch className="nav_side-search-icon" onClick={toggleSearch} />
-                        </div>
-                        <FaBell className="nav_side-notification-icon" />
-                        <FaUser className="nav_side-user-icon" />
-                    </div>
-                </div>
-            </div>
+            </div>         
         </>
     );
 }
 
-export default Slider;
+export default Sidebar;

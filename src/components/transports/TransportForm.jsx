@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
+import "../../assets/css/Transports.css"
 
 const vehicleTypes = [
-  { value: "", label: "Select Vehicle" }, 
+  { value: "", label: "Select Vehicle" },
   { value: "Tank", label: "Tank" },
-  { value: "Tank_wagon", label: "Tank Wagon" },
+  { value: "TankWagon", label: "Tank Wagon" },
   { value: "Truck", label: "Truck" },
-  { value: "Semi Truck", label: "Semi Truck" },
+  { value: "SemiTruck", label: "Semi Truck" },
 ];
 
 const statusTypes = [
   { value: "", label: "Select Status" },
-  { value: "Available", label: "Available" },
-  { value: "In Use", label: "In Use" },
-  { value: "Maintenance", label: "Maintenance" },
-  { value: "Out Of Service", label: "Out of Service" },
+  { value: "available", label: "Available" },
+  { value: "in_use", label: "In Use" },
+  { value: "maintenance", label: "Maintenance" },
+  { value: "out_of_service", label: "Out of Service" },
 ];
 
-const TransportForm = ({ addTransport, editingTransport, updateTransport }) => {
+const TransportForm = ({ addTransport, editingTransport, updateTransport, onClose }) => {
   const [transport, setTransport] = useState({
     name: "",
-    vehicleType: "", 
-    status: "", 
-    capacity: "",
-    description: "",
+    vehicleType: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -31,101 +30,69 @@ const TransportForm = ({ addTransport, editingTransport, updateTransport }) => {
     }
   }, [editingTransport]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setTransport({ ...transport, [name]: value });
+  const handleChange = (e) => {
+    setTransport({
+      ...transport,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!transport.vehicleType || !transport.status) {
-      alert("Please select a vehicle type and status.");
-      return;
-    }
-
     if (editingTransport) {
       updateTransport(transport);
     } else {
       addTransport(transport);
     }
-
-    setTransport({
-      name: "",
-      vehicleType: "",
-      status: "",
-      capacity: "",
-      description: "",
-    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="transport-form">
-      <div>
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={transport.name}
-          onChange={handleInputChange}
-          placeholder="Name"
-          required
-        />
+    <div className="transport-form-overlay">
+      <div className="transport-form-container">
+        <button className="close-button" onClick={onClose}>X</button>  
+        <h2>{editingTransport ? "Edit Transport" : "Add Transport"}</h2>
+        <form onSubmit={handleSubmit}>
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={transport.name}
+            onChange={handleChange}
+            placeholder="Name"
+            required
+          />
+          <label>Vehicle Type</label>
+          <select
+            name="vehicleType"
+            value={transport.vehicleType}
+            onChange={handleChange}
+            required
+          >
+            {vehicleTypes.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+          <label>Status</label>
+          <select
+            name="status"
+            value={transport.status}
+            onChange={handleChange}
+            required
+          >
+            {statusTypes.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
+              </option>
+            ))}
+          </select>
+          <button type="submit">
+            {editingTransport ? "Update Transport" : "Add Transport"}
+          </button>
+        </form>
       </div>
-
-      <div>
-        <label>Vehicle Type</label>
-        <select
-          name="vehicleType"
-          value={transport.vehicleType}
-          onChange={handleInputChange}
-        >
-          {vehicleTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label>Status</label>
-        <select
-          name="status"
-          value={transport.status}
-          onChange={handleInputChange}
-        >
-          {statusTypes.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label>Capacity</label>
-        <input
-          type="number"
-          name="capacity"
-          value={transport.capacity}
-          onChange={handleInputChange}
-          placeholder="Capacity"
-          required
-        />
-      </div>
-
-      <div>
-        <label>Description</label>
-        <textarea
-          name="description"
-          value={transport.description}
-          onChange={handleInputChange}
-          placeholder="Description"
-        ></textarea>
-      </div>
-
-      <button type="submit">{editingTransport ? "Update Transport" : "Add Transport"}</button>
-    </form>
+    </div>
   );
 };
 
