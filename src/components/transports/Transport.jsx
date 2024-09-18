@@ -1,204 +1,162 @@
-import React, { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import TransportForm from "./TransportForm";
-import TransportList from "./TransportList";
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { AgGridReact } from 'ag-grid-react';
+import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { GET_ALL_TRANSPORTS_QUERY, GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY } from '../../graphql/queries/TransportQueries';
+import { useAddTransport, useEditTransport, useDeleteTransport } from './TransportHandler';
+import TransportForm from './TransportForm';
 import '../../assets/css/Transports.css';
-import {
-  GET_ALL_TRANSPORTS_QUERY,
-  GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY,
-} from "../../graphql/queries/TransportQueries";
-import {
-  CREATE_TRANSPORT,
-  UPDATE_TRANSPORT,
-  DELETE_TRANSPORT,
-} from "../../graphql/mutation/TransportMutation";
-import Slider from "../Slider";
+import Slider from '../../components/Slider';
 
 const Transport = () => {
-  const [vehicleTypeFilter, setVehicleTypeFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [editingTransport, setEditingTransport] = useState(null);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  
-  const { loading, error, data, refetch } = useQuery(
-    vehicleTypeFilter ? GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY : GET_ALL_TRANSPORTS_QUERY,
-    {
-      variables: { vehicleType: vehicleTypeFilter },
-      skip: searchTerm !== "" && !vehicleTypeFilter,
-      onError: (err) => console.error("Query Error:", err),
+  const [selectedVehicleType, setSelectedVehicleType] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransport, setSelectedTransport] = useState(null);
+  const [viewTransport, setViewTransport] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const { data, loading, error, refetch } = useQuery(
+    selectedVehicleType ? GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY : GET_ALL_TRANSPORTS_QUERY,
+    { 
+      variables: selectedVehicleType ? { vehicleType: selectedVehicleType } : {},
+      // fetchPolicy: 'network-only'
     }
   );
 
-  const [createTransport] = useMutation(CREATE_TRANSPORT);
-  const [updateTransport] = useMutation(UPDATE_TRANSPORT);
-  const [deleteTransport] = useMutation(DELETE_TRANSPORT);
-
-  const addTransport = async (transport) => {
-    try {
-      const { data } = await createTransport({
-        variables: {
-          transportInfo: {
-            name: transport.name,
-            status: transport.status,
-            vehicleType: transport.vehicleType,
-          },
-        },
-      });
-
-      if (data.createTransport.errors && data.createTransport.errors.length > 0) {
-        alert(`Error: ${data.createTransport.errors.join(", ")}`);
-      } else {
-        alert(data.createTransport.message || "Transport created successfully!");
-        refetch();
-        setIsFormVisible(false);
-      }
-    } catch (err) {
-      console.error("Error creating transport:", err);
-      alert("An error occurred while creating the transport.");
+  useEffect(() => {
+    if (selectedVehicleType) {
+      refetch({ vehicleType: selectedVehicleType });
     }
+  }, [selectedVehicleType, refetch]);
+
+  const handleAdd = useAddTransport(refetch, setIsModalOpen, setErrorMessage);
+  const handleUpdate = useEditTransport(refetch, setIsModalOpen, setErrorMessage);
+  const handleDelete = useDeleteTransport(refetch);
+
+  const handleVehicleTypeChange = (event) => {
+    const selectedType = event.target.value || '';
+    setSelectedVehicleType(selectedType);
+    refetch({ vehicleType: selectedType });
   };
-
-  const handleUpdate = async (transport) => {
-    try {
-      const { data } = await updateTransport({
-        variables: {
-          transportId: transport.id,
-          transportInfo: {
-            name: transport.name,
-            vehicleType: transport.vehicleType,
-            status: transport.status,
-          },
-        },
-      });
-
-      if (data.updateTransport.errors && data.updateTransport.errors.length > 0) {
-        alert(`Error: ${data.updateTransport.errors.join(", ")}`);
-      } else {
-        alert(data.updateTransport.message || "Transport updated successfully!");
-        refetch();
-        setEditingTransport(null);
-        setIsFormVisible(false);
-      }
-    } catch (err) {
-      console.error("Error updating transport:", err);
-      alert("An error occurred while updating the transport.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this transport?")) return;
-
-    try {
-      const { data } = await deleteTransport({
-        variables: { transportId: id },
-      });
-
-      if (data.deleteTransport.errors && data.deleteTransport.errors.length > 0) {
-        alert(`Error: ${data.deleteTransport.errors.join(", ")}`);
-      } else {
-        alert(data.deleteTransport.message || "Transport deleted successfully!");
-        refetch();
-      }
-    } catch (err) {
-      console.error("Error deleting transport:", err);
-      alert("An error occurred while deleting the transport.");
-    }
-  };
-
-  const handleView = (transport) => {
-    alert(`Viewing transport: \n${JSON.stringify(transport, null, 2)}`);
-  };
-
-  const handleEdit = (transport) => {
-    setEditingTransport(transport);
-    setIsFormVisible(true);
-  };
-
-  const handleVehicleTypeChange = (e) => {
-    setVehicleTypeFilter(e.target.value);
-    refetch();
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
-
-  const filteredTransports = data
-    ? (vehicleTypeFilter
-      ? data.getAllTransportByVehicleType
-      : data.getAllTransports
-    )?.filter((transport) =>
-      transport.vehicleType.toLowerCase().includes(searchTerm) ||
-      transport.status.toLowerCase().includes(searchTerm) ||
-      transport.name.toLowerCase().includes(searchTerm)
-    )
-    : [];
 
   if (loading) return <p>Loading transports...</p>;
-  if (error) return <p>Error loading transports: {error.message}</p>;
+  if (error) {
+    console.error('GraphQL Error:', error);
+    return <p className="error-message">Error loading transports: {error.message}</p>;
+  }
+
+  // console.log('Transports data:', data);
+  const transports = selectedVehicleType ? data?.getAllTransportByVehicleType || [] : data?.getAllTransport || [];
+  // console.log('Transports:', transports);
+
+  const columnDefs = [
+    { headerName: 'Id', field: 'id', sortable: true, filter: true },
+    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Vehicle Type', field: 'vehicleType', sortable: true, filter: true },
+    {
+      headerName: 'Status',
+      field: 'status',
+      sortable: true,
+      filter: true,
+      cellRenderer: (params) => (
+        <span
+          className={
+            params.value === 'available'
+              ? 'transport-status-available'
+              : params.value === 'in_use'
+              ? 'transport-status-in-use'
+              : params.value === 'maintenance'
+              ? 'transport-status-maintenance'
+              : params.value === 'out_of_service'
+              ? 'transport-status-out-of-service'
+              : 'transport-status-default'
+          }
+        >
+          {params.value.charAt(0).toUpperCase() + params.value.slice(1).replace(/_/g, ' ')}
+        </span>
+      ),
+    },
+    {
+      headerName: 'Actions',
+      cellRenderer: (params) => (
+        <div className="transport-action-icon">
+          <button onClick={() => setViewTransport(params.data)} className="view-action-btn" title="View">
+            <FaEye />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedTransport(params.data);
+              setIsModalOpen(true);
+            }}
+            className="edit-action-btn" title="Edit"
+          >
+            <FaEdit />
+          </button>
+          <button onClick={() => handleDelete(params.data.id)} className="delete-action-btn" title="Delete">
+            <FaTrash />
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <>
-    <Slider/>
     <div className="transport-container">
+      <Slider />
       <div className="filter-section">
-
-      <div className="total-transports">
-        Total {vehicleTypeFilter ? `${vehicleTypeFilter} Transports` : "Transports"}: 
-        {Array.isArray(filteredTransports) ? filteredTransports.length : 0}
-      </div>
-    <div>
-        <label>Filter by Vehicle Type: </label>
-        <select onChange={handleVehicleTypeChange} value={vehicleTypeFilter}>
-          <option value="">All Vehicles</option>
-          {/* {vehicleTypes.map((type) => {
-             <option key={type} value={type}></option>
-          })} */}
-          <option value="Tank">Tank</option>
-          <option value="TankWagon">Tank Wagon</option>
-          <option value="Truck">Truck</option>
-          <option value="SemiTruck">Semi Truck</option>
-        </select>
+        <div className="total-transports">
+          Total {selectedVehicleType ? `${selectedVehicleType} ` : ''}Transports: {transports.length}
         </div>
-        
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
-
-
-
-      <button
-          onClick={() => {
-            setIsFormVisible(true);
-            setEditingTransport(null);
-          }}
-        >
-          Add Transport
+        <div>
+          <label>Filter by Vehicle Type: </label>
+          <select onChange={handleVehicleTypeChange} value={selectedVehicleType}>
+            <option value="">All Vehicles</option>
+            <option value="Tank">Tank</option>
+            <option value="TankWagon">Tank Wagon</option>
+            <option value="Truck">Truck</option>
+            <option value="SemiTruck">Semi Truck</option>
+          </select>
+        </div>
+        <button onClick={() => setIsModalOpen(true)} className="add-transport-btn">
+          <FaPlus /> Add Transport
         </button>
-
       </div>
-
-      {isFormVisible && (
+     
+      <div className="ag-theme-alpine-dark">
+        <AgGridReact
+          rowData={transports}
+          columnDefs={columnDefs}
+          pagination={true}
+          paginationPageSize={10}
+          paginationPageSizeSelector={false}
+          domLayout="autoHeight"
+        />
+      </div>
+  
+      {isModalOpen && (
         <TransportForm
-          addTransport={addTransport}
-          editingTransport={editingTransport}
-          updateTransport={handleUpdate}
-          onClose={() => setIsFormVisible(false)}
+          selectedTransport={selectedTransport}
+          onClose={() => {
+            setSelectedTransport(null);
+            setIsModalOpen(false);
+          }}
+          onAdd={handleAdd}
+          onUpdate={handleUpdate}
+          errorMessage={errorMessage}
         />
       )}
-
-      <TransportList
-        transports={filteredTransports}
-        onView={handleView}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      {viewTransport && (
+        <div className="view-transport-modal">
+          <button className="close-button" onClick={() => setViewTransport(null)}>X</button>
+          <h2>Transport Details</h2>
+          <p><strong>Name:</strong> {viewTransport.name}</p>
+          <p><strong>Vehicle Type:</strong> {viewTransport.vehicleType}</p>
+          <p><strong>Status:</strong> {viewTransport.status}</p>
+          <p><strong>Created At:</strong> {viewTransport.createdAt}</p>
+          <p><strong>Updated At:</strong> {viewTransport.updatedAt}</p>
+        </div>
+      )}
     </div>
-    </>
   );
 };
 
