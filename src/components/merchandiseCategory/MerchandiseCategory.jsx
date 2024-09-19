@@ -12,6 +12,8 @@ import {
   DELETE_CATEGORY,
 } from "../../graphql/mutation/MerchandiseCategoryMutation";
 import "../../assets/css/MerchandiseCategory.css";
+import Slider from "../Slider";
+import { FaPlus } from "react-icons/fa";
 
 const MerchandiseCategory = () => {
   const [editingCategory, setEditingCategory] = useState(null);
@@ -59,8 +61,10 @@ const MerchandiseCategory = () => {
   if (error) return <p>Error loading categories: {error.message}</p>;
 
   return (
+    <>
+    <Slider />
     <div className="category-container">
-      <button className="category-button" onClick={() => setIsFormVisible(true)}>Add Category</button>
+      <button className="category-button" onClick={() => setIsFormVisible(true)}><FaPlus/>Add</button>
 
       {isFormVisible && (
         <MerchandiseCategoryAdd
@@ -85,6 +89,8 @@ const MerchandiseCategory = () => {
         />
       )}
     </div>
+    </>
+
   );
 };
 

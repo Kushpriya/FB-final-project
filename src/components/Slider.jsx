@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-    FaBars, FaTachometerAlt, FaUser, FaCog, FaBox, FaList, FaUsers, FaLayerGroup,FaPlus, FaTruck,
-    FaMoon, FaSun, FaSearch, FaBell
+    FaBars, FaTachometerAlt, FaUsers, FaBox, FaLayerGroup, FaList, FaTruck, FaPlus, 
+    FaWarehouse, FaBuilding, FaUserTie, FaMoon, FaSun, FaSearch, FaBell, FaUser
 } from 'react-icons/fa';
 import SignOut from './SignOut';
 import '../assets/css/Slider.css';
@@ -13,7 +13,6 @@ function Slider({ handleOpenForm }) {
     const [activeMenu, setActiveMenu] = useState(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -39,13 +38,6 @@ function Slider({ handleOpenForm }) {
         document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
     }, [isDarkMode]);
 
-    const navigateTo = (path) => {
-        navigate(path);
-        if (path === '/orders/orderform') {
-            handleOpenForm();
-        }
-    };
-
     return (
         <>
             <div className={`sidebar-container ${isSidebarOpen ? '' : 'closed'} ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -53,95 +45,59 @@ function Slider({ handleOpenForm }) {
                     <FaBars />
                 </button>
                 <ul className="sidebar-content">
-                    <li onClick={() => { navigateTo('/dashboard'); }}>
-                        <FaTachometerAlt className="sidebar-icon" />
-                        {isSidebarOpen && <span>Dashboard</span>}
+                    <li>
+                        <Link to="/dashboard">
+                            <FaTachometerAlt className="sidebar-icon" />
+                            {isSidebarOpen && <span>Dashboard</span>}
+                        </Link>
                     </li>
-                    {/* <li onClick={() => { navigateTo('/profile'); }}>
-                        <FaUser className="sidebar-icon" />
-                        {isSidebarOpen && <span>Profile</span>}
-                    </li> */}
 
-                    <li onClick={() => handleMenuClick('merchandiseCategory')}>
-                        <FaBox className="sidebar-icon" />
-                        {isSidebarOpen && <span>Merchandise Category</span>}
-                        {activeMenu === 'merchandiseCategory' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/merchandiseCategory/categoryadd')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/merchandiseCategory/categorylist')}><FaList className="sidebar-sub-icon" /> List</li>
-                            </ul>
-                        )}
+                    <li>
+                        <Link to="/merchandiseCategory">
+                            <FaLayerGroup className="sidebar-icon" />
+                            {isSidebarOpen && <span>Merchandise Category</span>}
+                        </Link>
                     </li>
-                    
-                    <li onClick={() => handleMenuClick('merchandise')}>
-                        <FaBox className="sidebar-icon" />
-                        {isSidebarOpen && <span>Merchandise</span>}
-                        {activeMenu === 'merchandise' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/merchandise/merchandiseform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/merchandise/merchandiselist')}><FaList className="sidebar-sub-icon" /> List</li>
-                            </ul>
-                        )}
+
+                    <li>
+                        <Link to="/merchandise">
+                            <FaBox className="sidebar-icon" />
+                            {isSidebarOpen && <span>Merchandise</span>}
+                        </Link>
                     </li>
+
                     <li onClick={() => handleMenuClick('orders')}>
                         <FaList className="sidebar-icon" />
                         {isSidebarOpen && <span>Orders</span>}
                         {activeMenu === 'orders' && isSidebarOpen && (
                             <ul className="submenu">
-                                <li onClick={() => navigateTo('/orders/orderform')}>
-                                    <FaPlus className="sidebar-sub-icon" /> Add
+                                <li>
+                                    <Link to="/orders/delivery">
+                                        <FaTruck className="sidebar-sub-icon" /> Delivery Orders
+                                    </Link>
                                 </li>
-                                <li onClick={() => navigateTo('/orders/orderlist')}>
-                                    <FaList className="sidebar-sub-icon" /> List
+                                <li>
+                                    <Link to="/orders/recurring">
+                                        <FaCalendarAlt className="sidebar-sub-icon" /> Recurring Orders
+                                    </Link>
                                 </li>
                             </ul>
                         )}
                     </li>
-                    <li onClick={() => handleMenuClick('clients')}>
-                        <FaUsers className="sidebar-icon" />
-                        {isSidebarOpen && <span>Clients</span>}
-                        {activeMenu === 'clients' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/clients/clientform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/clients/clientlist')}><FaList className="sidebar-sub-icon" /> List</li>
-                            </ul>
-                        )}
+
+                    <li>
+                        <Link to="/clients">
+                            <FaUser className="sidebar-icon" />
+                            {isSidebarOpen && <span>Clients</span>}
+                        </Link>
                     </li>
-                    <li onClick={() => handleMenuClick('venue')}>
-                        <FaUsers className="sidebar-icon" />
-                        {isSidebarOpen && <span>Venue</span>}
-                        {activeMenu === 'venue' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/venue/venueform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/venue/venuelist')}><FaList className="sidebar-sub-icon" /> List</li>
-                                <li onClick={() => navigateTo('/venue/venueview')}><FaList className="sidebar-sub-icon" /> view</li>
-                            </ul>
-                        )}
+
+                    <li>
+                        <Link to="/transport">
+                            <FaTruck className="sidebar-icon" />
+                            {isSidebarOpen && <span>Transports</span>}
+                        </Link>
                     </li>
-                    <li onClick={() => handleMenuClick('couriers')}>
-                        <FaUsers className="sidebar-icon" />
-                        {isSidebarOpen && <span>Couriers</span>}
-                        {activeMenu === 'couriers' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/couriers/courierform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/couriers/courierlist')}><FaList className="sidebar-sub-icon" /> List</li>
-                            </ul>
-                        )}
-                    </li>
-                    <li onClick={() => handleMenuClick('transport')}>
-                        <FaTruck className="sidebar-icon" />
-                        {isSidebarOpen && <span>Transport</span>}
-                        {activeMenu === 'transport' && isSidebarOpen && (
-                            <ul className="submenu">
-                                <li onClick={() => navigateTo('/transports/transportform')}><FaPlus className="sidebar-sub-icon" /> Add</li>
-                                <li onClick={() => navigateTo('/transports/transportlist')}><FaList className="sidebar-sub-icon" /> List</li>
-                            </ul>
-                        )}
-                    </li>
-                    {/* <li onClick={() => navigateTo('/settings')}>
-                        <FaCog className="sidebar-icon" />
-                        {isSidebarOpen && <span>Settings</span>}
-                    </li> */}
 
                     <SignOut className="logout" />
                 </ul>

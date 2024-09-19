@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "../../assets/css/Transports.css"
+import React, { useState, useEffect } from 'react';
+import "../../assets/css/Transports.css";
 
 const vehicleTypes = [
   { value: "", label: "Select Vehicle" },
@@ -17,18 +17,19 @@ const statusTypes = [
   { value: "out_of_service", label: "Out of Service" },
 ];
 
-const TransportForm = ({ addTransport, editingTransport, updateTransport, onClose }) => {
+const TransportForm = ({ onAdd, onUpdate, selectedTransport, errorMessage, onClose }) => {
   const [transport, setTransport] = useState({
-    name: "",
-    vehicleType: "",
-    status: "",
+    name: '',
+    vehicleType: '',
+    status: '',
   });
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
-    if (editingTransport) {
-      setTransport(editingTransport);
+    if (selectedTransport) {
+      setTransport(selectedTransport);
     }
-  }, [editingTransport]);
+  }, [selectedTransport]);
 
   const handleChange = (e) => {
     setTransport({
@@ -39,18 +40,25 @@ const TransportForm = ({ addTransport, editingTransport, updateTransport, onClos
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (editingTransport) {
-      updateTransport(transport);
+    if (!transport.name || !transport.vehicleType || !transport.status) {
+      setFormError('All fields are required.');
+      return;
+    }
+    setFormError('');
+    if (selectedTransport) {
+      onUpdate(selectedTransport, transport);
     } else {
-      addTransport(transport);
+      onAdd(transport);
     }
   };
 
   return (
     <div className="transport-form-overlay">
       <div className="transport-form-container">
-        <button className="close-button" onClick={onClose}>X</button>  
-        <h2>{editingTransport ? "Edit Transport" : "Add Transport"}</h2>
+        <button className="close-button" onClick={onClose}>X</button>
+        <h2>{selectedTransport ? 'Edit Transport' : 'Add Transport'}</h2>
+        {formError && <p className="error-message">{formError}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <label>Name</label>
           <input
@@ -58,7 +66,7 @@ const TransportForm = ({ addTransport, editingTransport, updateTransport, onClos
             name="name"
             value={transport.name}
             onChange={handleChange}
-            placeholder="Name"
+            placeholder="Enter transport name"
             required
           />
           <label>Vehicle Type</label>
@@ -88,7 +96,7 @@ const TransportForm = ({ addTransport, editingTransport, updateTransport, onClos
             ))}
           </select>
           <button type="submit">
-            {editingTransport ? "Update Transport" : "Add Transport"}
+            {selectedTransport ? 'Update Transport' : 'Add Transport'}
           </button>
         </form>
       </div>

@@ -1,142 +1,112 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import ClientForm from "./ClientForm";
-import ClientList from "./ClientList";
-import ClientView from "./ClientView";
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import { AgGridReact } from 'ag-grid-react';
+import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { GET_ALL_CLIENTS } from '../../graphql/queries/ClientQueries';
+import { useAddClient, useEditClient, useDeleteClient } from './ClientHandler';
+import ClientForm from './ClientForm';
+import ClientView from './ClientView';
 import '../../assets/css/Clients.css';
-import {
-  GET_ALL_CLIENTS,
-} from "../../graphql/queries/ClientQueries";
-import {
-  CREATE_CLIENT,
-  EDIT_CLIENT,
-  DELETE_CLIENT,
-} from "../../graphql/mutation/ClientMutation"; 
-import { FaPlus } from 'react-icons/fa';
+import Slider from '../../components/Slider';
 
-export default function Client() {
+const Clients = () => {
+  const navigate = useNavigate();
+  const { loading, error, data, refetch } = useQuery(GET_ALL_CLIENTS);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
-  const [viewingClientId, setViewingClientId] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [rowData, setRowData] = useState([]);
+  const [viewClientId, setViewClientId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { loading, error, data, refetch } = useQuery(GET_ALL_CLIENTS, {
-    onError: (err) => console.error("Query Error:", err),
-  });
+  const handleAdd = useAddClient(refetch, setIsModalOpen, setErrorMessage);
+  const handleUpdate = useEditClient(refetch, setIsModalOpen, setErrorMessage);
+  const handleDelete = useDeleteClient(refetch);
 
-  const [createClient] = useMutation(CREATE_CLIENT);
-  const [updateClient] = useMutation(EDIT_CLIENT);
-  const [deleteClient] = useMutation(DELETE_CLIENT);
-
-  useEffect(() => {
-    if (data) {
-      setRowData(data.getAllClients);
-    }
-  }, [data]);
-
-  const toggleFormVisibility = () => {
-    console.log("Toggling form visibility");
-    setShowForm(prev => !prev);
-    setSelectedClient(null); 
-  };
-  
-  const handleCreate = async (client) => {
-    try {
-      console.log("Creating client:", client);
-      await createClient({ variables: { input: client } });
-      refetch();
-    } catch (err) {
-      console.error("Error creating client:", err);
-      alert("An error occurred while creating the client.");
-    }
+  const handleShowClick = (clientId) => {
+    navigate(`/venue/${clientId}`);
   };
 
-  const handleEdit = async (client) => {
-    const { __typename, id, createdAt, updatedAt, ...clientInfo } = client;
-  
-    try {
-      console.log("Editing client:", clientInfo);
-      await updateClient({ variables: { clientId: id, clientInfo } });
-      refetch();
-    } catch (err) {
-      console.error("Error updating client:", err);
-      alert("An error occurred while updating the client.");
-    }
-  };
-  
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this client?")) return;
-
-    try {
-      console.log("Deleting client with ID:", id);
-      await deleteClient({ variables: { clientId: id } });
-      refetch();
-    } catch (err) {
-      console.error("Error deleting client:", err);
-      alert("An error occurred while deleting the client.");
-    }
-  };
-
-  const handleView = (client) => {
-    console.log("Viewing client:", client);
-    setViewingClientId(client.id);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
-
-  const filteredClients = data
-    ? data.getAllClients.filter((client) =>
-        client.name.toLowerCase().includes(searchTerm)
+  const columnDefs = [
+    { headerName: 'ID', field: 'id', sortable: true, filter: true },
+    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Email', field: 'email', sortable: true, filter: true },
+    { headerName: 'Address', field: 'address', sortable: true, filter: true },
+    { headerName: 'Phone', field: 'phone', sortable: true, filter: true },
+    {
+      headerName: 'Actions',
+      cellRenderer: (params) => (
+        <div className="client-action-icon">
+          <button onClick={() => handleView(params.data.id)} className="view-action-btn">
+            <FaEye title="View" />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedClient(params.data);
+              setIsModalOpen(true);
+            }}
+            className="edit-action-btn"
+          >
+            <FaEdit title="Edit" />
+          </button>
+          <button onClick={() => handleDelete(params.data.id)} className="delete-action-btn">
+            <FaTrash title="Delete" />
+          </button>
+        </div>
+      ),
+    },
+    { headerName: 'Branch details', field: 'branch',
+      cellRenderer: (params) => (
+        <button onClick={() => handleShowClick(params.data.id)}>
+          show
+        </button>
       )
-    : [];
+     },
+
+  ];
 
   if (loading) return <p>Loading clients...</p>;
   if (error) return <p>Error loading clients: {error.message}</p>;
 
   return (
     <>
-      <div className="client-container">
-        <div className="filter-section">
-          <button className="client-add-btn" onClick={toggleFormVisibility}>
-            <FaPlus />
-          </button>
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-input"
+      <Slider />
+      <div className="clients-container">
+        <button onClick={() => setIsModalOpen(true)} className="client-add-btn">
+          <FaPlus /> Add Client
+        </button>
+        <div className="ag-theme-alpine-dark">
+          <AgGridReact
+            rowData={data.getAllClients}
+            columnDefs={columnDefs}
+            pagination={true}
+            paginationPageSize={10}
+            domLayout="autoHeight"
+            // onRowClicked={(event) => handleRowClick(event.data.id)} // Handle row click
           />
         </div>
 
-        {showForm && (
+        {isModalOpen && (
           <ClientForm
-            handleCreate={handleCreate}
-            handleEdit={handleEdit}
             selectedClient={selectedClient}
-            setSelectedClient={setSelectedClient}
-            toggleFormVisibility={toggleFormVisibility}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedClient(null);
+            }}
+            onAdd={handleAdd}
+            onUpdate={handleUpdate}
+            errorMessage={errorMessage}
           />
         )}
 
-        <ClientList
-          clients={filteredClients}
-          handleView={handleView}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
-
-        {viewingClientId && (
+        {viewClientId && (
           <ClientView
-            clientId={viewingClientId}
-            onClose={() => setViewingClientId(null)}
+            clientId={viewClientId}
+            onClose={() => setViewClientId(null)}
           />
         )}
       </div>
     </>
   );
 }
+
+export default Clients;

@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/css/Merchandise.css';
 
-export default function MerchandiseForm({ handleCreate, handleEdit, selectedMerchandise, setSelectedMerchandise, toggleFormVisibility }) {
+export default function MerchandiseForm({
+  handleCreate,
+  handleEdit,
+  selectedMerchandise,
+  setSelectedMerchandise,
+  categories,
+  errorMessage,
+  onClose
+}) {
   const initialFormData = {
     name: '',
     price: '',
-    status: '',
+    status: 'available',
     unit: '',
     description: '',
     merchandiseCategoryId: '',
   };
-
+  const [formError, setFormError] = useState('');
   const [formData, setFormData] = useState(selectedMerchandise || initialFormData);
 
   useEffect(() => {
     if (selectedMerchandise) {
       setFormData(selectedMerchandise);
+    } else {
+      setFormData(initialFormData);
     }
   }, [selectedMerchandise]);
 
@@ -25,80 +35,94 @@ export default function MerchandiseForm({ handleCreate, handleEdit, selectedMerc
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.price || !formData.status) {
+      setFormError('All fields are required.');
+      return;
+    }
+    setFormError('');
     if (selectedMerchandise) {
       handleEdit(selectedMerchandise.id, formData);
     } else {
       handleCreate(formData);
     }
-    setFormData(initialFormData); 
     setSelectedMerchandise(null);
-    toggleFormVisibility(); 
   };
 
   return (
-    <div className="merchandise-form-container">
-      <h2 className="merchandise-form-title">
-        <button className="close-button" onClick={toggleFormVisibility}>X</button>
-        {selectedMerchandise ? 'Edit Merchandise' : 'Create Merchandise'}
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <label className="merchandise-form-label">Name:</label>
-        <input
-          className="merchandise-form-input"
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <label className="merchandise-form-label">Price:</label>
-        <input
-          className="merchandise-form-input"
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          required
-        />
-        <label className="merchandise-form-label">Status:</label>
-        <select
-          className="merchandise-form-select"
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-        >
-          <option value="available">Available</option>
-          <option value="out_of_stock">Out of Stock</option>
-        </select>
-        <label className="merchandise-form-label">Unit:</label>
-        <input
-          className="merchandise-form-input"
-          type="text"
-          name="unit"
-          value={formData.unit}
-          onChange={handleChange}
-          required
-        />
-        <label className="merchandise-form-label">Description:</label>
-        <textarea
-          className="merchandise-form-textarea"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-        />
-        <label className="merchandise-form-label">Category ID:</label>
-        <input
-          className="merchandise-form-input"
-          type="text"
-          name="merchandiseCategoryId"
-          value={formData.merchandiseCategoryId}
-          onChange={handleChange}
-          required
-        />
-        <button className="merchandise-form-submit-btn" type="submit">
-          {selectedMerchandise ? 'Update Merchandise' : 'Create Merchandise'}
-        </button>
-      </form>
+    <div className="merchandise-form-overlay">
+      <div className="merchandise-form-container">
+        <button className="close-button" onClick={onClose}>X</button>
+        {formError && <p className="error-message">{formError}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <h2>
+          {selectedMerchandise ? 'Edit Merchandise' : 'Create Merchandise'}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter merchandise name"
+            required
+          />
+          <label>Price:</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Enter Price"
+            required
+          />
+          <label>Status:</label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            <option value="available">Available</option>
+            <option value="out_of_stock">Out of Stock</option>
+          </select>
+
+          <label>Unit:</label>
+          <input
+            type="text"
+            name="unit"
+            value={formData.unit}
+            onChange={handleChange}
+            placeholder="Enter Unit"
+            required
+          />
+
+          <label>Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Enter Description"
+          />
+          
+          <label>Category:</label>
+          <select
+            name="merchandiseCategoryId"
+            value={formData.merchandiseCategoryId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <button type="submit">
+            {selectedMerchandise ? 'Update Merchandise' : 'Create Merchandise'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

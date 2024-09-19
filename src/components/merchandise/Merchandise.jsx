@@ -1,127 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import {
-  CREATE_MERCHANDISE,
-  EDIT_MERCHANDISE,
-  DELETE_MERCHANDISE
-} from '../../graphql/mutation/MerchandiseMutation';
+import { useQuery } from '@apollo/client';
+import { AgGridReact } from 'ag-grid-react';
+import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { useAddMerchandise, useEditMerchandise, useDeleteMerchandise } from './MerchandiseHandler';
 import {
   GET_ALL_MERCHANDISE_QUERY,
   GET_MERCHANDISE_BY_CATEGORY_QUERY,
-  GET_ALL_MERCHANDISE_CATEGORIES
+  GET_ALL_MERCHANDISE_CATEGORIES,
 } from '../../graphql/queries/MerchandiseQueries';
 import MerchandiseForm from './MerchandiseForm';
-import MerchandiseList from './MerchandiseList';
-import { FaPlus } from 'react-icons/fa';
+import '../../assets/css/Merchandise.css';
+import Slider from '../Slider';
 
-export default function Merchandise() {
+const Merchandise = () => {
+  const { loading, error, data, refetch } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [selectedMerchandise, setSelectedMerchandise] = useState(null);
   const [viewMerchandise, setViewMerchandise] = useState(null);
-  const [showForm, setShowForm] = useState(false);
   const [rowData, setRowData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
-  const { loading: merchandiseLoading, error: merchandiseError, data: merchandiseData, refetch } = useQuery(
+
+  const { loading: merchLoading, data: merchData} = useQuery(
     categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY,
     { variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }
   );
 
-  const [createMerchandise] = useMutation(CREATE_MERCHANDISE);
-  const [updateMerchandise] = useMutation(EDIT_MERCHANDISE);
-  const [deleteMerchandise] = useMutation(DELETE_MERCHANDISE);
-
   useEffect(() => {
-    if (merchandiseData) {
-      setRowData(categoryId ? merchandiseData.getMerchandiseByCategory : merchandiseData.getAllMerchandises);
+    if (merchData) {
+      setRowData(categoryId ? merchData.getMerchandiseByCategory : merchData.getAllMerchandises);
     }
-  }, [merchandiseData, categoryId]);
+  }, [merchData, categoryId]);
 
-  const toggleFormVisibility = () => {
-    setShowForm(!showForm);
-    setSelectedMerchandise(null); 
-  };
+  const handleAdd = useAddMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
+  const handleUpdate = useEditMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
+  const handleDelete = useDeleteMerchandise(refetch, categoryId);
 
-  const handleCreate = async (merchandise) => {
-    try {
-      await createMerchandise({
-        variables: {
-          merchandiseCategoryId: merchandise.merchandiseCategoryId,
-          merchandiseInfo: {
-            name: merchandise.name,
-            price: parseFloat(merchandise.price),
-            status: merchandise.status,
-            unit: merchandise.unit,
-            description: merchandise.description,
-          },
-        },
-        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
-      });
-      refetch();
-      toggleFormVisibility();
-      alert('Merchandise created successfully.');
-    } catch (err) {
-      console.error('Error creating merchandise:', err);
-      alert('Error creating merchandise. Please try again.');
-    }
-  };
+  const categories = data?.getAllMerchandiseCategories || [];
+  const columnDefs = [
+    { headerName: 'ID', field: 'id', sortable: true, filter: true },
+    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Price', field: 'price', sortable: true, filter: true },
+    { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
+    {
+      headerName: 'Status',
+      field: 'status',
+      cellRenderer: (params) => (
+        <span className={params.value === 'available' ? 'merchandise-status-available' : 'merchandise-status-out-of-stock'}>
+          {params.value === 'available' ? 'Available' : 'Out of Stock'}
+        </span>
+      ),
+      sortable: true,
+      filter: true,
+    },
+    { headerName: 'Unit', field: 'unit', sortable: true, filter: true },
+    { headerName: 'Category Name', field: 'merchandiseCategory.name', sortable: true, filter: true },
+    {
+      headerName: 'Actions',
+      field: 'actions',
+      cellRenderer: (params) => (
+        <div className="merchandise-actions">
+          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-action-btn">
+            <FaEye title="View" />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedMerchandise(params.data);
+              setIsModalOpen(true);
+            }}
+            className="merchandise-action-btn"
+          >
+            <FaEdit title="Edit" />
+          </button>
+          <button onClick={() => handleDelete(params.data.id)} className="merchandise-action-btn">
+            <FaTrash title="Delete" />
+          </button>
+        </div>
+      ),
+      width: 200,
+    },
+  ];
 
-  const handleEdit = async (id, merchandiseInfo) => {
-    try {
-      await updateMerchandise({
-        variables: {
-          merchandiseId: id,
-          merchandiseInfo: {
-            name: merchandiseInfo.name,
-            price: parseFloat(merchandiseInfo.price),
-            status: merchandiseInfo.status,
-            unit: merchandiseInfo.unit,
-            description: merchandiseInfo.description,
-          },
-        },
-        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
-      });
-      refetch();
-      setSelectedMerchandise(null);
-      toggleFormVisibility();
-      alert('Merchandise updated successfully.');
-    } catch (err) {
-      console.error('Error updating merchandise:', err);
-      alert('Error updating merchandise. Please try again.');
-    }
-  };
-
-  const handleDelete = async (merchandiseId) => {
-    try {
-      await deleteMerchandise({
-        variables: { merchandiseId },
-        refetchQueries: [{ query: categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY, variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }],
-      });
-      refetch();
-      alert('Merchandise deleted successfully.');
-    } catch (err) {
-      console.error('Error deleting merchandise:', err);
-      alert('Error deleting merchandise. Please try again.');
-    }
-  };
-
-  const handleView = (merchandise) => {
-    setViewMerchandise(merchandise);
-  };
-
-  if (categoriesLoading || merchandiseLoading) 
-    return <p>Loading...</p>;
-  if (categoriesError || merchandiseError) 
-    return <p>Error: {categoriesError?.message || merchandiseError?.message}</p>;
-
-  const categories = categoriesData?.getAllMerchandiseCategories || [];
+  if (loading || merchLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
+    <>
+    <Slider/>
     <div className="merchandise-container">
       <div className="merchandise-header">
         <h2>Merchandise List</h2>
-        <button className="merchandise-add-btn" onClick={toggleFormVisibility}>
-          <FaPlus />
+        <button className="merchandise-add-btn" onClick={() => setIsModalOpen(true)}>
+          <FaPlus /> Add
         </button>
       </div>
       <div className="filter-section">
@@ -139,37 +110,40 @@ export default function Merchandise() {
           ))}
         </select>
       </div>
-      <div>
-        {showForm && (
-          <MerchandiseForm
-            handleCreate={handleCreate}
-            handleEdit={handleEdit}
-            selectedMerchandise={selectedMerchandise}
-            setSelectedMerchandise={setSelectedMerchandise}
-            toggleFormVisibility={toggleFormVisibility}
-          />
-        )}
-        {viewMerchandise && (
-          <div className="view-details">
-            <h3>Merchandise Details</h3>
-            <p><strong>Name:</strong> {viewMerchandise.name}</p>
-            <p><strong>Price:</strong> {viewMerchandise.price}</p>
-            <p><strong>Status:</strong> {viewMerchandise.status}</p>
-            <p><strong>Unit:</strong> {viewMerchandise.unit}</p>
-            <p><strong>Description:</strong> {viewMerchandise.description}</p>
-            <button onClick={() => setViewMerchandise(null)}>Close</button>
-          </div>
-        )}
-        <MerchandiseList
-          rowData={rowData}
-          handleEdit={(merchandise) => {
-            setSelectedMerchandise(merchandise);
-            setShowForm(true);
-          }}
-          handleDelete={handleDelete}
-          handleView={handleView}
-        />
+      <div className="ag-theme-alpine-dark">
+        <AgGridReact rowData={rowData} 
+        columnDefs={columnDefs}
+         pagination={true} 
+         paginationPageSize={10} 
+         domLayout="autoHeight" 
+         />
       </div>
+      {isModalOpen && (
+        <MerchandiseForm
+          handleCreate={handleAdd}
+          handleEdit={handleUpdate}
+          selectedMerchandise={selectedMerchandise}
+          setSelectedMerchandise={setSelectedMerchandise}
+          categories={categories}
+          onClose={() => setIsModalOpen(false)}
+          errorMessage={errorMessage}
+        />
+      )}
+      {viewMerchandise && (
+        <div className="merchandise-view-modal">
+          <button className="close-button" onClick={() => setViewMerchandise(null)}>X</button>
+          <h2>Merchandise Details</h2>
+          <h3>{viewMerchandise.name}</h3>
+          <p>Price: ${viewMerchandise.price}</p>
+          <p>Status: {viewMerchandise.status}</p>
+          <p>Unit: {viewMerchandise.unit}</p>
+          <p>Description: {viewMerchandise.description}</p>
+          <p>Category: {viewMerchandise.merchandiseCategory.name}</p>
+        </div>
+      )}
     </div>
+    </>
   );
-}
+};
+
+export default Merchandise;
