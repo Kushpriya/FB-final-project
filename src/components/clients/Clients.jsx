@@ -8,18 +8,17 @@ import { useAddClient, useEditClient, useDeleteClient } from './ClientHandler';
 import ClientForm from './ClientForm';
 import ClientView from './ClientView';
 import '../../assets/css/Clients.css';
-import Slider from '../../components/Slider';
 
 const Clients = () => {
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_ALL_CLIENTS);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formOpen, setformOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [viewClientId, setViewClientId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleAdd = useAddClient(refetch, setIsModalOpen, setErrorMessage);
-  const handleUpdate = useEditClient(refetch, setIsModalOpen, setErrorMessage);
+  const handleAdd = useAddClient(refetch, setformOpen, setErrorMessage);
+  const handleUpdate = useEditClient(refetch, setformOpen, setErrorMessage);
   const handleDelete = useDeleteClient(refetch);
 
   const handleShowClick = (clientId) => {
@@ -36,13 +35,13 @@ const Clients = () => {
       headerName: 'Actions',
       cellRenderer: (params) => (
         <div className="client-action-icon">
-          <button onClick={() => handleView(params.data.id)} className="view-action-btn">
+          <button onClick={() => setViewClientId(params.data.id)} className="view-action-btn">
             <FaEye title="View" />
           </button>
           <button
             onClick={() => {
               setSelectedClient(params.data);
-              setIsModalOpen(true);
+              setformOpen(true);
             }}
             className="edit-action-btn"
           >
@@ -54,24 +53,27 @@ const Clients = () => {
         </div>
       ),
     },
-    { headerName: 'Branch details', field: 'branch',
+    {
+      headerName: 'Branch details',
+      field: 'branch',
       cellRenderer: (params) => (
-        <button onClick={() => handleShowClick(params.data.id)}>
-          show
+        <button 
+          onClick={() => handleShowClick(params.data.id)} 
+          className="branch-details-btn"
+        >
+          Show
         </button>
-      )
-     },
-
+      ),
+    }
   ];
 
   if (loading) return <p>Loading clients...</p>;
-  if (error) return <p>Error loading clients: {error.message}</p>;
+  if (error) return <p className="error-message">Error loading clients: {error.message}</p>;
 
   return (
     <>
-      <Slider />
       <div className="clients-container">
-        <button onClick={() => setIsModalOpen(true)} className="client-add-btn">
+        <button onClick={() => setformOpen(true)} className="client-add-btn">
           <FaPlus /> Add Client
         </button>
         <div className="ag-theme-alpine-dark">
@@ -81,15 +83,14 @@ const Clients = () => {
             pagination={true}
             paginationPageSize={10}
             domLayout="autoHeight"
-            // onRowClicked={(event) => handleRowClick(event.data.id)} // Handle row click
           />
         </div>
 
-        {isModalOpen && (
+        {formOpen && (
           <ClientForm
             selectedClient={selectedClient}
             onClose={() => {
-              setIsModalOpen(false);
+              setformOpen(false);
               setSelectedClient(null);
             }}
             onAdd={handleAdd}
@@ -98,15 +99,10 @@ const Clients = () => {
           />
         )}
 
-        {viewClientId && (
-          <ClientView
-            clientId={viewClientId}
-            onClose={() => setViewClientId(null)}
-          />
-        )}
+        {viewClientId && <ClientView clientId={viewClientId} />}
       </div>
     </>
   );
-}
+};
 
 export default Clients;

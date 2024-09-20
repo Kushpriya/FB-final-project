@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_CLIENT, DELETE_CLIENT, EDIT_CLIENT } from '../../graphql/mutation/ClientMutation';
 
-export const useAddClient = (refetch, setIsModalOpen ,setErrorMessage) => {
+export const useAddClient = (refetch, setformOpen, setErrorMessage) => {
   const [createClient] = useMutation(CREATE_CLIENT);
 
   const handleAdd = async (formData) => {
-    if (!formData.name.trim() || !formData.address.trim()) {
+    if (!formData.id || !formData.name.trim() || !formData.email.trim() || !formData.address.trim() || !formData.phone.trim()) {
       alert('Fields cannot be empty.');
       return;
     }
@@ -15,7 +15,7 @@ export const useAddClient = (refetch, setIsModalOpen ,setErrorMessage) => {
       if (data.createClient.client) {
         alert('Client added successfully.');
         refetch();
-        setIsModalOpen(false);
+        setformOpen(false);
         setErrorMessage('');
       } else {
         alert('Error adding client.');
@@ -29,26 +29,24 @@ export const useAddClient = (refetch, setIsModalOpen ,setErrorMessage) => {
   return handleAdd;
 };
 
-export const useEditClient = (refetch, setIsModalOpen,setErrorMessage) => {
+export const useEditClient = (refetch, setformOpen, setErrorMessage) => {
   const [editClient] = useMutation(EDIT_CLIENT);
 
   const handleUpdate = async (selectedClient, formData) => {
-    console.log('Form Data for Update:', formData);
-  
-    if (!selectedClient?.id || !formData.name.trim() || !formData.address.trim()) {
+    if (!selectedClient?.id || !formData.name.trim() || !formData.email.trim() || !formData.address.trim() || !formData.phone.trim()) {
       alert('Client ID or form data is invalid.');
       return;
     }
-  
+
     try {
       const { data } = await editClient({
         variables: { clientId: selectedClient.id, clientInfo: formData },
       });
-  
+
       if (data.editClient.client) {
         alert('Client updated successfully.');
         refetch();
-        setIsModalOpen(false);
+        setformOpen(false);
         setErrorMessage('');
       } else {
         alert('Error updating client.');
@@ -62,7 +60,6 @@ export const useEditClient = (refetch, setIsModalOpen,setErrorMessage) => {
   return handleUpdate;
 };
 
-
 export const useDeleteClient = (refetch) => {
   const [deleteClient] = useMutation(DELETE_CLIENT);
 
@@ -70,9 +67,7 @@ export const useDeleteClient = (refetch) => {
     try {
       const { data } = await deleteClient({ variables: { clientId: String(clientId).trim() } });
       if (data.deleteClient.message === 'Client deleted successfully') {
-        console.log('Client deleted successfully');
-        await refetch(); 
-        console.log('Data refetched');
+        await refetch();
       } else {
         console.error('Delete failed:', data.deleteClient.message || 'Unknown error');
       }
@@ -83,7 +78,3 @@ export const useDeleteClient = (refetch) => {
   
   return handleDelete;
 };
-
-
-
-  

@@ -1,7 +1,9 @@
 .venues-container {
   padding: 20px;
-  background-color: #333;
+  /* background-color: #333; */
   color: #fff;
+  width: 70%;
+  margin:60px 200px;
 }
 
 .venue-add-btn {
@@ -28,9 +30,14 @@
   opacity: 0.8;
 }
 
-.view-action-btn { color: #00f; }
-.edit-action-btn { color: #ff0; }
-.delete-action-btn { color: #f00; }
+
+.edit-action-btn {
+  color: #ff0;
+}
+
+.delete-action-btn {
+  color: #f00;
+}
 
 .venue-form-container {
   position: fixed;
@@ -38,62 +45,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.venue-form {
-  background: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 400px;
-  width: 100%;
-}
-
-.venue-form h2 {
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.form-actions button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.form-actions .cancel-btn {
-  background-color: #f44336;
-  color: #fff;
-}
-
-.form-actions .cancel-btn:hover {
-  background-color: #e53935;
+  z-index: 1000;
+  background-color: #292b2f;
+  padding: 30px;
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .error-message {
   color: #f44336;
-  margin-bottom: 15px;
 }

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../assets/css/Dashboard.css';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import Slider from '../components/Slider';
 
 const data = [
   { name: 'Jan', value: 1000 },
@@ -22,7 +21,6 @@ function Dashboard() {
 
   return (
     <>
-    <Slider />
 
         <div className="dashboard">
 

@@ -1,58 +1,53 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Pricing from './components/Pricing';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Slider from './components/Slider';
 import Dashboard from './components/Dashboard';
-import Orders from './components/orders/Orders';
 import Clients from './components/clients/Clients';
 import Merchandise from './components/merchandise/Merchandise';
-import Courier from './components/couriers/couriers';
 import Transport from './components/transports/Transport';
 import Venue from './components/venue/Venue';
 import MerchandiseCategory from './components/merchandiseCategory/MerchandiseCategory';
-import Sidebar from './components/Sidebar';
+import OrderGroup from './components/orders/OrderGroup';
+import './App.css';
+import 'ag-grid-community/styles/ag-grid.css';      
+import 'ag-grid-community/styles/ag-theme-alpine.css'; 
 
+const AppWrapper = () => {
+  const location = useLocation();
+
+  const shouldShowSlider = !['/', '/signin', '/signup'].includes(location.pathname);
+
+
+  return (
+    <div className="app-container" >
+      {shouldShowSlider && <Slider/>}
+      <div className={`main-content-container ${shouldShowSlider ? '' : 'full-width'}`}>
+        <Routes>
+          <Route path="/" element={<Navbar />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/merchandiseCategory" element={<MerchandiseCategory />} />
+          <Route path="/merchandise" element={<Merchandise />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/venue/:clientId" element={<Venue />} />
+          <Route path="/transport" element={<Transport />} />
+          <Route path="/ordergroup" element={<OrderGroup />} />
+        </Routes>
+      </div>
+    </div>
+  );
+};
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Navbar />} />
-          <Route path="/pricing" element={<Pricing/>} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-
-          <Route path="/slider" element={<Slider />} />
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-
-          <Route path="/orders" element={<Orders />} />
-
-
-          <Route path="/merchandiseCategory" element={< MerchandiseCategory />} />
-            
-          <Route path="/merchandise" element={<Merchandise />} />
-           
-                 
-          <Route path="/clients" element={<Clients />} />
-
-          <Route path="/couriers" element={<Courier />} />
-
-          <Route path="/venue/:clientId" element={<Venue />} />
-          <Route path="/transport" element={<Transport />} />
-            
-
-          {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-
-
-        </Routes>
-      </div>
+      <AppWrapper />
     </Router>
   );
 }
 
 export default App;
-

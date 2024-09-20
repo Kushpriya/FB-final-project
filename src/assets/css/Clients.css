@@ -1,13 +1,8 @@
-
 .clients-container {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  margin: 40px;
-  margin-left: 250px;
-  /* background-color: #1c1c1e; */
-  color: #fff;
-  width: 80%;
+  padding: 50px;
+  /* color: #fff; */
 }
 
 .client-add-btn {
@@ -46,6 +41,17 @@
   font-size: 18px;
   margin: 10px;
   transition: transform 0.2s ease;
+}
+
+.view-action-btn{
+  color:rgb(71, 71, 251);
+}
+.edit-action-btn{
+  color:rgb(245, 245, 38);
+}
+
+.delete-action-btn{
+  color: rgb(253, 55, 55);
 }
 
 .view-action-btn:hover {
@@ -124,7 +130,6 @@
   background-color: #218838;
 }
 
-
 .client-form .error-message {
   color: red;
   margin-bottom: 15px;
@@ -144,7 +149,6 @@
 .close-button:hover {
   color: #dc3545;
 }
-
 
 .client-view-overlay {
   position: fixed;
@@ -182,16 +186,99 @@
   margin-bottom: 10px;
 }
 
-
-/* Clients.css or similar */
-.table-container {
-  margin: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
+.branch-details-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 14px;
 }
 
-.table {
-  height: 100%;
-  width: 100%;
+.branch-details-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.branch-details-btn:focus {
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+@media (max-width: 1200px) {
+  .clients-container {
+    margin-left: 200px; 
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .clients-container {
+    margin-left: 0; 
+    width: 100%;
+    padding: 10px;
+  }
+
+  .client-add-btn {
+    width: 120px;
+    padding: 0.4rem 0.8rem;
+    font-size: 14px;
+  }
+
+  .ag-theme-alpine-dark {
+    height: auto;
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .client-form-container h2,
+  .client-view-container h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-add-btn {
+    width: 100px;
+    padding: 0.3rem 0.6rem;
+    font-size: 12px;
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 95%;
+    max-width: 360px;
+    padding: 20px;
+  }
+
+  .client-form-container h2,
+  .client-view-container h2 {
+    font-size: 18px;
+  }
+
+  .client-form-container input,
+  .client-form-container select {
+    font-size: 12px;
+  }
+
+  .error-message {
+    font-size: 10px;
+  }
 }

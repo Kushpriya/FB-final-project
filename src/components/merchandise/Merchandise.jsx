@@ -5,12 +5,11 @@ import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { useAddMerchandise, useEditMerchandise, useDeleteMerchandise } from './MerchandiseHandler';
 import {
   GET_ALL_MERCHANDISE_QUERY,
-  GET_MERCHANDISE_BY_CATEGORY_QUERY,
-  GET_ALL_MERCHANDISE_CATEGORIES,
+  GET_MERCHANDISE_BY_CATEGORY_QUERY
 } from '../../graphql/queries/MerchandiseQueries';
 import MerchandiseForm from './MerchandiseForm';
 import '../../assets/css/Merchandise.css';
-import Slider from '../Slider';
+import { GET_ALL_MERCHANDISE_CATEGORIES } from '../../graphql/queries/MerchandiseCategoryQueries';
 
 const Merchandise = () => {
   const { loading, error, data, refetch } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
@@ -37,7 +36,6 @@ const Merchandise = () => {
   const handleUpdate = useEditMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
   const handleDelete = useDeleteMerchandise(refetch, categoryId);
 
-  const categories = data?.getAllMerchandiseCategories || [];
   const columnDefs = [
     { headerName: 'ID', field: 'id', sortable: true, filter: true },
     { headerName: 'Name', field: 'name', sortable: true, filter: true },
@@ -61,7 +59,7 @@ const Merchandise = () => {
       field: 'actions',
       cellRenderer: (params) => (
         <div className="merchandise-actions">
-          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-action-btn">
+          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-view-action-btn">
             <FaEye title="View" />
           </button>
           <button
@@ -69,11 +67,11 @@ const Merchandise = () => {
               setSelectedMerchandise(params.data);
               setIsModalOpen(true);
             }}
-            className="merchandise-action-btn"
+            className="merchandise-edit-action-btn"
           >
             <FaEdit title="Edit" />
           </button>
-          <button onClick={() => handleDelete(params.data.id)} className="merchandise-action-btn">
+          <button onClick={() => handleDelete(params.data.id)} className="merchandise-delete-action-btn">
             <FaTrash title="Delete" />
           </button>
         </div>
@@ -87,7 +85,6 @@ const Merchandise = () => {
 
   return (
     <>
-    <Slider/>
     <div className="merchandise-container">
       <div className="merchandise-header">
         <h2>Merchandise List</h2>
@@ -103,7 +100,7 @@ const Merchandise = () => {
           onChange={(e) => setCategoryId(e.target.value || null)}
         >
           <option value="">All Categories</option>
-          {categories.map((category) => (
+          {data?.getAllMerchandiseCategories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
@@ -124,7 +121,7 @@ const Merchandise = () => {
           handleEdit={handleUpdate}
           selectedMerchandise={selectedMerchandise}
           setSelectedMerchandise={setSelectedMerchandise}
-          categories={categories}
+          categories={data?.getAllMerchandiseCategories}
           onClose={() => setIsModalOpen(false)}
           errorMessage={errorMessage}
         />

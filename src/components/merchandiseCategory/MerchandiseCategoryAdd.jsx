@@ -19,6 +19,11 @@ const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { name, description } = category;
+    if (!name || !description) {
+      return; // Handle invalid form submission
+    }
+    // Determine whether to add or update
     editingCategory ? updateCategory(category) : addCategory(category);
     onClose();
   };

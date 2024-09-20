@@ -1,97 +1,44 @@
-
-.sidebar-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100vh;
-    background-color: #2d2d3f;
-    /* color: #ecf0f1; */
-    /* overflow: hidden; */
-    transition: all 0.3s;
-    /* transform: translateX(0);  */
-    z-index: 1000;
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #333;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: width 0.3s;
 }
 
-.sidebar-container.closed {
-    width: 80px;
+.sidebar.closed {
+  width: 60px;
 }
 
-.sidebar-toggle {
-    background: none;
-    border: none;
-    color: #ecf0f1;
-    font-size: 1.5rem;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    left: 10px;
+.toggle-btn {
+  background-color: #4e4e4e;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
 }
 
-.sidebar-content {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 60px;
+.menu-items {
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar-content li {
-    padding: 15px 20px;
-    cursor: pointer;
-    /* position: relative; */
-    transition: background-color 0.3s;
+.menu-item {
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.sidebar-content li:hover {
-    background-color: #a5a5a7;
+.menu-item:hover {
+  background-color: #f0ecec;
 }
 
-.sidebar-icon {
-    font-size: 1.2rem;
-    margin-right: 15px;
-    vertical-align: middle;
-}
-
-
-.submenu {
-    list-style-type: none;
-    padding-left: 40px;
-    margin-top: 10px;
-    max-height: 45px;
-   
-}
-
-.submenu li {
-    padding: 5px 20px;
-    color: #ecf0f1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background 0.3s;
-}
-
-.submenu li:hover {
-    background-color: #323e4c;
-}
-
-
-.sidebar-sub-icon {
-    font-size: 1rem;
-    margin-right: 10px;
-}
-
-
-.logout {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    cursor: pointer;
-}
-
-.logout:hover {
-    background-color: #e94e33;
-    
-}
-
-.logout .sidebar-icon {
-    color: #e74c3c;
+.menu-item span {
+  margin-left: 10px;
 }

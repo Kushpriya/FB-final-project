@@ -1,15 +1,16 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
+    /* background-image: url('../Images/back.png'); */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #777; 
-    color: #333; 
+    background-color: #777;
+    color: #333;
     line-height: 1.6;
 }
 
@@ -36,12 +37,43 @@ body {
 
 .navbar-links li, .navbar-auth a {
     margin: 0 10px;
+    position: relative;
+}
+
+.navbar-links li a, .navbar-auth a {
+    text-decoration: none;
+    color: #f5f3f3;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease; /* Add transform for scale effect */
+    position: relative;
+}
+
+.navbar-links li a::after, .navbar-auth a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -3px;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.navbar-links li a:hover, .navbar-auth a:hover {
+    /* background-color: #444; */
+    color: #fff;
+    transform: scale(1.07);
+}
+
+.navbar-links li a:hover::after, .navbar-auth a:hover::after {
+    width: 100%;
 }
 
 .navbar-links select {
     font-size: 15px;
-    color: #fff; 
-    margin-left: 0; 
+    color: #fff;
+    margin-left: 0;
     padding: 5px;
     cursor: pointer;
     background-color: transparent;
@@ -49,15 +81,15 @@ body {
 }
 
 .navbar-links select option {
-    background-color: #333; 
-    color: #fff; 
+    background-color: #333;
+    color: #fff;
 }
 
 .navbar-search-container {
     display: flex;
     align-items: center;
     position: relative;
-    margin-left: auto; 
+    margin-left: 10px;
 }
 
 .navbar-search-input {
@@ -74,7 +106,7 @@ body {
     color: #939393;
     cursor: pointer;
     position: absolute;
-    right: 10px; 
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
 }
@@ -85,25 +117,68 @@ body {
     cursor: pointer;
 }
 
-.navbar-auth a {
-    color: #f5f3f3;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-}
-
-.navbar-auth a:hover {
-    background-color: #f5f3f3; 
-    color: #565656; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-    border: 1px solid #ccc; 
-}
-
 .auth-icon {
-    margin-right: 5px; 
+    margin-right: 5px;
 }
+
+.intro-text {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    /* padding: 50px 20px; */
+    position: relative;
+
+    z-index: 1;
+    margin-top: 200px;
+}
+
+.intro-text::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.intro-text h1 {
+    font-size: 4.5em;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+/* .intro-text p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 0;
+    transition: color 0.3s ease;
+} */
+
+.intro-text h1, .intro-text p {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+
+.intro-text h1 {
+    animation-delay: 0.5s; 
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.intro-text h1:hover
+ {
+    color: #f3ecec;
+}
+
 
 @media (max-width: 768px) {
     .navbar {
@@ -144,11 +219,23 @@ body {
     }
 
     .navbar-search-input {
-        width: calc(100% - 40px); 
+        width: calc(100% - 50%);
+        margin-left: 200px;
+    }
+
+    .navbar-auth {
+        flex-direction: column;
+        align-items: flex-start; 
+        display: flex ; 
+    }
+
+    .navbar-auth a {
+        width: 100%; 
+        padding-left: 20px;
     }
 
     .navbar-search-icon {
-        right: 10px;
+        right: 150px;
     }
 }
 
@@ -168,7 +255,7 @@ body {
     }
 
     .navbar-search-input {
-        width: calc(100% - 20px); 
+        width: calc(100% - 20px);
     }
 
     .navbar-search-icon {
