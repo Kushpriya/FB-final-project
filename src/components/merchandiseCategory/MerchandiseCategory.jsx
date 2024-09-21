@@ -13,7 +13,7 @@ const MerchandiseCategory = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [viewCategoryId, setViewCategoryId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); 
 
   const handleAdd = useAddMerchandiseCategory(refetch, setFormOpen, setErrorMessage);
   const handleUpdate = useEditMerchandiseCategory(refetch, setFormOpen, setErrorMessage);
@@ -22,7 +22,6 @@ const MerchandiseCategory = () => {
   const columnDefs = [
     { headerName: 'ID', field: 'id', sortable: true, filter: true },
     { headerName: 'Name', field: 'name', sortable: true, filter: true },
-    { headerName: 'Description', field: 'description', sortable: true, filter: true },
     {
       headerName: 'Actions',
       cellRenderer: (params) => (
@@ -56,14 +55,15 @@ const MerchandiseCategory = () => {
         <FaPlus /> Add Category
       </button>
 
-      <div className="ag-theme-alpine-dark" style={{ width: '77%', height: '100%' }}>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+      <div className="ag-theme-alpine-dark" style={{ width: '70%', height: '100%' }}>
         <AgGridReact
           rowData={data.getAllMerchandiseCategories}
           columnDefs={columnDefs}
           pagination={true}
           paginationPageSize={10}
           domLayout="autoHeight"
-          
         />
       </div>
 

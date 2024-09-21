@@ -16,7 +16,6 @@ const ClientView = ({ clientId, onClose }) => {
   if (!client) return <p className="error-message">Client not found</p>;
 
   return (
-    <div className="client-view-overlay">
     <div className="client-view-container">
       <button className="close-button" onClick={onClose}>X</button>
       <h1>Client Details</h1>
@@ -27,8 +26,6 @@ const ClientView = ({ clientId, onClose }) => {
       <p><strong>Created At:</strong> {new Date(client.createdAt).toLocaleString()}</p>
       <p><strong>Updated At:</strong> {new Date(client.updatedAt).toLocaleString()}</p>
     </div>
-    </div>
-
   );
 };
 

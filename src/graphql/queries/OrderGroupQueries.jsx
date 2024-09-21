@@ -121,3 +121,79 @@ export const GET_NON_RECURRING_ORDERS = gql`
 `;
 
 
+export const GET_MAIN_RECURRING_ORDERS = gql`
+query GetMainRecurringOrders {
+  getMainRecurringOrders {
+      createdAt
+      updatedAt
+      clientId
+      completedOn
+      id
+      mainOrderGroupId
+      startOn
+      status
+      tenantId
+      venueId
+      deliveryOrder {
+          courierId
+          id
+          orderGroupId
+          source
+          transportId
+          vehicleType
+          lineItems {
+              deliveryOrderId
+              id
+              merchandiseCategoryId
+              merchandiseId
+              price
+              quantity
+              unit
+          }
+      }
+      recurring {
+          endDate
+          frequency
+          startDate
+      }
+  }
+}`;
+
+export const GET_CHILDREN_RECURRING_ORDERS = gql`
+query GetChildrenRecurringOrders($mainRecurringOrderId: ID!) {
+    getChildrenRecurringOrders(mainRecurringOrderId: $mainRecurringOrderId) {
+        clientId
+        createdAt
+        updatedAt
+        completedOn
+        id
+        mainOrderGroupId
+        startOn
+        status
+        tenantId
+        venueId
+        client {
+            address
+            email
+            id
+            name
+            phone
+        }
+        deliveryOrder {
+            courierId
+            id
+            orderGroupId
+            source
+            transportId
+            vehicleType
+            lineItems {
+                deliveryOrderId
+                merchandiseCategoryId
+                merchandiseId
+                price
+                quantity
+                unit
+            }
+        }
+    }
+}`;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
-import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEye, FaEdit, FaPlus, FaCodeBranch, FaTrashAlt } from 'react-icons/fa';
 import { GET_ALL_CLIENTS } from '../../graphql/queries/ClientQueries';
 import { useAddClient, useEditClient, useDeleteClient } from './ClientHandler';
 import ClientForm from './ClientForm';
@@ -35,7 +35,12 @@ const Clients = () => {
       headerName: 'Actions',
       cellRenderer: (params) => (
         <div className="client-action-icon">
-          <button onClick={() => setViewClientId(params.data.id)} className="view-action-btn">
+          
+          <button onClick={() => handleShowClick(params.data.id)} className="client-branch-action-btn">
+          <FaCodeBranch title='Venue'/>
+        </button>
+
+          <button onClick={() => setViewClientId(params.data.id)} className="client-view-action-btn">
             <FaEye title="View" />
           </button>
           <button
@@ -43,28 +48,17 @@ const Clients = () => {
               setSelectedClient(params.data);
               setformOpen(true);
             }}
-            className="edit-action-btn"
+            className="client-edit-action-btn"
           >
             <FaEdit title="Edit" />
+
           </button>
-          <button onClick={() => handleDelete(params.data.id)} className="delete-action-btn">
-            <FaTrash title="Delete" />
+          <button onClick={() => handleDelete(params.data.id)} className="client-delete-action-btn">
+            <FaTrashAlt title="Delete" />
           </button>
         </div>
       ),
     },
-    {
-      headerName: 'Branch details',
-      field: 'branch',
-      cellRenderer: (params) => (
-        <button 
-          onClick={() => handleShowClick(params.data.id)} 
-          className="branch-details-btn"
-        >
-          Show
-        </button>
-      ),
-    }
   ];
 
   if (loading) return <p>Loading clients...</p>;
@@ -99,7 +93,10 @@ const Clients = () => {
           />
         )}
 
-        {viewClientId && <ClientView clientId={viewClientId} />}
+        {viewClientId && <ClientView 
+        clientId={viewClientId} 
+        onClose={() => setViewClientId(null)}
+        />}
       </div>
     </>
   );

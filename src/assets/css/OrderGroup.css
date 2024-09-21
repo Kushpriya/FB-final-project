@@ -15,7 +15,7 @@
     background-color: #6f6f6f;
     padding: 20px;
     border-radius: 8px;
-    width: 80%;
+    /* width: 80%; */
     max-width: 1000px;
     height: 80vh;
     overflow-y: auto;
@@ -114,7 +114,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 50px;
-    margin-left: 300px;
+    /* margin-left: 300px; */
   }
   
   /* Button styling */
@@ -217,6 +217,12 @@
     cursor: pointer;
     font-size: 20px;
   }
+  .line-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
   
   /* Responsive design */
   @media (max-width: 768px) {

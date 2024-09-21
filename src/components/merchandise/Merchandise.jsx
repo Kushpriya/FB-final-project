@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { AgGridReact } from 'ag-grid-react';
-import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEye, FaEdit, FaPlus, FaTrashAlt } from 'react-icons/fa';
 import { useAddMerchandise, useEditMerchandise, useDeleteMerchandise } from './MerchandiseHandler';
 import {
   GET_ALL_MERCHANDISE_QUERY,
@@ -72,7 +72,7 @@ const Merchandise = () => {
             <FaEdit title="Edit" />
           </button>
           <button onClick={() => handleDelete(params.data.id)} className="merchandise-delete-action-btn">
-            <FaTrash title="Delete" />
+            <FaTrashAlt title="Delete" />
           </button>
         </div>
       ),
@@ -89,11 +89,11 @@ const Merchandise = () => {
       <div className="merchandise-header">
         <h2>Merchandise List</h2>
         <button className="merchandise-add-btn" onClick={() => setIsModalOpen(true)}>
-          <FaPlus /> Add
+          <FaPlus /> Add Merchandise
         </button>
       </div>
       <div className="filter-section">
-        <label htmlFor="category-select">Select Category:</label>
+        <label>Select Category:</label>
         <select
           id="category-select"
           value={categoryId || ''}
@@ -107,7 +107,7 @@ const Merchandise = () => {
           ))}
         </select>
       </div>
-      <div className="ag-theme-alpine-dark">
+      <div className="ag-theme-alpine-dark" style={{ width: '100%', height: '100%' }}>
         <AgGridReact rowData={rowData} 
         columnDefs={columnDefs}
          pagination={true} 
@@ -130,12 +130,13 @@ const Merchandise = () => {
         <div className="merchandise-view-modal">
           <button className="close-button" onClick={() => setViewMerchandise(null)}>X</button>
           <h2>Merchandise Details</h2>
-          <h3>{viewMerchandise.name}</h3>
-          <p>Price: ${viewMerchandise.price}</p>
-          <p>Status: {viewMerchandise.status}</p>
-          <p>Unit: {viewMerchandise.unit}</p>
-          <p>Description: {viewMerchandise.description}</p>
-          <p>Category: {viewMerchandise.merchandiseCategory.name}</p>
+          <p><strong>ID:</strong> {viewMerchandise.id}</p>
+          <p><strong>Name:</strong> {viewMerchandise.name}</p>
+          <p><strong>Price: $</strong> {viewMerchandise.price}</p>
+          <p><strong>Status: </strong> {viewMerchandise.status}</p>
+          <p><strong>Unit: </strong> {viewMerchandise.unit}</p>
+          <p><strong>Description: </strong> {viewMerchandise.description}</p>
+          <p><strong>Category: </strong> {viewMerchandise.merchandiseCategory.name}</p>
         </div>
       )}
     </div>

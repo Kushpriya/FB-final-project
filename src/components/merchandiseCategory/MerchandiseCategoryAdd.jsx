@@ -19,14 +19,15 @@ const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, description } = category;
-    if (!name || !description) {
-      return; // Handle invalid form submission
+    
+    if (editingCategory) {
+      updateCategory(editingCategory, category); 
+    } else {
+      addCategory(category);
     }
-    // Determine whether to add or update
-    editingCategory ? updateCategory(category) : addCategory(category);
     onClose();
   };
+  
 
   return (
     <div className="category-form-overlay">

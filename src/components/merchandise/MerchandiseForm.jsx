@@ -18,6 +18,7 @@ export default function MerchandiseForm({
     description: '',
     merchandiseCategoryId: '',
   };
+
   const [formError, setFormError] = useState('');
   const [formData, setFormData] = useState(selectedMerchandise || initialFormData);
 
@@ -33,18 +34,46 @@ export default function MerchandiseForm({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    const { name, price, unit, merchandiseCategoryId } = formData;
+    
+    if (!name.trim()) {
+      return 'Name is required and cannot be empty.';
+    }
+
+    if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
+      return 'Price must be a positive number.';
+    }
+
+    if (!unit.trim()) {
+      return 'Unit is required and cannot be empty.';
+    }
+
+    if (!merchandiseCategoryId) {
+      return 'Please select a category.';
+    }
+
+    return '';
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.price || !formData.status) {
-      setFormError('All fields are required.');
+    
+    const validationError = validateForm();
+    
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
+    
     setFormError('');
+
     if (selectedMerchandise) {
       handleEdit(selectedMerchandise.id, formData);
     } else {
       handleCreate(formData);
     }
+
     setSelectedMerchandise(null);
   };
 
@@ -54,9 +83,11 @@ export default function MerchandiseForm({
         <button className="close-button" onClick={onClose}>X</button>
         {formError && <p className="error-message">{formError}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        
         <h2>
           {selectedMerchandise ? 'Edit Merchandise' : 'Create Merchandise'}
         </h2>
+        
         <form onSubmit={handleSubmit}>
           <label>Name:</label>
           <input
@@ -67,6 +98,7 @@ export default function MerchandiseForm({
             placeholder="Enter merchandise name"
             required
           />
+          
           <label>Price:</label>
           <input
             type="number"
@@ -76,6 +108,7 @@ export default function MerchandiseForm({
             placeholder="Enter Price"
             required
           />
+          
           <label>Status:</label>
           <select
             name="status"
@@ -118,6 +151,7 @@ export default function MerchandiseForm({
               </option>
             ))}
           </select>
+          
           <button type="submit">
             {selectedMerchandise ? 'Update Merchandise' : 'Create Merchandise'}
           </button>

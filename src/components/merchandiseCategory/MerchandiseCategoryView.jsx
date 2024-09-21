@@ -15,7 +15,6 @@ const MerchandiseCategoryView = ({ categoryId, onClose }) => {
   const category = data?.getMerchandiseCategoryById;
 
   return (
-    <div className="category-view-overlay">
       <div className="category-view-container">
         <button className="close-button" onClick={onClose}>X</button>
         <h2>Category Details</h2>
@@ -31,7 +30,6 @@ const MerchandiseCategoryView = ({ categoryId, onClose }) => {
           <p>No category data available.</p>
         )}
       </div>
-    </div>
   );
 };
 

@@ -57,10 +57,9 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            <div className="intro-text">
+            {/* <div className="intro-text">
                 <h1>Welcome to FuelPanda</h1>
-                {/* <p>Explore amazing products and services.</p> */}
-            </div>
+            </div> */}
         </div>
     );
 };

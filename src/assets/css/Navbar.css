@@ -7,13 +7,15 @@
 body {
     /* background-image: url('../Images/back.png'); */
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: #777;
-    color: #333;
-    line-height: 1.6;
+    /* color: #333; */
 }
-
+.navbar-container{
+    background-color: rgb(24, 23, 23);
+   position: relative;
+    top: -20px;
+    width: 100%;
+}
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -31,8 +33,8 @@ body {
 .navbar-links, .navbar-auth {
     display: flex;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    /* margin: 0; */
+    /* padding: 0; */
 }
 
 .navbar-links li, .navbar-auth a {

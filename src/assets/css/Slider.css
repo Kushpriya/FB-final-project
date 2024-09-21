@@ -1,12 +1,4 @@
-body.dark-mode {
-    background-color: #1e1e2f;
-    color: #ffffff;
-}
 
-body.light-mode {
-    background-color: #d7d7d8;
-    color: #000000;
-}
 
 .sidebar-container {
     position: fixed;
@@ -71,7 +63,7 @@ body.light-mode {
     cursor: pointer;
     display: flex;
     align-items: center;
-    transition: background 0.3s;
+    /* transition: background 0.3s; */
 }
 
 .submenu li:hover {
@@ -142,16 +134,6 @@ body.light-mode {
     left: 50px;
 }
 
-.dark-mode {
-    background-color: #2d2d3f;
-    color: #ffffff;
-}
-
-.light-mode {
-    background-color: #d2d5d2;
-    color: #2c3e50;
-}
-
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -162,9 +144,9 @@ body.light-mode {
     font-size: 1.5rem;
 }
 .theme-toggle img.theme-image {
-    width: 40px;  /* Adjust size as needed */
+    width: 40px;  
     height: 40px;
-    border-radius: 50%; /* Optional: makes it circular */
+    border-radius: 50%; 
 }
 
 

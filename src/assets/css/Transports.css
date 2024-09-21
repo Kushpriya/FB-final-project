@@ -9,7 +9,7 @@
 .filter-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 50px;
   padding: 10px;
   border-radius: 5px;
 }
@@ -18,6 +18,7 @@
   font-size: 16px;
   font-weight: bold;
   flex: 1;
+  margin: 20px;
 }
 
 .add-transport-btn {
@@ -29,6 +30,8 @@
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
+  font-size: 15px;
+  margin-right: 100px;
 }
 
 .add-transport-btn:hover {

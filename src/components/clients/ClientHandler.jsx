@@ -5,11 +5,12 @@ export const useAddClient = (refetch, setformOpen, setErrorMessage) => {
   const [createClient] = useMutation(CREATE_CLIENT);
 
   const handleAdd = async (formData) => {
-    if (!formData.id || !formData.name.trim() || !formData.email.trim() || !formData.address.trim() || !formData.phone.trim()) {
-      alert('Fields cannot be empty.');
+    const { name, email, address, phone } = formData;
+  
+    if (!name.trim() || !email.trim() || !address.trim() || !phone.trim()) {
+      setErrorMessage('All fields must be filled.');
       return;
     }
-
     try {
       const { data } = await createClient({ variables: { clientInfo: formData } });
       if (data.createClient.client) {
@@ -18,13 +19,13 @@ export const useAddClient = (refetch, setformOpen, setErrorMessage) => {
         setformOpen(false);
         setErrorMessage('');
       } else {
-        alert('Error adding client.');
+        setErrorMessage(data.createClient.errors || 'Error adding client.');
       }
     } catch (error) {
-      alert('Error adding client.');
+      setErrorMessage('Error adding client.');
       console.error('Error adding client:', error);
     }
-  };
+  };  
 
   return handleAdd;
 };
@@ -32,30 +33,29 @@ export const useAddClient = (refetch, setformOpen, setErrorMessage) => {
 export const useEditClient = (refetch, setformOpen, setErrorMessage) => {
   const [editClient] = useMutation(EDIT_CLIENT);
 
-  const handleUpdate = async (selectedClient, formData) => {
-    if (!selectedClient?.id || !formData.name.trim() || !formData.email.trim() || !formData.address.trim() || !formData.phone.trim()) {
-      alert('Client ID or form data is invalid.');
+  const handleUpdate = async (clientId, formData) => {
+    if (!clientId || !formData.name.trim() || !formData.email.trim() || !formData.address.trim() || !formData.phone.trim()) {
+      setErrorMessage('Client ID or form data is invalid.');
       return;
     }
-
     try {
       const { data } = await editClient({
-        variables: { clientId: selectedClient.id, clientInfo: formData },
+        variables: { clientId, clientInfo: formData },
       });
-
       if (data.editClient.client) {
         alert('Client updated successfully.');
         refetch();
         setformOpen(false);
         setErrorMessage('');
       } else {
-        alert('Error updating client.');
+        setErrorMessage(data.editClient.errors || 'Error updating client.');
       }
     } catch (error) {
       console.error('Error updating client:', error);
-      alert('Error updating client.');
+      setErrorMessage('Error updating client.');
     }
   };
+  
 
   return handleUpdate;
 };
@@ -64,17 +64,26 @@ export const useDeleteClient = (refetch) => {
   const [deleteClient] = useMutation(DELETE_CLIENT);
 
   const handleDelete = async (clientId) => {
-    try {
-      const { data } = await deleteClient({ variables: { clientId: String(clientId).trim() } });
-      if (data.deleteClient.message === 'Client deleted successfully') {
-        await refetch();
-      } else {
-        console.error('Delete failed:', data.deleteClient.message || 'Unknown error');
-      }
-    } catch (err) {
-      console.error('Delete failed:', err.message);
+    if (!clientId) {
+      alert('Invalid client ID');
+      return;
     }
-  };
+
+    if (window.confirm("Are you sure you want to delete this client?")) {
+
+      try {
+        const { data } = await deleteClient({ variables: { clientId: String(clientId).trim() } });
+        if (data.deleteClient.message === 'Client deleted successfully') {
+        alert('Client deletted successfully.');
+        refetch();
+        } else {
+          console.error('Delete failed:', data.deleteClient.message || 'Unknown error');
+        }
+      } catch (err) {
+        console.error('Delete failed:', err.message);
+      }
+    }
+    };
   
   return handleDelete;
 };

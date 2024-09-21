@@ -30,61 +30,64 @@ export const useAddMerchandiseCategory = (refetch, setFormOpen, setErrorMessage)
 };
 
 export const useEditMerchandiseCategory = (refetch, setFormOpen, setErrorMessage) => {
-    const [editCategory] = useMutation(EDIT_CATEGORY);
-  
-    const handleUpdate = async (selectedCategory, formData) => {
-      if (!selectedCategory?.id || !formData.name.trim() || !formData.description.trim()) {
-        alert('Category ID or form data is invalid.');
-        return;
-      }
-  
-      try {
-        const { data } = await editCategory({
-          variables: { merchandiseCategoryId: selectedCategory.id, name: formData.name, description: formData.description },
-        });
-  
-        if (data.editMerchandiseCategory.merchandiseCategory) {
-          alert('Category updated successfully.');
-          refetch();
-          setFormOpen(false);
-          setErrorMessage('');
-        } else {
-          alert('Error updating category.');
-        }
-      } catch (error) {
-        if (error.graphQLErrors) {
-          error.graphQLErrors.forEach(({ message }) => {
-            console.error('GraphQL error:', message);
-          });
-        } else {
-          console.error('Error updating category:', error);
-        }
+  const [editCategory] = useMutation(EDIT_CATEGORY);
+
+  const handleUpdate = async (selectedCategory, formData) => {
+    if (!selectedCategory?.id || !formData?.name.trim() || !formData?.description.trim()) {
+      alert('Category ID or form data is invalid.');
+      return;
+    }
+
+    try {
+      const { data } = await editCategory({
+        variables: {
+          merchandiseCategoryId: selectedCategory.id,
+          name: formData.name,
+          description: formData.description
+        },
+      });
+
+      if (data.editMerchandiseCategory) {
+        alert('Category updated successfully.');
+        refetch();
+        setFormOpen(false);
+        setErrorMessage('');
+      } else {
         alert('Error updating category.');
       }
-      
-    };
-  
-    return handleUpdate;
+    } catch (error) {
+      console.error('Error updating category:', error);
+      alert('Error updating category. Details: ' + error.message);
+    }
   };
 
-  export const useDeleteMerchandiseCategory = (refetch) => {
-    const [deleteCategory] = useMutation(DELETE_CATEGORY);
-  
-    const handleDelete = async (categoryId) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
+  return handleUpdate;
+};
 
+
+export const useDeleteMerchandiseCategory = (refetch) => {
+  const [deleteCategory] = useMutation(DELETE_CATEGORY);
+
+  const handleDelete = async (categoryId) => {
+    if (window.confirm("Are you sure you want to delete this category?")) {
       try {
         const { data } = await deleteCategory({ variables: { merchandiseCategoryId: String(categoryId).trim() } });
-        if (data.deleteMerchandiseCategory.message === 'Category deleted successfully') {
+        
+        console.log('Delete response:', data); 
+
+        if (data.deleteMerchandiseCategory.message === 'Merchandise category deleted successfully') {
           await refetch();
+          alert('Merchandise category deleted successfully');
         } else {
           console.error('Delete failed:', data.deleteMerchandiseCategory.message || 'Unknown error');
         }
       } catch (err) {
         console.error('Delete failed:', err.message);
+        alert('Delete failed: ' + err.message);
       }
     }
-    };
-  
-    return handleDelete;
   };
+
+  return handleDelete;
+};
+
