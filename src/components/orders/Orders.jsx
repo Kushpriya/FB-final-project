@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/orders/OrderForm.css';
-import '../../assets/css/orders/OrderList.css';
+import '../../assets/css/OrderForm.css';
+import '../../assets/css/OrderList.css';
 import OrderForm from './OrderForm';
 import OrderList from './OrderList';
 import Slider from '../../components/Slider';
