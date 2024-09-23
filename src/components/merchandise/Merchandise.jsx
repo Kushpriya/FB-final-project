@@ -1,159 +1,149 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../../assets/css/merchandise/MerchandiseForm.css';
-import '../../assets/css/merchandise/MerchandiseList.css';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { AgGridReact } from 'ag-grid-react';
+import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { useAddMerchandise, useEditMerchandise, useDeleteMerchandise } from './MerchandiseHandler';
+import {
+  GET_ALL_MERCHANDISE_QUERY,
+  GET_MERCHANDISE_BY_CATEGORY_QUERY,
+  GET_ALL_MERCHANDISE_CATEGORIES,
+} from '../../graphql/queries/MerchandiseQueries';
+import MerchandiseForm from './MerchandiseForm';
+import '../../assets/css/Merchandise.css';
 import Slider from '../Slider';
-import MerchandiseAdd from './MerchandiseForm';
-import MerchandiseList from './MerchandiseList';
 
-function Merchandise() {
-  const [merchandiseList, setMerchandiseList] = useState([]);
-  const [newMerchandise, setNewMerchandise] = useState({
-    id: "",
-    name: "",
-    category: "",
-    description: "",
-    quantity: 1,
-    price: "",
-    dateAdded: "",
-    totalValue: "",
-    status: "",
-  });
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingMerchandiseId, setEditingMerchandiseId] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [formVisible, setFormVisible] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false);
+const Merchandise = () => {
+  const { loading, error, data, refetch } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categoryId, setCategoryId] = useState(null);
+  const [selectedMerchandise, setSelectedMerchandise] = useState(null);
+  const [viewMerchandise, setViewMerchandise] = useState(null);
+  const [rowData, setRowData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredMerchandise = merchandiseList.filter(
-    (merchandise) =>
-      merchandise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      merchandise.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const { loading: merchLoading, data: merchData} = useQuery(
+    categoryId ? GET_MERCHANDISE_BY_CATEGORY_QUERY : GET_ALL_MERCHANDISE_QUERY,
+    { variables: categoryId ? { merchandiseCategoryId: categoryId } : {} }
   );
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewMerchandise((prevMerchandise) => {
-      const updatedMerchandise = { ...prevMerchandise, [name]: value };
-
-      if (name === "quantity" || name === "price") {
-        const quantity = name === "quantity" ? value : updatedMerchandise.quantity;
-        const price = name === "price" ? value : updatedMerchandise.price;
-        updatedMerchandise.totalValue = quantity * price;
-      }
-
-      return updatedMerchandise;
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      newMerchandise.name &&
-      newMerchandise.category &&
-      newMerchandise.description &&
-      newMerchandise.quantity > 0 &&
-      newMerchandise.price > 0 &&
-      newMerchandise.dateAdded &&
-      newMerchandise.status
-    ) {
-      if (isEditing) {
-        setMerchandiseList((prevMerchandiseList) =>
-          prevMerchandiseList.map((merchandise) =>
-            merchandise.id === editingMerchandiseId ? { ...newMerchandise, id: editingMerchandiseId } : merchandise
-          )
-        );
-        setIsEditing(false);
-        setEditingMerchandiseId(null);
-      } else {
-        const newId = merchandiseList.length + 1;
-        setMerchandiseList((prevMerchandiseList) => [
-          ...prevMerchandiseList,
-          { ...newMerchandise, id: newId },
-        ]);
-      }
-
-      setNewMerchandise({
-        id: "",
-        name: "",
-        category: "",
-        description: "",
-        quantity: 1,
-        price: "",
-        dateAdded: "",
-        totalValue: "",
-        status: "",
-      });
-      navigate('/merchandise/merchandiselist'); 
-    } else {
-      alert("Please fill out all fields.");
+  useEffect(() => {
+    if (merchData) {
+      setRowData(categoryId ? merchData.getMerchandiseByCategory : merchData.getAllMerchandises);
     }
-  };
+  }, [merchData, categoryId]);
 
-  const handleEdit = (merchandise) => {
-    setIsEditing(true);
-    setEditingMerchandiseId(merchandise.id);
-    setNewMerchandise(merchandise);
-    navigate('/merchandise/merchandiseform'); 
-  };
+  const handleAdd = useAddMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
+  const handleUpdate = useEditMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
+  const handleDelete = useDeleteMerchandise(refetch, categoryId);
 
-  const handleDelete = (merchandiseId) => {
-    const confirmed = window.confirm("Are you sure you want to delete this merchandise?");
-    if (confirmed) {
-      setMerchandiseList(merchandiseList.filter((merchandise) => merchandise.id !== merchandiseId));
-    }
-  };
+  const categories = data?.getAllMerchandiseCategories || [];
+  const columnDefs = [
+    { headerName: 'ID', field: 'id', sortable: true, filter: true },
+    { headerName: 'Name', field: 'name', sortable: true, filter: true },
+    { headerName: 'Price', field: 'price', sortable: true, filter: true },
+    { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
+    {
+      headerName: 'Status',
+      field: 'status',
+      cellRenderer: (params) => (
+        <span className={params.value === 'available' ? 'merchandise-status-available' : 'merchandise-status-out-of-stock'}>
+          {params.value === 'available' ? 'Available' : 'Out of Stock'}
+        </span>
+      ),
+      sortable: true,
+      filter: true,
+    },
+    { headerName: 'Unit', field: 'unit', sortable: true, filter: true },
+    { headerName: 'Category Name', field: 'merchandiseCategory.name', sortable: true, filter: true },
+    {
+      headerName: 'Actions',
+      field: 'actions',
+      cellRenderer: (params) => (
+        <div className="merchandise-actions">
+          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-action-btn">
+            <FaEye title="View" />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedMerchandise(params.data);
+              setIsModalOpen(true);
+            }}
+            className="merchandise-action-btn"
+          >
+            <FaEdit title="Edit" />
+          </button>
+          <button onClick={() => handleDelete(params.data.id)} className="merchandise-action-btn">
+            <FaTrash title="Delete" />
+          </button>
+        </div>
+      ),
+      width: 200,
+    },
+  ];
 
-  const handleOpenForm = () => {
-    setFormVisible(true);
-    setShowCloseButton(true);
-    navigate('/merchandise/merchandiseform'); 
-  };
-
-  const handleCloseForm = () => {
-    setFormVisible(false);
-    setShowCloseButton(false);
-    navigate('/merchandise/merchandiselist'); 
-  };
+  if (loading || merchLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <>
-      <Slider />
-      <div className="merchandise-container">
-        <div className="merchandise-content">
-          {location.pathname === '/merchandise/merchandiseform' && (
-            <MerchandiseAdd
-              newMerchandise={newMerchandise}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-              isEditing={isEditing}
-              handleCloseForm={handleCloseForm}
-              showCloseButton={showCloseButton}
-            />
-          )}
-          {location.pathname === '/merchandise/merchandiselist' && (
-            <MerchandiseList
-              merchandiseList={merchandiseList}
-              filteredMerchandise={filteredMerchandise}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-              handleSearch={handleSearch}
-              searchTerm={searchTerm}
-              handleOpenForm={handleOpenForm}
-            />
-          )}
-        </div>
+    <Slider/>
+    <div className="merchandise-container">
+      <div className="merchandise-header">
+        <h2>Merchandise List</h2>
+        <button className="merchandise-add-btn" onClick={() => setIsModalOpen(true)}>
+          <FaPlus /> Add
+        </button>
       </div>
+      <div className="filter-section">
+        <label htmlFor="category-select">Select Category:</label>
+        <select
+          id="category-select"
+          value={categoryId || ''}
+          onChange={(e) => setCategoryId(e.target.value || null)}
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="ag-theme-alpine-dark">
+        <AgGridReact rowData={rowData} 
+        columnDefs={columnDefs}
+         pagination={true} 
+         paginationPageSize={10} 
+         domLayout="autoHeight" 
+         />
+      </div>
+      {isModalOpen && (
+        <MerchandiseForm
+          handleCreate={handleAdd}
+          handleEdit={handleUpdate}
+          selectedMerchandise={selectedMerchandise}
+          setSelectedMerchandise={setSelectedMerchandise}
+          categories={categories}
+          onClose={() => setIsModalOpen(false)}
+          errorMessage={errorMessage}
+        />
+      )}
+      {viewMerchandise && (
+        <div className="merchandise-view-modal">
+          <button className="close-button" onClick={() => setViewMerchandise(null)}>X</button>
+          <h2>Merchandise Details</h2>
+          <h3>{viewMerchandise.name}</h3>
+          <p>Price: ${viewMerchandise.price}</p>
+          <p>Status: {viewMerchandise.status}</p>
+          <p>Unit: {viewMerchandise.unit}</p>
+          <p>Description: {viewMerchandise.description}</p>
+          <p>Category: {viewMerchandise.merchandiseCategory.name}</p>
+        </div>
+      )}
+    </div>
     </>
   );
-}
+};
 
 export default Merchandise;

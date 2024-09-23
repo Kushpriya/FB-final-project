@@ -11,7 +11,6 @@ const LOGIN_MUTATION = gql`
       email
       jti
     }
-    message
   }
 }
 `;

@@ -1,6 +1,6 @@
 import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import "../../assets/css/orders/OrderList.css";
+import "../../assets/css/OrderList.css";
 
 function OrderList({
     orders,

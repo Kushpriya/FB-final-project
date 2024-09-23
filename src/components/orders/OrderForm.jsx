@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FaBox, FaUser, FaLocationArrow, FaCalendarAlt, FaHashtag, FaDollarSign, FaTruck, FaShippingFast, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import "../../assets/css/orders/OrderForm.css";
+import "../../assets/css/OrderForm.css";
 
 function OrderForm({ isEditing, newOrder, handleInputChange, handleSubmit, handleCloseForm, showCloseButton }) {
     useEffect(() => {

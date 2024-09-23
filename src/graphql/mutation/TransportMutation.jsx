@@ -17,7 +17,7 @@ export const CREATE_TRANSPORT = gql`
   }
 `;
 
-export const UPDATE_TRANSPORT = gql`
+export const EDIT_TRANSPORT = gql`
 mutation UpdateTransport($transportId:ID!, $transportInfo:MakeTransportInput!) {
     updateTransport(input: {
         transportId:$transportId,

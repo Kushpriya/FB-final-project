@@ -21,8 +21,8 @@ export const GET_ALL_MERCHANDISE_QUERY = gql`
 `;
 
 export const GET_MERCHANDISE_BY_CATEGORY_QUERY = gql`
-query GetMerchandiseByCategory {
-    getMerchandiseByCategory(merchandiseCategoryId: "2") {
+query GetMerchandiseByCategory($merchandiseCategoryId: ID!) {
+    getMerchandiseByCategory(merchandiseCategoryId: $merchandiseCategoryId) {
         createdAt
         description
         id
@@ -37,6 +37,16 @@ query GetMerchandiseByCategory {
         }
     }
 }
+`;
 
+export const GET_ALL_MERCHANDISE_CATEGORIES = gql`
+query GetAllMerchandiseCategories {
+    getAllMerchandiseCategories {
+        description
+        id
+        name
+        tenantId
+    }
+}
 
 `;
