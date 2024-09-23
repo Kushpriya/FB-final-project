@@ -10,31 +10,32 @@ import { GET_MERCHANDISE_BY_CATEGORY_QUERY } from '../../graphql/queries/Merchan
 
 const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMessage }) => {
   const initialFormData = {
-    
-    orderGroupInfo: {
-      // startOn: new Date().toISOString().slice(0, 10),
-      // status: 'pending',
-      clientId: selectedOrderGroup?.client?.id || null,
-      venueId: selectedOrderGroup?.venue?.id || null,
-      recurring: {
-        frequency: '',
-        startDate: '',
-        endDate: '',
-      },
-      deliveryOrderAttributes: {
-        source: '',
-        vehicleType: '',
-        transportId: '',
-        courierId: '',
-        lineItemsAttributes: [], 
-      },
+    // startOn: new Date().toISOString().slice(0, 10),
+    // status: 'pending',
+    client: selectedOrderGroup?.client || { name: '' },
+    venue: selectedOrderGroup?.venue || { name: '' },
+    deliveryOrderAttributes : {
+      source: '',
+      transportId: '',
+      vehicleType: '',
+      courierId: '',
+      lineItemsAttributes: [],
     },
+    recurring:{
+      frequency: '',
+      startDate: '',
+      endDate: '',  
+    }
+    // recurring: false,
+    // frequency: '',
+    // startDate: '',
+    // endDate: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [lineItem, setLineItem] = useState({
-    merchandiseCategoryId: '',
-    merchandiseId: '',
+    category: '',
+    merchandise: '',
     price: '',
     unit: '',
     quantity: '',
@@ -135,17 +136,17 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
   const validate = () => {
     const newErrors = {};
-    const { deliveryOrderAttributes, clientId, venueId, recurring } = formData.orderGroupInfo;
+    const { deliveryOrderAttributes, client, venue } = formData;
 
-    if (!deliveryOrderAttributes.source.trim()) newErrors.deliveryOrderSource = 'Source is required.';
-    if (!clientId) newErrors.client = 'Client is required.';
-    if (!venueId) newErrors.venue = 'Venue is required.';
+    if (!deliveryOrderAttributes.source.trim()) newErrors.deliveryOrderAttributesSource = 'Source is required.';
+    if (!client.name) newErrors.client = 'Client is required.';
+    if (!venue.name) newErrors.venue = 'Venue is required.';
     if (deliveryOrderAttributes.lineItemsAttributes.length === 0) newErrors.lineItemsAttributes = 'At least one line item is required.';
 
-    if (recurring.frequency) {
-      if (!recurring.frequency) newErrors.frequency = 'Frequency is required.';
-      if (!recurring.startDate) newErrors.startDate = 'Start date is required.';
-      if (!recurring.endDate) newErrors.endDate = 'End date is required.';
+    if (deliveryOrderAttributes.recurring) {
+      if (!deliveryOrderAttributes.frequency) newErrors.frequency = 'Frequency is required.';
+      if (!deliveryOrderAttributes.startDate) newErrors.startDate = 'Start date is required.';
+      if (!deliveryOrderAttributes.endDate) newErrors.endDate = 'End date is required.';
     }
 
     setErrors(newErrors);
@@ -163,8 +164,8 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     }));
 
     setLineItem({
-     merchandiseCategoryId: '',
-      merchandiseId: '',
+      category: '',
+      merchandise: '',
       price: '',
       unit: '',
       quantity: '',
@@ -207,11 +208,11 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     const { name, value } = e.target;
     setLineItem(prev => ({ ...prev, [name]: value }));
 
-    if (name === 'merchandiseCategoryId' && value) {
+    if (name === 'category' && value) {
       fetchMerchandise({ variables: { merchandiseCategoryId: value } });
     }
 
-    if (name === 'merchandiseId' && value) {
+    if (name === 'merchandise' && value) {
       const selectedMerchandise = merchandiseData?.getMerchandiseByCategory?.find(item => item.id === value);
       if (selectedMerchandise) {
         setLineItem(prev => ({
@@ -228,30 +229,22 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
     if (validate()) {
       const data = {
-        orderGroupInfo: {
-          // startOn: formData.orderGroupInfo.startOn,
-          // status: formData.orderGroupInfo.status,
-          clientId: formData.orderGroupInfo.clientId,
-          venueId: formData.orderGroupInfo.venueId,
-          recurring: {
-            frequency: formData.orderGroupInfo.recurring.frequency.trim(),
-            startDate: formData.orderGroupInfo.recurring.startDate,
-            endDate: formData.orderGroupInfo.recurring.endDate,
-          },
-          deliveryOrderAttributes: {
-            source: formData.orderGroupInfo.deliveryOrderAttributes.source.trim(),
-            vehicleType: formData.orderGroupInfo.deliveryOrderAttributes.vehicleType.trim(),
-            transportId: formData.orderGroupInfo.deliveryOrderAttributes.transportId.trim(),
-            courierId: formData.orderGroupInfo.deliveryOrderAttributes.courierId.trim(),
-            lineItemsAttributes: formData.orderGroupInfo.deliveryOrderAttributes.lineItemsAttributes.map((item) => ({
-              merchandiseCategoryId: item.merchandiseCategoryId.trim(),
-              merchandiseId: item.merchandise.trim(),
-              quantity: parseInt(item.quantity, 10),
-              unit: item.unit.trim(),
-              price: parseFloat(item.price) || 0,
-            })),
-          },
+        clientId: formData.client.id || '',
+        venueId: formData.venue.id || '',
+        deliveryOrderAttributes: {
+          source: formData.deliveryOrderAttributes.source.trim(),
+          vehicleType: formData.deliveryOrderAttributes.vehicleType.trim(),
+          transportId: formData.deliveryOrderAttributes.transportId.trim(),
+          courierId: formData.deliveryOrderAttributes.courierId.trim(),
+          lineItemsAttributes: formData.deliveryOrderAttributes.lineItemsAttributes.map((item) => ({
+            merchandiseCategoryId: item.category.trim(),
+            merchandiseId: item.merchandise.trim(),
+            quantity: parseInt(item.quantity, 10),
+            unit: item.unit.trim() , 
+            price: parseFloat(item.price) || 0
+          })),
         },
+       
       };
 
       if (selectedOrderGroup) {
@@ -260,7 +253,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
         onAdd(data);
       }
 
-      onClose();
+      onClose(); 
     }
   };
 
@@ -286,7 +279,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 onChange={(e) => handleInputChange('deliveryOrderAttributes', e)}
                 placeholder="Enter Source"
               />
-              {errors.deliveryOrderSource && <p className="error-message">{errors.deliveryOrderSource}</p>}
+              {errors.deliveryOrderAttributesSource && <p className="error-message">{errors.deliveryOrderAttributesSource}</p>}
             </label>
 
             <label>Courier:
@@ -316,10 +309,10 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                   onChange={handleVehicleTypeChange}
                 >
                   <option value="">All Vehicles</option>
-                  <option value="Tank">Tank</option>
-                  <option value="TankWagon">Tank Wagon</option>
-                  <option value="Truck">Truck</option>
-                  <option value="SemiTruck">Semi Truck</option>
+                  <option value="tank">Tank</option>
+                  <option value="tank_wagon">Tank Wagon</option>
+                  <option value="truck">Truck</option>
+                  <option value="semi_truck">Semi Truck</option>
                 </select>
                 {errors.vehicleType && <p className="error-message">{errors.vehicleType}</p>}
               </label>
@@ -399,7 +392,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 type="radio"
                 name="recurring"
                 value="yes"
-                checked={formData.deliveryOrderAttributes.isRecurring === true}
+                checked={formData.deliveryOrderAttributes.recurring === true}
                 onChange={handleRecurringChange}
               />
               Yes
@@ -407,15 +400,15 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             <label>
               <input
                 type="radio"
-                name="isRecurring"
+                name="recurring"
                 value="no"
-                checked={formData.deliveryOrderAttributes.isRecurring === false}
+                checked={formData.deliveryOrderAttributes.recurring === false}
                 onChange={handleRecurringChange}
               />
               No
             </label>
 
-          {formData.deliveryOrderAttributes.isRecurring && (
+          {formData.deliveryOrderAttributes.recurring && (
             <>
               <label>
                 Frequency:
@@ -480,11 +473,11 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
           <fieldset >
             <legend>Line Items</legend>
             <label>
-        MerchandisemerchandiseCategoryId:
+        Merchandise Category:
         <select
-          id = "merchandiseCategoryId"
-          name="merchandiseCategoryId"
-          value={lineItem.merchandiseCategoryId}
+          id = "category"
+          name="category"
+          value={lineItem.category.id}
           onChange={handleLineItemChange}
         >
           <option value="">Select Category</option>
@@ -516,7 +509,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </select>
           </label>
 
-          {lineItem.merchandiseCategoryId && (
+          {lineItem.category && (
             <>
                 <label>
                   Price:
@@ -571,8 +564,8 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             <tbody>
               {formData.deliveryOrderAttributes.lineItemsAttributes.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.merchandiseCategoryId}</td>
-                  <td>{item.merchandiseId}</td>
+                  <td>{item.category}</td>
+                  <td>{item.merchandise}</td>
                   <td>{item.price}</td>
                   <td>{item.unit}</td>
                   <td>{item.quantity}</td>

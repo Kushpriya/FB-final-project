@@ -3,10 +3,10 @@ import '../../assets/css/Transports.css';
 
 const vehicleTypes = [
   { value: '', label: 'Select Vehicle' },
-  { value: 'Tank', label: 'Tank' },
-  { value: 'TankWagon', label: 'Tank Wagon' },
-  { value: 'Truck', label: 'Truck' },
-  { value: 'SemiTruck', label: 'Semi Truck' },
+  { value: 'tank', label: 'Tank' },
+  { value: 'tank_wagon', label: 'Tank Wagon' },
+  { value: 'truck', label: 'Truck' },
+  { value: 'semi_truck', label: 'Semi Truck' },
 ];
 
 const statusTypes = [

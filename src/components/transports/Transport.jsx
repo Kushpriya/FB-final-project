@@ -104,10 +104,10 @@ const Transport = () => {
           <label>Filter by Vehicle Type: </label>
           <select onChange={handleVehicleTypeChange} value={selectedVehicleType}>
             <option value="">All Vehicles</option>
-            <option value="Tank">Tank</option>
-            <option value="TankWagon">Tank Wagon</option>
-            <option value="Truck">Truck</option>
-            <option value="SemiTruck">Semi Truck</option>
+            <option value="tank">Tank</option>
+            <option value="tank_wagon">Tank Wagon</option>
+            <option value="truck">Truck</option>
+            <option value="semi_truck">Semi Truck</option>
           </select>
         </div>
         <button onClick={() => setIsModalOpen(true)} className="add-transport-btn">
