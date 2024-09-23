@@ -131,9 +131,9 @@
 }
 
 .merchandise-form-container {
-  background-color: #080808;
-  padding: 30px;
-  width: 400px;
+  background-color: #313030;
+  padding: 40px ;
+  width: 500px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   position: relative;
@@ -149,6 +149,7 @@
   display: block;
   color: #ddd;
   font-weight: bold;
+  margin-top: 20px;
 }
 
 .merchandise-form-container input,
@@ -160,7 +161,7 @@
   border: 1px solid #555;
   border-radius: 5px;
   font-size: 14px;
-  padding: 10px;
+  padding: 15px;
 }
 
 .merchandise-form-container button[type="submit"] {
@@ -172,6 +173,7 @@
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  margin-top: 20px;
   transition: background-color 0.3s ease;
 }
 

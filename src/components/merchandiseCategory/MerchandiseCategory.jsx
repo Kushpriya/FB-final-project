@@ -57,7 +57,7 @@ const MerchandiseCategory = () => {
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      <div className="ag-theme-alpine-dark" style={{ width: '70%', height: '100%' }}>
+      <div className="ag-theme-alpine-dark" style={{ width: '60%', height: '100%' }}>
         <AgGridReact
           rowData={data.getAllMerchandiseCategories}
           columnDefs={columnDefs}

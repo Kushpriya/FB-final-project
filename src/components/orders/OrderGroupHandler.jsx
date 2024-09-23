@@ -5,11 +5,8 @@ export const useCreateOrderGroup = (refetch, setformOpen, setErrorMessage) => {
   const [createOrderGroup] = useMutation(CREATE_ORDER_GROUP);
 
   const handleCreate = async (formData) => {
-    if (!formData.startOn || !formData.status) {
-      alert('Required fields cannot be empty.');
-      return;
-    }
-
+    console.log("Form Data:", formData); 
+  
     try {
       const { data } = await createOrderGroup({ variables: { orderGroupInfo: formData } });
       if (data.createOrderGroup.orderGroup) {
@@ -21,11 +18,13 @@ export const useCreateOrderGroup = (refetch, setformOpen, setErrorMessage) => {
         alert('Error creating order group.');
       }
     } catch (error) {
-      alert('Error creating order group.');
       console.error('Error creating order group:', error);
+      const errorMessage = error?.graphQLErrors?.[0]?.message || error.message || 'An unexpected error occurred.';
+      alert(`Error creating order group: ${errorMessage}`);
+      setErrorMessage(errorMessage);
     }
   };
-
+  
   return handleCreate;
 };
 
@@ -33,10 +32,10 @@ export const useEditOrderGroup = (refetch, setformOpen, setErrorMessage) => {
     const [editOrderGroup] = useMutation(EDIT_ORDER_GROUP);
   
     const handleUpdate = async (orderGroupId, formData) => {
-      if (!orderGroupId || !formData.startOn || !formData.status) {
-        alert('Required fields cannot be empty.');
-        return;
-      }
+      // if (!orderGroupId || !formData.startOn || !formData.status) {
+      //   alert('Required fields cannot be empty.');
+      //   return;
+      // }
   
       try {
         const { data } = await editOrderGroup({

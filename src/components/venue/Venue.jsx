@@ -39,11 +39,11 @@ const Venue = () => {
               setSelectedVenue(params.data);
               setformOpen(true);
             }}
-            className="edit-action-btn"
+            className="venue-edit-action-btn"
           >
             <FaEdit title="Edit" />
           </button>
-          <button onClick={() => handleDelete(clientId, params.data.id)} className="delete-action-btn">
+          <button onClick={() => handleDelete(clientId, params.data.id)} className="venue-delete-action-btn">
             <FaTrash title="Delete" />
           </button>
         </div>
@@ -69,7 +69,6 @@ const Venue = () => {
             pagination={true}
             paginationPageSize={10}
             domLayout="autoHeight"
-            className="table"
           />
         </div>
 

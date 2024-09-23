@@ -52,8 +52,11 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar-auth">
-                    <Link to="/signin">Sign In</Link>
-                    <Link to="/signup">Sign Up</Link>
+                    <button><Link to="/signin">Sign In</Link></button>
+                    <button><Link to="/signup">Sign Up</Link></button>
+                    {/* <Button>Sign Up</Button> */}
+                    {/* <Link to="/signin">Sign In</Link> */}
+                    {/* <Link to="/signup">Sign Up</Link> */}
                 </div>
             </nav>
 

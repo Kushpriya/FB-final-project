@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 
 
 const httpLink = createHttpLink({
-  uri: 'https://3a26-2404-7c00-44-458c-4a57-ad2d-cb19-17c4.ngrok-free.app/graphql', 
+  uri: 'https://3572-113-199-229-240.ngrok-free.app/graphql', 
   cache: new InMemoryCache(),
 });
 

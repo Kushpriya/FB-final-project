@@ -56,8 +56,14 @@ function Slider() {
                             {isSidebarOpen && <span>Merchandise</span>}
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/ordergroup">
+                            <FaList className="sidebar-icon" />
+                            {isSidebarOpen && <span>Order Group</span>}
+                        </Link>
+                    </li>
 
-                    <li onClick={() => handleMenuClick('orders')}>
+                    {/* <li onClick={() => handleMenuClick('orders')}>
                         <FaList className="sidebar-icon" />
                         {isSidebarOpen && <span>Orders</span>}
                         {activeMenu === 'orders' && isSidebarOpen && (
@@ -73,7 +79,7 @@ function Slider() {
                                 </li>
                             </ul>
                         )}
-                    </li>
+                    </li> */}
 
                     <li>
                         <Link to="/clients">

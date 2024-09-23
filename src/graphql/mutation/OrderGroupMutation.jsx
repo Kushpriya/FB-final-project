@@ -2,23 +2,37 @@ import { gql } from '@apollo/client';
 
 export const CREATE_ORDER_GROUP = gql`
   mutation CreateOrderGroup($orderGroupInfo: OrderGroupInput!) {
-    createOrderGroup(input: $orderGroupInfo) {
+    createOrderGroup(input: {orderGroupInfo: $orderGroupInfo }) {
       errors
       orderGroup {
         startOn
+        completedOn
         status
+        clientId
+        venueId
+        mainOrderGroupId
+
         deliveryOrder {
           orderGroupId
           source
+          courierId
+          vehicleType
+          transportId
           lineItems {
             deliveryOrderId
             quantity
+            merchandiseCategoryId
+            merchandiseId
+            price
+            quantity
+            unit
             merchandise {
               name
               unit
               price
             }
             merchandiseCategory {
+              id
               name
             }
           }
@@ -34,8 +48,8 @@ export const CREATE_ORDER_GROUP = gql`
         client {
           name
         }
-        completedOn
-        id
+        # completedOn
+        # id
         venue {
           name
         }

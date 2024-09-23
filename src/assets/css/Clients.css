@@ -14,6 +14,7 @@
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
+  font-size: 15px;
   margin-left: 85%;
 }
 
@@ -174,28 +175,6 @@
   text-align: center;
 }
 
-
-
-.branch-details-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 14px;
-}
-
-.branch-details-btn:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-.branch-details-btn:focus {
-  outline: none;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-}
 
 .error-message {
   color: red;

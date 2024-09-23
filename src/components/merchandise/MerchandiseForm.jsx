@@ -19,8 +19,8 @@ export default function MerchandiseForm({
     merchandiseCategoryId: '',
   };
 
-  const [formError, setFormError] = useState('');
   const [formData, setFormData] = useState(selectedMerchandise || initialFormData);
+  const [errors, setErrors] = useState({}); 
 
   useEffect(() => {
     if (selectedMerchandise) {
@@ -35,53 +35,50 @@ export default function MerchandiseForm({
   };
 
   const validateForm = () => {
+    const newErrors = {};
     const { name, price, unit, merchandiseCategoryId } = formData;
-    
+
     if (!name.trim()) {
-      return 'Name is required and cannot be empty.';
+      newErrors.name = 'Name is required and cannot be empty.';
     }
 
     if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
-      return 'Price must be a positive number.';
+      newErrors.price = 'Price must be a positive number.';
     }
 
     if (!unit.trim()) {
-      return 'Unit is required and cannot be empty.';
+      newErrors.unit = 'Unit is required and cannot be empty.';
     }
 
     if (!merchandiseCategoryId) {
-      return 'Please select a category.';
+      newErrors.category = 'Please select a category.';
     }
 
-    return '';
+    setErrors(newErrors); 
+    return Object.keys(newErrors).length === 0; 
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    const validationError = validateForm();
-    
-    if (validationError) {
-      setFormError(validationError);
-      return;
-    }
-    
-    setFormError('');
 
-    if (selectedMerchandise) {
-      handleEdit(selectedMerchandise.id, formData);
-    } else {
-      handleCreate(formData);
-    }
+    if (validateForm()) {
+      setErrors({}); 
 
-    setSelectedMerchandise(null);
+      if (selectedMerchandise) {
+        handleEdit(selectedMerchandise.id, formData);
+      } else {
+        handleCreate(formData);
+      }
+
+      setSelectedMerchandise(null);
+      onClose();
+    }
   };
 
   return (
     <div className="merchandise-form-overlay">
       <div className="merchandise-form-container">
         <button className="close-button" onClick={onClose}>X</button>
-        {formError && <p className="error-message">{formError}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         
         <h2>
@@ -98,7 +95,8 @@ export default function MerchandiseForm({
             placeholder="Enter merchandise name"
             required
           />
-          
+          {errors.name && <p className="error-message">{errors.name}</p>}
+
           <label>Price:</label>
           <input
             type="number"
@@ -108,7 +106,8 @@ export default function MerchandiseForm({
             placeholder="Enter Price"
             required
           />
-          
+          {errors.price && <p className="error-message">{errors.price}</p>}
+
           <label>Status:</label>
           <select
             name="status"
@@ -128,6 +127,7 @@ export default function MerchandiseForm({
             placeholder="Enter Unit"
             required
           />
+          {errors.unit && <p className="error-message">{errors.unit}</p>}
 
           <label>Description:</label>
           <textarea
@@ -136,7 +136,7 @@ export default function MerchandiseForm({
             onChange={handleChange}
             placeholder="Enter Description"
           />
-          
+
           <label>Category:</label>
           <select
             name="merchandiseCategoryId"
@@ -151,7 +151,8 @@ export default function MerchandiseForm({
               </option>
             ))}
           </select>
-          
+          {errors.category && <p className="error-message">{errors.category}</p>}
+
           <button type="submit">
             {selectedMerchandise ? 'Update Merchandise' : 'Create Merchandise'}
           </button>

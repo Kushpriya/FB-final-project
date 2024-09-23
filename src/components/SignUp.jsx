@@ -7,7 +7,7 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [organization, setOrganization] = useState('');
+    // const [organization, setOrganization] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
     const [errors, setErrors] = useState({ username: '', email: '', password: '', confirmPassword: '' });
@@ -51,14 +51,15 @@ const SignUp = () => {
         if (isValid && termsAgreed && organization) {
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userPassword', password);
-            localStorage.setItem('userOrganization', organization); 
+            // localStorage.setItem('userOrganization', organization); 
             alert(`New account created successfully with ${organization}. You can now log in.`);
-            window.location.href = `/signin?organization=${organization}`; 
+            // window.location.href = `/signin?organization=${organization}`; 
         } else if (!termsAgreed) {
             alert('You must agree to the terms and conditions before signing up.');
-        } else if (!organization) {
-            alert('You must select an organization.');
         }
+        // } else if (!organization) {
+        //     alert('You must select an organization.');
+        // }
     };
 
     const togglePasswordVisibility = (field) => {
@@ -137,7 +138,7 @@ const SignUp = () => {
                         {errors.confirmPassword && <span id="confirmPasswordError" className="error-message">{errors.confirmPassword}</span>}
                     </div>
 
-                    <div className="input-box">
+                    {/* <div className="input-box">
                         <span className="icon"><FaBuilding /></span>
                         <select
                             id="signup-organization"
@@ -151,7 +152,7 @@ const SignUp = () => {
                             <option value="Google">Google</option>
                             <option value="Microsoft">Microsoft</option>
                         </select>
-                    </div>
+                    </div> */}
                     
                     <div className="remember-forgot">
                         <label>

@@ -9,37 +9,43 @@ import { GET_ALL_MERCHANDISE_CATEGORIES } from '../../graphql/queries/Merchandis
 import { GET_MERCHANDISE_BY_CATEGORY_QUERY } from '../../graphql/queries/MerchandiseQueries';
 
 const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMessage }) => {
-  const [formData, setFormData] = useState({
-    client: selectedOrderGroup?.client || { name: '' },
-    venue: selectedOrderGroup?.venue || { name: '' },
-    deliveryOrder: {
-      source: '',
-      transport: {
-        name: '',
-        vehicleType: ''
+  const initialFormData = {
+    
+    orderGroupInfo: {
+      // startOn: new Date().toISOString().slice(0, 10),
+      // status: 'pending',
+      clientId: selectedOrderGroup?.client?.id || null,
+      venueId: selectedOrderGroup?.venue?.id || null,
+      recurring: {
+        frequency: '',
+        startDate: '',
+        endDate: '',
       },
-      lineItems: []
+      deliveryOrderAttributes: {
+        source: '',
+        vehicleType: '',
+        transportId: '',
+        courierId: '',
+        lineItemsAttributes: [], 
+      },
     },
-    isRecurring: false,
-    frequency: '',
-    startDate: '',
-    endDate: ''
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
   const [lineItem, setLineItem] = useState({
-    category: '',
-    merchandise: '',
+    merchandiseCategoryId: '',
+    merchandiseId: '',
     price: '',
     unit: '',
-    quantity: ''
+    quantity: '',
   });
 
   const [errors, setErrors] = useState({});
-  const [selectedCourier, setSelectedCourier] = useState('');
   const [selectedClient, setSelectedClient] = useState('');
+  const [editingIndex, setEditingIndex] = useState(null);
 
-  const { loading: loadingCourier, error: errorCourier, data: courierData } = useQuery(GET_ALL_COURIER);
-  const { loading: loadingClients, error: errorClients, data: clientData } = useQuery(GET_ALL_CLIENTS);
+  const { loading: loadingCourier, data: courierData, error: errorCourier } = useQuery(GET_ALL_COURIER);
+  const { loading: loadingClients, data: clientData, error: errorClients } = useQuery(GET_ALL_CLIENTS);
   const [getVenuesByClientId, { loading: venuesLoading, data: venuesData }] = useLazyQuery(GET_VENUES_BY_CLIENT_ID);
   const [getTransportsByVehicleType, { loading: loadingTransportsByType, data: transportsDataByType }] = useLazyQuery(GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY);
   const { data: categoriesData } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
@@ -47,29 +53,52 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
   useEffect(() => {
     if (selectedOrderGroup) {
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         client: selectedOrderGroup.client || { name: '' },
         venue: selectedOrderGroup.venue || { name: '' },
-        deliveryOrder: selectedOrderGroup.deliveryOrder || {
-          source: '',
-          transport: {
-            name: '',
-            vehicleType: ''
-          },
-          lineItems: []
-        }
-      });
+        deliveryOrderAttributes: {
+          source: selectedOrderGroup.deliveryOrderAttributes?.source || '',
+          transportId: selectedOrderGroup.deliveryOrderAttributes?.transportId || '',
+          vehicleType: selectedOrderGroup.deliveryOrderAttributes?.vehicleType || '',
+          courierId: selectedOrderGroup.deliveryOrderAttributes?.courierId || '',
+          lineItemsAttributes: selectedOrderGroup.deliveryOrderAttributes?.lineItemsAttributes || [],
+        },
+      }));
     }
   }, [selectedOrderGroup]);
+
+  const handleInputChange = (field, e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [field]: {
+        ...prev[field],
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleCourierChange = (e) => {
+    const selectedCourierId = e.target.value;
+  
+    setFormData((prevState) => ({
+      ...prevState,
+      deliveryOrderAttributes: {
+        ...prevState.deliveryOrderAttributes,
+        courierId: selectedCourierId,  // Update courierId in formData
+      },
+    }));
+  };
 
   const handleClientChange = (e) => {
     const clientId = e.target.value;
     setSelectedClient(clientId);
     const selectedClientData = clientData?.getAllClients?.find(client => client.id === clientId);
-    setFormData(prevState => ({
-      ...prevState,
+    setFormData(prev => ({
+      ...prev,
       client: selectedClientData || { name: '' },
-      venue: { name: '' }
+      venue: { name: '' },
     }));
 
     if (clientId) {
@@ -79,74 +108,116 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
   const handleVehicleTypeChange = (e) => {
     const vehicleType = e.target.value;
-
-    setFormData(prevState => ({
+  
+    setFormData((prevState) => ({
       ...prevState,
-      deliveryOrder: {
-        ...prevState.deliveryOrder,
-        transport: {
-          ...prevState.deliveryOrder.transport,
-          vehicleType
-        }
-      }
+      deliveryOrderAttributes: {
+          ...prevState.deliveryOrderAttributes,
+          vehicleType, 
+      },
     }));
-
+  
     if (vehicleType) {
       getTransportsByVehicleType({ variables: { vehicleType } });
     }
-  };
+  };  
 
   const handleRecurringChange = (e) => {
-    const isRecurring = e.target.value === 'yes';
-
-    setFormData(prevState => ({
-      ...prevState,
-      deliveryOrder: {
-        ...prevState.deliveryOrder,
-        isRecurring: isRecurring
-      }
+    const recurring = e.target.value === 'yes';
+    setFormData(prev => ({
+      ...prev,
+      deliveryOrderAttributes: {
+        ...prev.deliveryOrderAttributes,
+        recurring,
+      },
     }));
   };
 
-  const handleAddLineItem = () => {
-    if (lineItem.category && lineItem.merchandise && lineItem.quantity) {
-      setFormData(prevState => ({
-        ...prevState,
-        deliveryOrder: {
-          ...prevState.deliveryOrder,
-          lineItems: [...prevState.deliveryOrder.lineItems, lineItem]
-        }
-      }));
-      setLineItem({
-        category: '',
-        merchandise: '',
-        price: '',
-        unit: '',
-        quantity: ''
-      });
-    } else {
-      setErrors({ lineItem: 'All line item fields must be filled out.' });
+  const validate = () => {
+    const newErrors = {};
+    const { deliveryOrderAttributes, clientId, venueId, recurring } = formData.orderGroupInfo;
+
+    if (!deliveryOrderAttributes.source.trim()) newErrors.deliveryOrderSource = 'Source is required.';
+    if (!clientId) newErrors.client = 'Client is required.';
+    if (!venueId) newErrors.venue = 'Venue is required.';
+    if (deliveryOrderAttributes.lineItemsAttributes.length === 0) newErrors.lineItemsAttributes = 'At least one line item is required.';
+
+    if (recurring.frequency) {
+      if (!recurring.frequency) newErrors.frequency = 'Frequency is required.';
+      if (!recurring.startDate) newErrors.startDate = 'Start date is required.';
+      if (!recurring.endDate) newErrors.endDate = 'End date is required.';
     }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddOrUpdateLineItem = () => {
+    const updatedlineItemsAttributes = editingIndex !== null
+      ? formData.deliveryOrderAttributes.lineItemsAttributes.map((item, index) => (index === editingIndex ? lineItem : item))
+      : [...formData.deliveryOrderAttributes.lineItemsAttributes, lineItem];
+
+    setFormData(prev => ({
+      ...prev,
+      deliveryOrderAttributes: { ...prev.deliveryOrderAttributes, lineItemsAttributes: updatedlineItemsAttributes },
+    }));
+
+    setLineItem({
+     merchandiseCategoryId: '',
+      merchandiseId: '',
+      price: '',
+      unit: '',
+      quantity: '',
+    });
+    setEditingIndex(null);
+  };
+
+  const handleTransportChange = (e) => {
+    const selectedTransportId = e.target.value;  // Get selected transport ID
+  
+    const selectedTransport = transportsDataByType?.getAllTransportByVehicleType?.find(
+      (transport) => transport.id === selectedTransportId
+    );
+  
+    setFormData((prevState) => ({
+      ...prevState,
+      deliveryOrderAttributes: {
+        ...prevState.deliveryOrderAttributes,
+        transportId: selectedTransport?.id || '',   // Store selected transport ID
+        vehicleType: selectedTransport?.vehicleType || '',  // Optionally update vehicleType
+      },
+    }));
+  };
+
+  const handleEditLineItem = (index) => {
+    const selectedItem = formData.deliveryOrderAttributes.lineItemsAttributes[index];
+    setLineItem(selectedItem);
+    setEditingIndex(index);
+  };
+
+  const handleDeleteLineItem = (index) => {
+    const updatedlineItemsAttributes = formData.deliveryOrderAttributes.lineItemsAttributes.filter((_, i) => i !== index);
+    setFormData(prev => ({
+      ...prev,
+      deliveryOrderAttributes: { ...prev.deliveryOrderAttributes, lineItemsAttributes: updatedlineItemsAttributes },
+    }));
   };
 
   const handleLineItemChange = (e) => {
     const { name, value } = e.target;
-    setLineItem(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setLineItem(prev => ({ ...prev, [name]: value }));
 
-    if (name === 'category' && value) {
+    if (name === 'merchandiseCategoryId' && value) {
       fetchMerchandise({ variables: { merchandiseCategoryId: value } });
     }
 
-    if (name === 'merchandise' && value) {
+    if (name === 'merchandiseId' && value) {
       const selectedMerchandise = merchandiseData?.getMerchandiseByCategory?.find(item => item.id === value);
       if (selectedMerchandise) {
-        setLineItem(prevState => ({
-          ...prevState,
+        setLineItem(prev => ({
+          ...prev,
           price: selectedMerchandise.price,
-          unit: selectedMerchandise.unit
+          unit: selectedMerchandise.unit,
         }));
       }
     }
@@ -154,28 +225,41 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (validate()) {
       const data = {
-        deliveryOrder: {
-          source: formData.deliveryOrder.source.trim(),
-          transport: {
-            name: formData.deliveryOrder.transport.name.trim(),
-            vehicleType: formData.deliveryOrder.transport.vehicleType.trim(),
+        orderGroupInfo: {
+          // startOn: formData.orderGroupInfo.startOn,
+          // status: formData.orderGroupInfo.status,
+          clientId: formData.orderGroupInfo.clientId,
+          venueId: formData.orderGroupInfo.venueId,
+          recurring: {
+            frequency: formData.orderGroupInfo.recurring.frequency.trim(),
+            startDate: formData.orderGroupInfo.recurring.startDate,
+            endDate: formData.orderGroupInfo.recurring.endDate,
           },
-          lineItems: formData.deliveryOrder.lineItems
+          deliveryOrderAttributes: {
+            source: formData.orderGroupInfo.deliveryOrderAttributes.source.trim(),
+            vehicleType: formData.orderGroupInfo.deliveryOrderAttributes.vehicleType.trim(),
+            transportId: formData.orderGroupInfo.deliveryOrderAttributes.transportId.trim(),
+            courierId: formData.orderGroupInfo.deliveryOrderAttributes.courierId.trim(),
+            lineItemsAttributes: formData.orderGroupInfo.deliveryOrderAttributes.lineItemsAttributes.map((item) => ({
+              merchandiseCategoryId: item.merchandiseCategoryId.trim(),
+              merchandiseId: item.merchandise.trim(),
+              quantity: parseInt(item.quantity, 10),
+              unit: item.unit.trim(),
+              price: parseFloat(item.price) || 0,
+            })),
+          },
         },
-        client: {
-          name: formData.client.name.trim(),
-        },
-        venue: {
-          name: formData.venue.name.trim(),
-        }
       };
+
       if (selectedOrderGroup) {
         onUpdate(selectedOrderGroup.id, data);
       } else {
         onAdd(data);
       }
+
       onClose();
     }
   };
@@ -183,6 +267,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
   if (loadingCourier || loadingClients || venuesLoading) return <p>Loading...</p>;
   if (errorCourier) return <p>Error loading couriers: {errorCourier.message}</p>;
   if (errorClients) return <p>Error loading clients: {errorClients.message}</p>;
+
   return (
     <div className="order-group-form-overlay">
       <div className="order-group-form-container">
@@ -197,30 +282,28 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
               <input
                 type="text"
                 name="source"
-                value={formData.deliveryOrder.source}
-                onChange={(e) => setFormData(prevState => ({
-                  ...prevState,
-                  deliveryOrder: { ...prevState.deliveryOrder, source: e.target.value }
-                }))}
+                value={formData.deliveryOrderAttributes.source}
+                onChange={(e) => handleInputChange('deliveryOrderAttributes', e)}
                 placeholder="Enter Source"
               />
               {errors.deliveryOrderSource && <p className="error-message">{errors.deliveryOrderSource}</p>}
             </label>
 
-            <label>Courier:</label>
-            <select
-              id="courier"
-              name="courier"
-              value={selectedCourier}
-              onChange={(e) => setSelectedCourier(e.target.value)}
-            >
-              <option value="">Select a Courier</option>
-              {courierData?.getAllCourier?.map((courier) => (
-                <option key={courier.id} value={courier.id}>
-                  {courier.firstName} {courier.lastName}
-                </option>
-              ))}
-            </select>
+            <label>Courier:
+              <select
+                id="courier"
+                name="courier"
+                value={formData.deliveryOrderAttributes.courierId}  // Bind courierId from formData
+                onChange={handleCourierChange}  // Handle selection
+              >
+                <option value="">Select a Courier</option>
+                {courierData?.getAllCourier?.map((courier) => (
+                  <option key={courier.id} value={courier.id}>
+                    {courier.firstName} {courier.lastName}
+                  </option>
+                ))}
+              </select>
+            </label>    
 
             <fieldset>
               <legend>Transport</legend>
@@ -229,7 +312,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 <select
                   id="vehicleType"
                   name="vehicleType"
-                  value={formData.deliveryOrder.transport.vehicleType}
+                  value={formData.deliveryOrderAttributes.vehicleType || ''}  // Ensure it falls back to an empty string if undefined
                   onChange={handleVehicleTypeChange}
                 >
                   <option value="">All Vehicles</option>
@@ -246,28 +329,20 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 <select
                   id="transport"
                   name="transport"
-                  value={formData.deliveryOrder.transport.name}
-                  onChange={(e) => setFormData(prevState => ({
-                    ...prevState,
-                    deliveryOrder: {
-                      ...prevState.deliveryOrder,
-                      transport: { ...prevState.deliveryOrder.transport, name: e.target.value }
-                    }
-                  }))}
+                  value={formData.deliveryOrderAttributes.transportId}  // This is linked to transportId
+                  onChange={handleTransportChange}  // Event handler
                   disabled={!transportsDataByType || loadingTransportsByType}
                 >
                   <option value="">Select Transport</option>
                   {transportsDataByType?.getAllTransportByVehicleType?.map((transport) => (
-                    <option key={transport.id} value={transport.name}>
-                      {transport.name}
+                    <option key={transport.id} value={transport.id}>  {/* Use transport.id as the value */}
+                      {transport.name}  {/* Display transport.name */}
                     </option>
                   ))}
                 </select>
                 {errors.transportName && <p className="error-message">{errors.transportName}</p>}
               </label>
-              {loadingTransportsByType && <p>Loading transport options...</p>}
             </fieldset>
-          </fieldset>
 
           <fieldset>
             <legend>Client</legend>
@@ -287,39 +362,44 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 ))}
               </select>
             </label>
+          <label>
+            Venue:
+            <select
+              id="venue"
+              name="venue"
+              value={formData.venue.id}  
+              onChange={(e) => {
+                const selectedVenue = venuesData?.getVenuesByClientId?.find((venue) => 
+                  venue.id === e.target.value  
+                );
 
-            <label>
-              Venue:
-              <select
-                id="venue"
-                name="venue"
-                value={formData.venue.name}
-                onChange={(e) => setFormData(prevState => ({
-                  ...prevState,
-                  venue: { ...prevState.venue, name: e.target.value }
-                }))}
-                disabled={!venuesData}
-              >
-                <option value="">Select a Venue</option>
-                {venuesData?.getVenuesByClientId?.map((venue) => (
-                  <option key={venue.id} value={venue.name}>
-                    {venue.name}
-                  </option>
-                ))}
-              </select>
-              {errors.venue && <p className="error-message">{errors.venue}</p>}
-            </label>
+                if (selectedVenue) {
+                  setFormData(prevState => ({
+                    ...prevState,   // Proper state update with spread operator
+                    venue: { id: selectedVenue.id, name: selectedVenue.name }  // Update state with venue ID and name
+                  }));
+                }
+              }}
+              disabled={!venuesData}
+            >
+              <option value="">Select a Venue</option>
+              {venuesData?.getVenuesByClientId?.map((venue) => (
+                <option key={venue.id} value={venue.id}>  {/* Use venue.id as the value */}
+                  {venue.name}  {/* Display venue.name in the dropdown */}
+                </option>
+              ))}
+            </select>
+            {errors.venue && <p className="error-message">{errors.venue}</p>}
+          </label>
           </fieldset>
-
-
           <fieldset>
             <legend>Recurring</legend>
             <label>
               <input
                 type="radio"
-                name="isRecurring"
+                name="recurring"
                 value="yes"
-                checked={formData.deliveryOrder.isRecurring === true}
+                checked={formData.deliveryOrderAttributes.isRecurring === true}
                 onChange={handleRecurringChange}
               />
               Yes
@@ -329,24 +409,24 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 type="radio"
                 name="isRecurring"
                 value="no"
-                checked={formData.deliveryOrder.isRecurring === false}
+                checked={formData.deliveryOrderAttributes.isRecurring === false}
                 onChange={handleRecurringChange}
               />
               No
             </label>
 
-          {formData.deliveryOrder.isRecurring && (
+          {formData.deliveryOrderAttributes.isRecurring && (
             <>
               <label>
                 Frequency:
                 <select
                   id="frequency"
                   name="frequency"
-                  value={formData.deliveryOrder.frequency}
+                  value={formData.deliveryOrderAttributes.frequency}
                   onChange={(e) => setFormData(prevState => ({
                     ...prevState,
-                    deliveryOrder: {
-                      ...prevState.deliveryOrder,
+                    deliveryOrderAttributes: {
+                      ...prevState.deliveryOrderAttributes,
                       frequency: e.target.value
                     }
                   }))}
@@ -364,11 +444,11 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 <input
                   type="date"
                   name="startDate"
-                  value={formData.deliveryOrder.startDate}
+                  value={formData.deliveryOrderAttributes.startDate}
                   onChange={(e) => setFormData(prevState => ({
                     ...prevState,
-                    deliveryOrder: {
-                      ...prevState.deliveryOrder,
+                    deliveryOrderAttributes: {
+                      ...prevState.deliveryOrderAttributes,
                       startDate: e.target.value
                     }
                   }))}
@@ -381,11 +461,11 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 <input
                   type="date"
                   name="endDate"
-                  value={formData.deliveryOrder.endDate}
+                  value={formData.deliveryOrderAttributes.endDate}
                   onChange={(e) => setFormData(prevState => ({
                     ...prevState,
-                    deliveryOrder: {
-                      ...prevState.deliveryOrder,
+                    deliveryOrderAttributes: {
+                      ...prevState.deliveryOrderAttributes,
                       endDate: e.target.value
                     }
                   }))}
@@ -396,14 +476,15 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
           )}
           </fieldset>
 
-          <fieldset>
+<div className='lineitem-list'>
+          <fieldset >
             <legend>Line Items</legend>
-               <div className="line-item-form">
             <label>
-        Merchandise Category:
+        MerchandisemerchandiseCategoryId:
         <select
-          name="category"
-          value={lineItem.category}
+          id = "merchandiseCategoryId"
+          name="merchandiseCategoryId"
+          value={lineItem.merchandiseCategoryId}
           onChange={handleLineItemChange}
         >
           <option value="">Select Category</option>
@@ -415,7 +496,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
         </select>
         {errors.category && <p className="error-message">{errors.category}</p>}
       </label>
-</div>
+
           <label>
             Merchandise:
             <select
@@ -435,7 +516,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </select>
           </label>
 
-          {lineItem.category && (
+          {lineItem.merchandiseCategoryId && (
             <>
                 <label>
                   Price:
@@ -467,24 +548,46 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                   />
                 </label>
 
-                <button type="button" onClick={handleAddLineItem}>Add Line Item</button>
+                <button type="button" className="add-order-btn"onClick={handleAddOrUpdateLineItem}>
+              {editingIndex !== null ? 'Update Line Item' : 'Add Line Item'}
+            </button>
               </>
-              
             )}
           </fieldset>
+          </div>
 
            <fieldset>
-            <legend>Added Line Items</legend>
-            <ul>
-              {formData.deliveryOrder.lineItems.map((item, index) => (
-                <li key={index}>
-                  {item.merchandise} - {item.price} - {item.unit} - {item.quantity}
-                </li>
+           <table border="1px">
+            <thead >
+              <tr>
+                <th>Category</th>
+                <th>Merchandise</th>
+                <th>Price</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formData.deliveryOrderAttributes.lineItemsAttributes.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.merchandiseCategoryId}</td>
+                  <td>{item.merchandiseId}</td>
+                  <td>{item.price}</td>
+                  <td>{item.unit}</td>
+                  <td>{item.quantity}</td>
+                  <td>
+                    <div className='line-btn'>
+                    <button type="button" className='edit-order-btn' onClick={() => handleEditLineItem(index)}>Edit</button>
+                    <button type="button" className='delete-order-btn' onClick={() => handleDeleteLineItem(index)}>Delete</button>
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </ul>
+            </tbody>
+          </table>
           </fieldset> 
-
-
+          </fieldset>
           <button type="submit">{selectedOrderGroup ? 'Update' : 'Add'} Order Group</button>
         </form>
       </div>
