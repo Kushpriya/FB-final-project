@@ -10,29 +10,25 @@ import { GET_MERCHANDISE_BY_CATEGORY_QUERY } from '../../graphql/queries/Merchan
 
 const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMessage }) => {
   const initialFormData = {
-    // startOn: new Date().toISOString().slice(0, 10),
-    // status: 'pending',
     client: selectedOrderGroup?.client || { name: '' },
     venue: selectedOrderGroup?.venue || { name: '' },
-    deliveryOrderAttributes : {
+    deliveryOrderAttributes: {
       source: '',
       transportId: '',
       vehicleType: '',
       courierId: '',
       lineItemsAttributes: [],
     },
-    recurring:{
+    recurring: {
       frequency: '',
       startDate: '',
-      endDate: '',  
-    }
-    // recurring: false,
-    // frequency: '',
-    // startDate: '',
-    // endDate: '',
+      endDate: '',
+    },
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [isRecurring, setIsRecurring] = useState(false);
+
   const [lineItem, setLineItem] = useState({
     category: '',
     merchandise: '',
@@ -40,6 +36,8 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     unit: '',
     quantity: '',
   });
+
+
 
   const [errors, setErrors] = useState({});
   const [selectedClient, setSelectedClient] = useState('');
@@ -59,11 +57,17 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
         client: selectedOrderGroup.client || { name: '' },
         venue: selectedOrderGroup.venue || { name: '' },
         deliveryOrderAttributes: {
+          ...prev.deliveryOrderAttributes,
           source: selectedOrderGroup.deliveryOrderAttributes?.source || '',
           transportId: selectedOrderGroup.deliveryOrderAttributes?.transportId || '',
           vehicleType: selectedOrderGroup.deliveryOrderAttributes?.vehicleType || '',
           courierId: selectedOrderGroup.deliveryOrderAttributes?.courierId || '',
           lineItemsAttributes: selectedOrderGroup.deliveryOrderAttributes?.lineItemsAttributes || [],
+        },
+        recurring: {
+          frequency: selectedOrderGroup.recurring?.frequency || '',
+          startDate: selectedOrderGroup.recurring?.startDate || '',
+          endDate: selectedOrderGroup.recurring?.endDate || '',
         },
       }));
     }
@@ -87,7 +91,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
       ...prevState,
       deliveryOrderAttributes: {
         ...prevState.deliveryOrderAttributes,
-        courierId: selectedCourierId,  // Update courierId in formData
+        courierId: selectedCourierId,  
       },
     }));
   };
@@ -123,30 +127,19 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     }
   };  
 
-  const handleRecurringChange = (e) => {
-    const recurring = e.target.value === 'yes';
-    setFormData(prev => ({
-      ...prev,
-      deliveryOrderAttributes: {
-        ...prev.deliveryOrderAttributes,
-        recurring,
-      },
-    }));
-  };
-
   const validate = () => {
     const newErrors = {};
-    const { deliveryOrderAttributes, client, venue } = formData;
+    const { deliveryOrderAttributes, client, venue, recurring } = formData;
 
     if (!deliveryOrderAttributes.source.trim()) newErrors.deliveryOrderAttributesSource = 'Source is required.';
     if (!client.name) newErrors.client = 'Client is required.';
     if (!venue.name) newErrors.venue = 'Venue is required.';
     if (deliveryOrderAttributes.lineItemsAttributes.length === 0) newErrors.lineItemsAttributes = 'At least one line item is required.';
 
-    if (deliveryOrderAttributes.recurring) {
-      if (!deliveryOrderAttributes.frequency) newErrors.frequency = 'Frequency is required.';
-      if (!deliveryOrderAttributes.startDate) newErrors.startDate = 'Start date is required.';
-      if (!deliveryOrderAttributes.endDate) newErrors.endDate = 'End date is required.';
+    if (recurring.frequency) {
+      if (!recurring.frequency) newErrors.frequency = 'Frequency is required.';
+      if (!recurring.startDate) newErrors.startDate = 'Start date is required.';
+      if (!recurring.endDate) newErrors.endDate = 'End date is required.';
     }
 
     setErrors(newErrors);
@@ -174,7 +167,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
   };
 
   const handleTransportChange = (e) => {
-    const selectedTransportId = e.target.value;  // Get selected transport ID
+    const selectedTransportId = e.target.value;  
   
     const selectedTransport = transportsDataByType?.getAllTransportByVehicleType?.find(
       (transport) => transport.id === selectedTransportId
@@ -184,19 +177,23 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
       ...prevState,
       deliveryOrderAttributes: {
         ...prevState.deliveryOrderAttributes,
-        transportId: selectedTransport?.id || '',   // Store selected transport ID
-        vehicleType: selectedTransport?.vehicleType || '',  // Optionally update vehicleType
+        transportId: selectedTransport?.id || '',   
+        vehicleType: selectedTransport?.vehicleType || '',  
       },
     }));
   };
 
   const handleEditLineItem = (index) => {
+    if (!window.confirm('Are you sure you want to edit this line item?')) return;
+
     const selectedItem = formData.deliveryOrderAttributes.lineItemsAttributes[index];
     setLineItem(selectedItem);
     setEditingIndex(index);
   };
 
   const handleDeleteLineItem = (index) => {
+    if (!window.confirm('Are you sure you want to delete this line item?')) return;
+
     const updatedlineItemsAttributes = formData.deliveryOrderAttributes.lineItemsAttributes.filter((_, i) => i !== index);
     setFormData(prev => ({
       ...prev,
@@ -224,37 +221,63 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     }
   };
 
+  const handleRecurringChange = (e) => {
+    setIsRecurring(e.target.value === 'yes');
+  };
+
+  const handleFrequencyChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      recurring: {
+        ...prev.recurring,
+        frequency: e.target.value,
+      },
+    }));
+  };
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      recurring: {
+        ...prev.recurring,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const data = {
+      clientId: formData.client.id || '',
+      venueId: formData.venue.id || '',
+      recurring: isRecurring ? {
+        frequency: formData.recurring.frequency,
+        startDate: formData.recurring.startDate,
+        endDate: formData.recurring.endDate,
+      } : null, 
+      deliveryOrderAttributes: {
+        source: formData.deliveryOrderAttributes.source.trim(),
+        vehicleType: formData.deliveryOrderAttributes.vehicleType.trim(),
+        transportId: formData.deliveryOrderAttributes.transportId.trim(),
+        courierId: formData.deliveryOrderAttributes.courierId.trim(),
+        lineItemsAttributes: formData.deliveryOrderAttributes.lineItemsAttributes.map((item) => ({
+          merchandiseCategoryId: item.category.trim(),
+          merchandiseId: item.merchandise.trim(),
+          quantity: parseInt(item.quantity, 10),
+          unit: item.unit.trim(),
+          price: parseFloat(item.price) || 0,
+        })),
+      },
+    };
 
-    if (validate()) {
-      const data = {
-        clientId: formData.client.id || '',
-        venueId: formData.venue.id || '',
-        deliveryOrderAttributes: {
-          source: formData.deliveryOrderAttributes.source.trim(),
-          vehicleType: formData.deliveryOrderAttributes.vehicleType.trim(),
-          transportId: formData.deliveryOrderAttributes.transportId.trim(),
-          courierId: formData.deliveryOrderAttributes.courierId.trim(),
-          lineItemsAttributes: formData.deliveryOrderAttributes.lineItemsAttributes.map((item) => ({
-            merchandiseCategoryId: item.category.trim(),
-            merchandiseId: item.merchandise.trim(),
-            quantity: parseInt(item.quantity, 10),
-            unit: item.unit.trim() , 
-            price: parseFloat(item.price) || 0
-          })),
-        },
-       
-      };
-
-      if (selectedOrderGroup) {
-        onUpdate(selectedOrderGroup.id, data);
-      } else {
-        onAdd(data);
-      }
-
-      onClose(); 
+    if (selectedOrderGroup) {
+      onUpdate(selectedOrderGroup.id, data);
+    } else {
+      onAdd(data);
     }
+    
+    onClose();
   };
 
   if (loadingCourier || loadingClients || venuesLoading) return <p>Loading...</p>;
@@ -270,6 +293,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
         <form onSubmit={handleSubmit}>
           <fieldset>
             <legend>Delivery Order</legend>
+            <div className='delivery'>
             <label>
               Source:
               <input
@@ -296,10 +320,12 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                   </option>
                 ))}
               </select>
-            </label>    
+            </label> 
+            </div>   
 
             <fieldset>
               <legend>Transport</legend>
+            <div className='delivery'>
               <label>
                 Vehicle Type:
                 <select
@@ -322,23 +348,25 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 <select
                   id="transport"
                   name="transport"
-                  value={formData.deliveryOrderAttributes.transportId}  // This is linked to transportId
-                  onChange={handleTransportChange}  // Event handler
+                  value={formData.deliveryOrderAttributes.transportId}  
+                  onChange={handleTransportChange}  
                   disabled={!transportsDataByType || loadingTransportsByType}
                 >
                   <option value="">Select Transport</option>
                   {transportsDataByType?.getAllTransportByVehicleType?.map((transport) => (
-                    <option key={transport.id} value={transport.id}>  {/* Use transport.id as the value */}
-                      {transport.name}  {/* Display transport.name */}
+                    <option key={transport.id} value={transport.id}>  
+                      {transport.name}  
                     </option>
                   ))}
                 </select>
                 {errors.transportName && <p className="error-message">{errors.transportName}</p>}
               </label>
+              </div>
             </fieldset>
 
           <fieldset>
             <legend>Client</legend>
+            <div className='delivery'>
             <label>
               Client Name:
               <select
@@ -368,8 +396,8 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
                 if (selectedVenue) {
                   setFormData(prevState => ({
-                    ...prevState,   // Proper state update with spread operator
-                    venue: { id: selectedVenue.id, name: selectedVenue.name }  // Update state with venue ID and name
+                    ...prevState,   
+                    venue: { id: selectedVenue.id, name: selectedVenue.name }  
                   }));
                 }
               }}
@@ -377,99 +405,79 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             >
               <option value="">Select a Venue</option>
               {venuesData?.getVenuesByClientId?.map((venue) => (
-                <option key={venue.id} value={venue.id}>  {/* Use venue.id as the value */}
-                  {venue.name}  {/* Display venue.name in the dropdown */}
+                <option key={venue.id} value={venue.id}>  
+                  {venue.name}  
                 </option>
               ))}
             </select>
             {errors.venue && <p className="error-message">{errors.venue}</p>}
           </label>
+          </div>
           </fieldset>
           <fieldset>
-            <legend>Recurring</legend>
+        <legend>Recurring</legend>
+        <div className='delivery'>
+        <label>
+          <input
+            type="radio"
+            name="recurring"
+            value="yes"
+            checked={isRecurring}
+            onChange={handleRecurringChange}
+          />
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="recurring"
+            value="no"
+            checked={!isRecurring}
+            onChange={handleRecurringChange}
+          />
+          No
+        </label>
+        
+        {isRecurring && (
+          <>
             <label>
-              <input
-                type="radio"
-                name="recurring"
-                value="yes"
-                checked={formData.deliveryOrderAttributes.recurring === true}
-                onChange={handleRecurringChange}
-              />
-              Yes
+              Frequency:
+              <select
+                value={formData.recurring.frequency}
+                onChange={handleFrequencyChange}
+              >
+                <option value="">Select Frequency</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
             </label>
+
             <label>
+              Start Date:
               <input
-                type="radio"
-                name="recurring"
-                value="no"
-                checked={formData.deliveryOrderAttributes.recurring === false}
-                onChange={handleRecurringChange}
+                type="date"
+                name="startDate"
+                value={formData.recurring.startDate}
+                onChange={handleDateChange}
               />
-              No
             </label>
 
-          {formData.deliveryOrderAttributes.recurring && (
-            <>
-              <label>
-                Frequency:
-                <select
-                  id="frequency"
-                  name="frequency"
-                  value={formData.deliveryOrderAttributes.frequency}
-                  onChange={(e) => setFormData(prevState => ({
-                    ...prevState,
-                    deliveryOrderAttributes: {
-                      ...prevState.deliveryOrderAttributes,
-                      frequency: e.target.value
-                    }
-                  }))}
-                >
-                  <option value="">Select Frequency</option>
-                  <option value="daily">daily</option>
-                  <option value="weekly">weekly</option>
-                  <option value="monthly">monthly</option>
-                </select>
-                {errors.frequency && <p className="error-message">{errors.frequency}</p>}
-              </label>
+            <label>
+              End Date:
+              <input
+                type="date"
+                name="endDate"
+                value={formData.recurring.endDate}
+                onChange={handleDateChange}
+              />
+            </label>
+          </>
+        )}
+            </div>
+      </fieldset>
 
-              <label>
-                Start Date:
-                <input
-                  type="date"
-                  name="startDate"
-                  value={formData.deliveryOrderAttributes.startDate}
-                  onChange={(e) => setFormData(prevState => ({
-                    ...prevState,
-                    deliveryOrderAttributes: {
-                      ...prevState.deliveryOrderAttributes,
-                      startDate: e.target.value
-                    }
-                  }))}
-                />
-                {errors.startDate && <p className="error-message">{errors.startDate}</p>}
-              </label>
-
-              <label>
-                End Date:
-                <input
-                  type="date"
-                  name="endDate"
-                  value={formData.deliveryOrderAttributes.endDate}
-                  onChange={(e) => setFormData(prevState => ({
-                    ...prevState,
-                    deliveryOrderAttributes: {
-                      ...prevState.deliveryOrderAttributes,
-                      endDate: e.target.value
-                    }
-                  }))}
-                />
-                {errors.endDate && <p className="error-message">{errors.endDate}</p>}
-              </label>
-            </>
-          )}
-          </fieldset>
-
-<div className='lineitem-list'>
+<div className='delivery'>
           <fieldset >
             <legend>Line Items</legend>
             <label>
@@ -580,6 +588,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </tbody>
           </table>
           </fieldset> 
+
           </fieldset>
           <button type="submit">{selectedOrderGroup ? 'Update' : 'Add'} Order Group</button>
         </form>

@@ -40,7 +40,7 @@ const Merchandise = () => {
     { headerName: 'ID', field: 'id', sortable: true, filter: true },
     { headerName: 'Name', field: 'name', sortable: true, filter: true },
     { headerName: 'Price', field: 'price', sortable: true, filter: true },
-    { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
+    // { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
     {
       headerName: 'Status',
       field: 'status',

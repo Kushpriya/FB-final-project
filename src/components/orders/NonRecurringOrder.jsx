@@ -8,9 +8,9 @@ import { GET_NON_RECURRING_ORDERS } from '../../graphql/queries/OrderGroupQuerie
 const flattenNonRecurringOrderData = (orders) => {
   return orders.map(order => ({
     id: order.id,
-    mainOrderGroupId: order.mainOrderGroupId,
+    // mainOrderGroupId: order.mainOrderGroupId,
     startOn: order.startOn,
-    completedOn: order.completedOn,
+    completedOn: order.completedOn || 'N/A',
     status: order.status,
     clientId: order.clientId || 'N/A',
     deliverySource: order.deliveryOrder?.source || 'N/A',
@@ -31,7 +31,7 @@ const NonRecurringOrderGroup = () => {
 
   const columnDefs = [
     { headerName: 'ID', field: 'id' },
-    { headerName: 'Main Order Group ID', field: 'mainOrderGroupId' },
+    // { headerName: 'Main Order Group ID', field: 'mainOrderGroupId' },
     { headerName: 'Start On', field: 'startOn' },
     { headerName: 'Completed On', field: 'completedOn' },
     { headerName: 'Status', field: 'status' },

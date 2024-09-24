@@ -18,9 +18,8 @@ const OrderGroup = () => {
       <div className="dropdown-container">
         <select value={selectedOrder} onChange={handleSelection} className="order-dropdown">
           <option value="OrderGroup">Order Group List</option>
-          <option value="RecurringOrder">Recurring Order</option>
+          <option value="MainRecurringOrder">Recurring Order</option>
           <option value="NonRecurringOrder">Non-Recurring Order</option>
-          <option value="MainRecurringOrder">Main Recurring Order</option>
         </select>
       </div>
 

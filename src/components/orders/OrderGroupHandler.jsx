@@ -32,27 +32,25 @@ export const useEditOrderGroup = (refetch, setformOpen, setErrorMessage) => {
     const [editOrderGroup] = useMutation(EDIT_ORDER_GROUP);
   
     const handleUpdate = async (orderGroupId, formData) => {
-      // if (!orderGroupId || !formData.startOn || !formData.status) {
-      //   alert('Required fields cannot be empty.');
-      //   return;
-      // }
-  
+      if (!window.confirm('Are you sure you want to edit this order group?')) return;
       try {
         const { data } = await editOrderGroup({
-          variables: { orderGroupId, orderGroupInfo: formData },
+          variables: { orderGroupId, 
+            orderGroupInfo: formData },
         });
   
-        if (data.editOrderGroup.orderGroup) {
+        if (data?.editOrderGroup?.orderGroup) {
           alert('Order group updated successfully.');
           refetch();
-          setformOpen(false);
-          setErrorMessage('');
+          setformOpen(false); 
+          console.log(formData);
+          setErrorMessage(''); 
         } else {
-          alert('Error updating order group.');
+          setErrorMessage('Error updating order group.');
         }
       } catch (error) {
-        console.error('Error updating order group:', error);
-        alert('Error updating order group.');
+        console.error('Error updating order group..:', error);
+        setErrorMessage('Failed to update order group. Please try again.');
       }
     };
   
@@ -63,17 +61,22 @@ export const useEditOrderGroup = (refetch, setformOpen, setErrorMessage) => {
     const [deleteOrderGroup] = useMutation(DELETE_ORDER_GROUP);
   
     const handleDelete = async (orderGroupId) => {
+      if (!window.confirm('Are you sure you want to delete this order group?')) return;
+  
       try {
         const { data } = await deleteOrderGroup({ variables: { orderGroupId } });
-        if (data.deleteOrderGroup.message === 'Order group deleted successfully') {
-          await refetch();
-        } else {
-          console.error('Delete failed:', data.deleteOrderGroup.message || 'Unknown error');
-        }
+        console.log('Delete response:', data); 
+  
+        const message = data?.deleteOrderGroup?.message;
+        alert(message);
+        await refetch();
       } catch (error) {
-        console.error('Delete failed:', error.message);
+        alert('Failed to delete the order group. Please try again.');
+        console.error('Delete error:', error.message);
       }
     };
   
     return handleDelete;
   };
+  
+  

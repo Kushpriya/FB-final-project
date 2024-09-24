@@ -1,14 +1,16 @@
 .order-group-container {
   display: flex;
   flex-direction: column;
-  padding: 50px;
+  padding: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .order-group-container .order-header {
   font-size: 24px;
   font-weight: bold;
   color: #f9f6f6;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-left: 410px;
 }
 
@@ -16,7 +18,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .order-dropdown {
@@ -42,8 +44,8 @@
   width: 200px;
   border-radius: 5px;
   cursor: pointer;
-  margin: 10px;
-  margin-left: 85%;
+  /* margin: 10px; */
+  margin-left: 82%;
 }
 
 .order-group-add-btn:hover {
@@ -118,12 +120,31 @@
 .order-group-form-container {
   background-color: #292b2f;
   padding: 30px;
-  width: 700px;
+  width: 900px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow-y: auto; 
   max-height: 80vh;
+}
+
+/* .delivery{
+  display: flex;
+  justify-content: space-between;
+} */
+.column-drop-area {
+  margin-bottom: 20px;
+}
+
+.custom-column-drop-container {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  min-height: 100px;
+  background-color: #464545;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -139,11 +160,12 @@
   margin-bottom: 8px;
   color: #ddd;
   font-weight: bold;
+  /* background-color: #28a745; */
 }
 
 .order-group-form-container input,
 .order-group-form-container select {
-  width: 50%;
+  /* width: 100%; */
   padding: 5px;
   margin-bottom: 15px;
   background-color: #333;
@@ -153,15 +175,6 @@
   font-size: 14px;
 }
 
-/* .order-transport,
-.lineitem-list,
-.order-client {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px; 
-  padding: 40px;
-  background-color: #007bff;
-} */
 
 .order-group-form-container .add-order-btn{
   background-color: #2a28a7;
@@ -345,7 +358,7 @@
 
 
 .error-message {
-  color: red;
+  color: rgb(216, 4, 4);
   font-size: 12px;
   margin-top: 5px;
 }

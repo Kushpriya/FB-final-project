@@ -28,7 +28,7 @@ const flattenRecurringOrderData = (orders) => {
   }));
 };
 
-const MainRecurringOrder = () => {
+const RecurringOrder = () => {
   const { loading, error, data, refetch } = useQuery(GET_MAIN_RECURRING_ORDERS);
   const [selectedOrderGroup, setSelectedOrderGroup] = useState(null);
 
@@ -95,4 +95,4 @@ const MainRecurringOrder = () => {
   );
 };
 
-export default MainRecurringOrder;
+export default RecurringOrder;

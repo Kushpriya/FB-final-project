@@ -56,7 +56,7 @@ const OrderGroupList = () => {
     { headerName: 'Transport Status', field: 'transportStatus' },
     { headerName: 'Courier Email', field: 'courierEmail' },
     { headerName: 'Courier Name', field: 'courierName' },
-    { headerName: 'Bio', field: 'bio' },
+    // { headerName: 'Bio', field: 'bio' },
     { headerName: 'Line Item Quantity', field: 'lineItemQuantity' },
     { headerName: 'Line Item Unit', field: 'lineItemUnit' },
     { headerName: 'Merchandise Category', field: 'merchandiseCategory' },
@@ -101,7 +101,7 @@ const OrderGroupList = () => {
         <FaPlus /> Add Order Group
       </button>
       <h1>Order Group List</h1>
-      <div className="ag-theme-alpine-dark">
+      <div className="ag-theme-alpine-dark"style={{ height: '500px', width: '100%' }}>
         <AgGridReact
           rowData={orderGroupsData}
           columnDefs={columnDefs}

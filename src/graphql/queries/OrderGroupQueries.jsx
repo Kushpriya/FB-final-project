@@ -2,54 +2,85 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_ORDER_GROUPS = gql`
-  query GetAllOrderGroups {
+query GetAllOrderGroups {
     getAllOrderGroups {
-      startOn
-      status
-      client {
-        name
-      }
-      deliveryOrder {
-        source
-        vehicleType
-        courier {
-          email
-          firstName
-          lastName
-          bio
-        }
-        lineItems {
-          quantity
-          unit
-          merchandiseCategory {
-            description
+        createdAt
+        updatedAt
+        startOn
+        status
+        client {
             name
-          }
-          merchandise {
-            description
-            status
+        }
+        deliveryOrder {
+            source
+            vehicleType
+            courier {
+                email
+                firstName
+                lastName
+                bio
+            }
+            lineItems {
+                quantity
+                unit
+                merchandiseCategory {
+                    description
+                    name
+                }
+                merchandise {
+                    description
+                    status
+                    name
+                    createdAt
+                    id
+                    merchandiseCategory {
+                        createdAt
+                        description
+                        id
+                        name
+                        tenantId
+                        updatedAt
+                    }
+                    merchandiseCategoryId
+                    price
+                    unit
+                    updatedAt
+                }
+                price
+                createdAt
+                deliveryOrderId
+                id
+                merchandiseCategoryId
+                merchandiseId
+                updatedAt
+            }
+            transport {
+                name
+                status
+            }
+            courierId
+            createdAt
+            id
+            orderGroupId
+            transportId
+            updatedAt
+        }
+        venue {
             name
-          }
-          price
         }
-        transport {
-          name
-          status
+        completedOn
+        id
+        recurring {
+            endDate
+            frequency
+            startDate
         }
-      }
-      venue {
-        name
-      }
-      completedOn
-      id
-      recurring {
-        endDate
-        frequency
-        startDate
-      }
-      mainOrderGroupId
+        mainOrderGroupId
+        clientId
+        tenantId
+        venueId
     }
-  }
+}
 `;
 
 
@@ -91,6 +122,10 @@ export const GET_RECURRING_ORDERS = gql`
 export const GET_NON_RECURRING_ORDERS = gql`
   query GetNonRecurringOrders {
     getNonRecurringOrders {
+      client{
+        name
+        email
+      }
       clientId
       completedOn
       id
@@ -99,7 +134,15 @@ export const GET_NON_RECURRING_ORDERS = gql`
       status
       tenantId
       venueId
+      venue{
+        name
+      }
       deliveryOrder {
+        courier{
+          firstName
+          lastName
+          email
+        }
         courierId
         id
         orderGroupId

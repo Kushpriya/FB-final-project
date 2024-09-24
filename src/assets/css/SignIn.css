@@ -11,6 +11,7 @@
   align-items: center;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  width: 350px;
 }
 
 .signin-logo-container {
