@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_VENUE, EDIT_VENUE, DELETE_VENUE } from '../../graphql/mutation/VenueMutation';
 
-export const useAddVenue = (refetch, setIsModalOpen, setErrorMessage) => {
+export const useAddVenue = (refetch, setformOpen, setErrorMessage) => {
   const [createVenue] = useMutation(CREATE_VENUE);
 
   const handleAdd = async (formData) => {
@@ -12,12 +12,12 @@ export const useAddVenue = (refetch, setIsModalOpen, setErrorMessage) => {
 
     try {
       const { data } = await createVenue({
-        variables: { clientId: formData.clientId, name: formData.name }
+        variables: { clientId: formData.clientId, name: formData.name },
       });
       if (data.createVenue.venue) {
         setErrorMessage('');
         refetch();
-        setIsModalOpen(false);
+        setformOpen(false);
       } else {
         setErrorMessage('Error adding venue.');
       }
@@ -30,7 +30,7 @@ export const useAddVenue = (refetch, setIsModalOpen, setErrorMessage) => {
   return handleAdd;
 };
 
-export const useEditVenue = (refetch, setIsModalOpen, setErrorMessage) => {
+export const useEditVenue = (refetch, setformOpen, setErrorMessage) => {
   const [editVenue] = useMutation(EDIT_VENUE);
 
   const handleUpdate = async (clientId, venueId, name) => {
@@ -47,7 +47,7 @@ export const useEditVenue = (refetch, setIsModalOpen, setErrorMessage) => {
       if (data.editVenue.venue) {
         setErrorMessage('');
         refetch();
-        setIsModalOpen(false);
+        setformOpen(false);
       } else {
         setErrorMessage('Error updating venue.');
       }
@@ -66,7 +66,7 @@ export const useDeleteVenue = (refetch) => {
   const handleDelete = async (clientId, venueId) => {
     try {
       await deleteVenue({
-        variables: { clientId, venueId }
+        variables: { clientId, venueId },
       });
       refetch();
     } catch (error) {

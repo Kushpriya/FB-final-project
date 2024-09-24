@@ -1,11 +1,10 @@
 
   .dashboard {
-    width: 80%;
+    /* width: 80%; */
     margin: 20px;
-    margin-left: 250px;
-    /* background-color: #202020; */
+    background-color: #202020;
     border-radius: 8px;
-    padding: 20px;
+    padding: 40px;
   }
   
   .dashboard-title {

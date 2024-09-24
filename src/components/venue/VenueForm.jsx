@@ -3,6 +3,7 @@ import '../../assets/css/Venue.css';
 
 const VenueForm = ({ selectedVenue, onClose, onAdd, onUpdate, errorMessage, clientId }) => {
   const [name, setName] = useState('');
+  const [validationError, setValidationError] = useState('');
 
   useEffect(() => {
     if (selectedVenue) {
@@ -14,6 +15,14 @@ const VenueForm = ({ selectedVenue, onClose, onAdd, onUpdate, errorMessage, clie
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    setValidationError('');
+
+    if (!name.trim()) {
+      setValidationError('Venue name is required.');
+      return;
+    }
+
     if (selectedVenue) {     
       onUpdate(clientId, selectedVenue.id, name);
     } else {
@@ -22,23 +31,26 @@ const VenueForm = ({ selectedVenue, onClose, onAdd, onUpdate, errorMessage, clie
   };
 
   return (
-    <div className="venue-form-container">
-      <button className="close-button" onClick={onClose}>X</button>
-      <h2>{selectedVenue ? 'Edit Venue' : 'Add Venue'}</h2>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">{selectedVenue ? 'Update Venue' : 'Add Venue'}</button>
-      </form>
+    <div className="venue-form-overlay">
+      <div className="venue-form-container">
+        <button className="close-button" onClick={onClose}>X</button>
+        <h2>{selectedVenue ? 'Edit Venue' : 'Add Venue'}</h2>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+             {validationError && <p className="error-message">{validationError}</p>}
+          </label>
+          <button type="submit">{selectedVenue ? 'Update Venue' : 'Add Venue'}</button>
+        </form>
+      </div>
     </div>
   );
 };

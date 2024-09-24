@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import "../../assets/css/Transports.css";
+import '../../assets/css/Transports.css';
 
 const vehicleTypes = [
-  { value: "", label: "Select Vehicle" },
-  { value: "Tank", label: "Tank" },
-  { value: "TankWagon", label: "Tank Wagon" },
-  { value: "Truck", label: "Truck" },
-  { value: "SemiTruck", label: "Semi Truck" },
+  { value: '', label: 'Select Vehicle' },
+  { value: 'tank', label: 'Tank' },
+  { value: 'tank_wagon', label: 'Tank Wagon' },
+  { value: 'truck', label: 'Truck' },
+  { value: 'semi_truck', label: 'Semi Truck' },
 ];
 
 const statusTypes = [
-  { value: "", label: "Select Status" },
-  { value: "available", label: "Available" },
-  { value: "in_use", label: "In Use" },
-  { value: "maintenance", label: "Maintenance" },
-  { value: "out_of_service", label: "Out of Service" },
+  { value: '', label: 'Select Status' },
+  { value: 'available', label: 'Available' },
+  { value: 'in_use', label: 'In Use' },
+  { value: 'maintenance', label: 'Maintenance' },
+  { value: 'out_of_service', label: 'Out of Service' },
 ];
 
 const TransportForm = ({ onAdd, onUpdate, selectedTransport, errorMessage, onClose }) => {
@@ -23,13 +23,23 @@ const TransportForm = ({ onAdd, onUpdate, selectedTransport, errorMessage, onClo
     vehicleType: '',
     status: '',
   });
-  const [formError, setFormError] = useState('');
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (selectedTransport) {
       setTransport(selectedTransport);
     }
   }, [selectedTransport]);
+
+  const validate = () => {
+    const newErrors = {};
+    if (!transport.name.trim()) newErrors.name = 'Name is required';
+    if (!transport.vehicleType) newErrors.vehicleType = 'Vehicle type is required';
+    if (!transport.status) newErrors.status = 'Status is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     setTransport({
@@ -40,15 +50,13 @@ const TransportForm = ({ onAdd, onUpdate, selectedTransport, errorMessage, onClo
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!transport.name || !transport.vehicleType || !transport.status) {
-      setFormError('All fields are required.');
-      return;
-    }
-    setFormError('');
-    if (selectedTransport) {
-      onUpdate(selectedTransport, transport);
-    } else {
-      onAdd(transport);
+    if (validate()) {
+      if (selectedTransport) {
+        onUpdate(selectedTransport.id, transport);
+      } else {
+        onAdd(transport);
+      }
+      onClose();
     }
   };
 
@@ -57,44 +65,55 @@ const TransportForm = ({ onAdd, onUpdate, selectedTransport, errorMessage, onClo
       <div className="transport-form-container">
         <button className="close-button" onClick={onClose}>X</button>
         <h2>{selectedTransport ? 'Edit Transport' : 'Add Transport'}</h2>
-        {formError && <p className="error-message">{formError}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={transport.name}
-            onChange={handleChange}
-            placeholder="Enter transport name"
-            required
-          />
-          <label>Vehicle Type</label>
-          <select
-            name="vehicleType"
-            value={transport.vehicleType}
-            onChange={handleChange}
-            required
-          >
-            {vehicleTypes.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-          <label>Status</label>
-          <select
-            name="status"
-            value={transport.status}
-            onChange={handleChange}
-            required
-          >
-            {statusTypes.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </select>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={transport.name}
+              onChange={handleChange}
+              placeholder="Enter transport name"
+              required
+            />
+            {errors.name && <p className="error-message">{errors.name}</p>}
+          </label>
+
+          <label>
+            Vehicle Type:
+            <select
+              name="vehicleType"
+              value={transport.vehicleType}
+              onChange={handleChange}
+              required
+            >
+              {vehicleTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+            {errors.vehicleType && <p className="error-message">{errors.vehicleType}</p>}
+          </label>
+
+          <label>
+            Status:
+            <select
+              name="status"
+              value={transport.status}
+              onChange={handleChange}
+              required
+            >
+              {statusTypes.map((status) => (
+                <option key={status.value} value={status.value}>
+                  {status.label}
+                </option>
+              ))}
+            </select>
+            {errors.status && <p className="error-message">{errors.status}</p>}
+          </label>
+
           <button type="submit">
             {selectedTransport ? 'Update Transport' : 'Add Transport'}
           </button>

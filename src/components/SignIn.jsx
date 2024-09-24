@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import LOGIN_MUTATION from '../graphql/mutation/LoginMutation';
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
+import { loginSuccess, loginFailure } from '../store/authSlice';
 import '../assets/css/SignIn.css';
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const authError = useSelector((state) => state.auth.error);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errors, setErrors] = useState({});
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
   const validateSignIn = (event) => {
     event.preventDefault();
@@ -37,22 +42,24 @@ const SignIn = () => {
   };
 
   const handleSignIn = async (loginData) => {
-    // loginData.tenantId = 1; 
     try {
       const { data } = await login({ variables: { loginData } });
       if (data?.login?.token) {
         localStorage.setItem('token', data.login.token);
+        dispatch(loginSuccess({
+          token: data.login.token,
+          user: data.login.user,
+        }));
         alert(`Welcome, ${data.login.user.name}!`);
         window.location.href = '/slider';
       } else {
-        alert('SignIn failed. Please check your credentials.');
+        dispatch(loginFailure('SignIn failed. Please check your credentials.'));
       }
     } catch (err) {
-      alert('SignIn failed. Please try again later.');
+      dispatch(loginFailure('SignIn failed. Please try again later.'));
       console.error('Error during sign-in:', err);
     }
   };
-  
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -99,11 +106,11 @@ const SignIn = () => {
           <button type="submit" className="signin-btn" disabled={loading}>
             {loading ? 'Signing in...' : 'SignIn'}
           </button>
-          {error && <p className="signin-error-message">Error: {error.message}</p>}
+          {authError && <p className="signin-error-message">Error: {authError}</p>}
 
           <div className="signin-register">
-                <p>Don't have an account? <a href="/signup" className="signin-toggle-form">Sign up</a></p>
-            </div>
+            <p>Don't have an account? <a href="/signup" className="signin-toggle-form">Sign up</a></p>
+          </div>
         </form>
       </div>
     </div>

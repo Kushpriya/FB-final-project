@@ -1,99 +1,155 @@
 .venues-container {
-  padding: 20px;
-  background-color: #333;
+  padding:60px;
   color: #fff;
+  width: 70%;
 }
 
 .venue-add-btn {
-  background-color: #4caf50;
-  color: #fff;
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
   border: none;
-  padding: 10px;
+  width: 150px;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
+  font-size: 15px;
+  margin-left: 80%;
 }
 
 .venue-add-btn:hover {
   background-color: #45a049;
 }
 
-.venue-action-icon button {
-  background: none;
+.venue-action-icon {
+  background: transparent;
+  display: flex;
+  justify-content: space-around;
+  gap: 5px;
+}
+
+
+.venue-view-action-btn,
+.venue-edit-action-btn,
+.venue-delete-action-btn
+ {
+  background-color: transparent;
   border: none;
-  color: #fff;
   cursor: pointer;
+  font-size: 18px;
+  margin-top: 10px;
 }
 
-.venue-action-icon button:hover {
-  opacity: 0.8;
+
+.venue-view-action-btn {
+  color: rgb(71, 71, 251);
 }
 
-.view-action-btn { color: #00f; }
-.edit-action-btn { color: #ff0; }
-.delete-action-btn { color: #f00; }
+.venue-edit-action-btn {
+  color: rgb(245, 245, 38);
+}
 
-.venue-form-container {
+.venue-delete-action-btn {
+  color: rgb(253, 55, 55);
+}
+
+.venue-view-action-btn:hover {
+  color: #007bff;
+}
+
+.venue-edit-action-btn:hover {
+  color: #ffc107;
+}
+
+.venue-delete-action-btn:hover {
+  color: #dc3545;
+}
+.venue-form-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
-.venue-form {
-  background: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 400px;
-  width: 100%;
+.venue-form-container {
+  background-color: #292b2f;
+  padding: 30px;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
-.venue-form h2 {
+.venue-form-container h2 {
   margin-bottom: 20px;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
 }
 
-.form-group {
+.venue-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ddd;
+  font-weight: bold;
+}
+
+.venue-form-container input,
+.venue-form-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.venue-form-container button[type="submit"] {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.venue-form-container button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+.venue-form .error-message {
+  color: red;
   margin-bottom: 15px;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.form-actions button {
-  padding: 10px 15px;
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
+  color: #fff;
+  font-size: 18px;
   cursor: pointer;
 }
 
-.form-actions .cancel-btn {
-  background-color: #f44336;
-  color: #fff;
-}
-
-.form-actions .cancel-btn:hover {
-  background-color: #e53935;
+.close-button:hover {
+  color: #dc3545;
 }
 
 .error-message {
-  color: #f44336;
-  margin-bottom: 15px;
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }

@@ -3,22 +3,14 @@
   flex-direction: column;
   height: 100vh;
   color: #ffffff;
-  margin: 20px;
-  margin-left: 300px;
-  width: 65%;
-  overflow: auto;
-}
-
-.transport-container > * {
-  margin: 10px;
+  margin: 50px;
 }
 
 .filter-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 50px;
   padding: 10px;
-  /* background-color: #333; */
   border-radius: 5px;
 }
 
@@ -26,6 +18,7 @@
   font-size: 16px;
   font-weight: bold;
   flex: 1;
+  margin: 20px;
 }
 
 .add-transport-btn {
@@ -37,6 +30,8 @@
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
+  font-size: 15px;
+  margin-right: 100px;
 }
 
 .add-transport-btn:hover {
@@ -53,12 +48,6 @@
   max-width: 200px;
 }
 
-.ag-theme-alpine-dark {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-}
 
 .transport-status-available {
   color: #28a745;
@@ -111,35 +100,49 @@
 }
 
 .close-button:hover {
-  color: #ddd;
+  color: #fe0808;
 }
+
 
 .transport-action-icon {
   display: flex;
   gap: 10px;
 }
 
-.view-action-btn,
-.edit-action-btn,
-.delete-action-btn {
-  background: none;
+.transport-view-action-btn,
+.transport-edit-action-btn,
+.transport-delete-action-btn {
+  background-color: transparent;
   border: none;
-  color: #fff;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  margin-top: 10px;
 }
 
-.view-action-btn:hover {
-  color: #17a2b8;
+.transport-view-action-btn {
+  color: rgb(71, 71, 251);
 }
 
-.edit-action-btn:hover {
+.transport-edit-action-btn {
+  color: rgb(245, 245, 38);
+}
+
+.transport-delete-action-btn {
+  color: rgb(253, 55, 55);
+}
+
+.transport-view-action-btn:hover {
+  color: #007bff;
+}
+
+.transport-edit-action-btn:hover {
   color: #ffc107;
 }
 
-.delete-action-btn:hover {
+.transport-delete-action-btn:hover {
   color: #dc3545;
 }
+
 
 .transport-form-overlay {
   position: fixed;

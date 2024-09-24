@@ -28,7 +28,6 @@ export const useAddTransport = (refetch, setIsModalOpen, setErrorMessage) => {
   return handleAdd;
 };
 
-// Edit Transport Hook
 export const useEditTransport = (refetch, setIsModalOpen, setErrorMessage) => {
   const [editTransport] = useMutation(EDIT_TRANSPORT);
 
@@ -40,7 +39,14 @@ export const useEditTransport = (refetch, setIsModalOpen, setErrorMessage) => {
 
     try {
       const { data } = await editTransport({
-        variables: { transportId: transportData.id, transportInfo: updatedData }
+        variables: { 
+          transportId: transportData.id, 
+          transportInfo: { 
+            name: updatedData.name,
+            vehicleType: updatedData.vehicleType,
+            status: updatedData.status 
+          } 
+        }
       });
       if (data.updateTransport.transport) {
         alert('Transport updated successfully.');
@@ -58,26 +64,27 @@ export const useEditTransport = (refetch, setIsModalOpen, setErrorMessage) => {
   return handleUpdate;
 };
 
+
 export const useDeleteTransport = (refetch) => {
   const [deleteTransport] = useMutation(DELETE_TRANSPORT);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this transport?')) return;
-
+  
     try {
       const { data } = await deleteTransport({ variables: { transportId: id } });
-      
-      if (data.deleteTransport.success) {
+      console.log('Delete response:', data);
+      if (data.deleteTransport.message) {
         alert('Transport deleted successfully.');
         refetch();
       } else {
         alert('Error deleting transport.');
       }
     } catch (error) {
-      alert('Error deleting transport.');
+      alert(`Error deleting transport: ${error.message}`);
       console.error('Error deleting transport:', error);
     }
   };
-
+  
   return handleDelete;
 };

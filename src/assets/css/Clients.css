@@ -1,13 +1,8 @@
-
 .clients-container {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  margin: 40px;
-  margin-left: 250px;
-  /* background-color: #1c1c1e; */
-  color: #fff;
-  width: 80%;
+  padding: 50px;
+  /* color: #fff; */
 }
 
 .client-add-btn {
@@ -19,44 +14,60 @@
   border-radius: 5px;
   cursor: pointer;
   margin: 10px;
+  font-size: 15px;
+  margin-left: 85%;
 }
 
 .client-add-btn:hover {
   background-color: #218838;
 }
 
-.ag-theme-alpine-dark {
-  width: 100%;
-  height: 500px;
-  background-color: #1c1c1e;
-}
-
 .client-action-icon {
+  background: transparent;
   display: flex;
   justify-content: space-around;
   gap: 5px;
 }
 
-.view-action-btn,
-.edit-action-btn,
-.delete-action-btn {
-  cursor: pointer;
-  background: none;
+.client-view-action-btn,
+.client-edit-action-btn,
+.client-delete-action-btn,
+.client-branch-action-btn {
+  background-color: transparent;
   border: none;
+  cursor: pointer;
   font-size: 18px;
-  margin: 10px;
-  transition: transform 0.2s ease;
+  margin-top: 10px;
 }
 
-.view-action-btn:hover {
+.client-branch-action-btn{
+  color: #28a745;
+}
+.client-view-action-btn {
+  color: rgb(71, 71, 251);
+}
+
+.client-edit-action-btn {
+  color: rgb(245, 245, 38);
+}
+
+.client-delete-action-btn {
+  color: rgb(253, 55, 55);
+}
+
+.client-branch-action-btn:hover {
+  color: #2fff00;
+}
+
+.client-view-action-btn:hover {
   color: #007bff;
 }
 
-.edit-action-btn:hover {
+.client-edit-action-btn:hover {
   color: #ffc107;
 }
 
-.delete-action-btn:hover {
+.client-delete-action-btn:hover {
   color: #dc3545;
 }
 
@@ -124,7 +135,6 @@
   background-color: #218838;
 }
 
-
 .client-form .error-message {
   color: red;
   margin-bottom: 15px;
@@ -145,53 +155,99 @@
   color: #dc3545;
 }
 
-
-.client-view-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
 .client-view-container {
-  background-color: #292b2f;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 30px;
-  width: 400px;
+  background-color: #444;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  z-index: 1000;
+  width: 400px;
+  max-width: 500px;
 }
 
 .client-view-container h2 {
-  color: #fff;
+  color: #f9f9f9;
   text-align: center;
-  margin-bottom: 20px;
-}
-
-.client-view-container p {
-  color: #ddd;
-  background-color: #333;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
 }
 
 
-/* Clients.css or similar */
-.table-container {
-  margin: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
-.table {
-  height: 100%;
-  width: 100%;
+@media (max-width: 1200px) {
+  .clients-container {
+    margin-left: 200px; 
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .clients-container {
+    margin-left: 0; 
+    width: 100%;
+    padding: 10px;
+  }
+
+  .client-add-btn {
+    width: 120px;
+    padding: 0.4rem 0.8rem;
+    font-size: 14px;
+  }
+
+  .ag-theme-alpine-dark {
+    height: auto;
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .client-form-container h2,
+  .client-view-container h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-add-btn {
+    width: 100px;
+    padding: 0.3rem 0.6rem;
+    font-size: 12px;
+  }
+
+  .client-form-container,
+  .client-view-container {
+    width: 95%;
+    max-width: 360px;
+    padding: 20px;
+  }
+
+  .client-form-container h2,
+  .client-view-container h2 {
+    font-size: 18px;
+  }
+
+  .client-form-container input,
+  .client-form-container select {
+    font-size: 12px;
+  }
+
+  .error-message {
+    font-size: 10px;
+  }
 }

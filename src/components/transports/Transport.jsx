@@ -6,7 +6,6 @@ import { GET_ALL_TRANSPORTS_QUERY, GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY } from '
 import { useAddTransport, useEditTransport, useDeleteTransport } from './TransportHandler';
 import TransportForm from './TransportForm';
 import '../../assets/css/Transports.css';
-import Slider from '../../components/Slider';
 
 const Transport = () => {
   const [selectedVehicleType, setSelectedVehicleType] = useState('');
@@ -19,7 +18,7 @@ const Transport = () => {
     selectedVehicleType ? GET_TRANSPORTS_BY_VEHICLE_TYPE_QUERY : GET_ALL_TRANSPORTS_QUERY,
     { 
       variables: selectedVehicleType ? { vehicleType: selectedVehicleType } : {},
-      // fetchPolicy: 'network-only'
+     
     }
   );
 
@@ -40,14 +39,9 @@ const Transport = () => {
   };
 
   if (loading) return <p>Loading transports...</p>;
-  if (error) {
-    console.error('GraphQL Error:', error);
-    return <p className="error-message">Error loading transports: {error.message}</p>;
-  }
+  if (error) return <p>Error loading transports: {error.message}</p>;
 
-  // console.log('Transports data:', data);
   const transports = selectedVehicleType ? data?.getAllTransportByVehicleType || [] : data?.getAllTransport || [];
-  // console.log('Transports:', transports);
 
   const columnDefs = [
     { headerName: 'Id', field: 'id', sortable: true, filter: true },
@@ -80,7 +74,7 @@ const Transport = () => {
       headerName: 'Actions',
       cellRenderer: (params) => (
         <div className="transport-action-icon">
-          <button onClick={() => setViewTransport(params.data)} className="view-action-btn" title="View">
+          <button onClick={() => setViewTransport(params.data)} className="transport-view-action-btn" title="View">
             <FaEye />
           </button>
           <button
@@ -88,11 +82,11 @@ const Transport = () => {
               setSelectedTransport(params.data);
               setIsModalOpen(true);
             }}
-            className="edit-action-btn" title="Edit"
+            className="transport-edit-action-btn" title="Edit"
           >
             <FaEdit />
           </button>
-          <button onClick={() => handleDelete(params.data.id)} className="delete-action-btn" title="Delete">
+          <button onClick={() => handleDelete(params.data.id)} className="transport-delete-action-btn" title="Delete">
             <FaTrash />
           </button>
         </div>
@@ -102,7 +96,6 @@ const Transport = () => {
 
   return (
     <div className="transport-container">
-      <Slider />
       <div className="filter-section">
         <div className="total-transports">
           Total {selectedVehicleType ? `${selectedVehicleType} ` : ''}Transports: {transports.length}
@@ -111,10 +104,10 @@ const Transport = () => {
           <label>Filter by Vehicle Type: </label>
           <select onChange={handleVehicleTypeChange} value={selectedVehicleType}>
             <option value="">All Vehicles</option>
-            <option value="Tank">Tank</option>
-            <option value="TankWagon">Tank Wagon</option>
-            <option value="Truck">Truck</option>
-            <option value="SemiTruck">Semi Truck</option>
+            <option value="tank">Tank</option>
+            <option value="tank_wagon">Tank Wagon</option>
+            <option value="truck">Truck</option>
+            <option value="semi_truck">Semi Truck</option>
           </select>
         </div>
         <button onClick={() => setIsModalOpen(true)} className="add-transport-btn">
@@ -122,7 +115,7 @@ const Transport = () => {
         </button>
       </div>
      
-      <div className="ag-theme-alpine-dark">
+      <div className="ag-theme-alpine-dark"style={{ width: '90%', height: '10%' }}>
         <AgGridReact
           rowData={transports}
           columnDefs={columnDefs}

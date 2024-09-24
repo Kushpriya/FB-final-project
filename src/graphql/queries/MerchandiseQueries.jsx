@@ -38,15 +38,3 @@ query GetMerchandiseByCategory($merchandiseCategoryId: ID!) {
     }
 }
 `;
-
-export const GET_ALL_MERCHANDISE_CATEGORIES = gql`
-query GetAllMerchandiseCategories {
-    getAllMerchandiseCategories {
-        description
-        id
-        name
-        tenantId
-    }
-}
-
-`;

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { AgGridReact } from 'ag-grid-react';
-import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEye, FaEdit, FaPlus, FaTrashAlt } from 'react-icons/fa';
 import { useAddMerchandise, useEditMerchandise, useDeleteMerchandise } from './MerchandiseHandler';
 import {
   GET_ALL_MERCHANDISE_QUERY,
-  GET_MERCHANDISE_BY_CATEGORY_QUERY,
-  GET_ALL_MERCHANDISE_CATEGORIES,
+  GET_MERCHANDISE_BY_CATEGORY_QUERY
 } from '../../graphql/queries/MerchandiseQueries';
 import MerchandiseForm from './MerchandiseForm';
 import '../../assets/css/Merchandise.css';
-import Slider from '../Slider';
+import { GET_ALL_MERCHANDISE_CATEGORIES } from '../../graphql/queries/MerchandiseCategoryQueries';
 
 const Merchandise = () => {
   const { loading, error, data, refetch } = useQuery(GET_ALL_MERCHANDISE_CATEGORIES);
@@ -37,12 +36,11 @@ const Merchandise = () => {
   const handleUpdate = useEditMerchandise(refetch, setIsModalOpen, setErrorMessage, categoryId);
   const handleDelete = useDeleteMerchandise(refetch, categoryId);
 
-  const categories = data?.getAllMerchandiseCategories || [];
   const columnDefs = [
     { headerName: 'ID', field: 'id', sortable: true, filter: true },
     { headerName: 'Name', field: 'name', sortable: true, filter: true },
     { headerName: 'Price', field: 'price', sortable: true, filter: true },
-    { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
+    // { headerName: 'Category ID', field: 'merchandiseCategoryId', sortable: true, filter: true },
     {
       headerName: 'Status',
       field: 'status',
@@ -61,7 +59,7 @@ const Merchandise = () => {
       field: 'actions',
       cellRenderer: (params) => (
         <div className="merchandise-actions">
-          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-action-btn">
+          <button onClick={() => setViewMerchandise(params.data)} className="merchandise-view-action-btn">
             <FaEye title="View" />
           </button>
           <button
@@ -69,12 +67,12 @@ const Merchandise = () => {
               setSelectedMerchandise(params.data);
               setIsModalOpen(true);
             }}
-            className="merchandise-action-btn"
+            className="merchandise-edit-action-btn"
           >
             <FaEdit title="Edit" />
           </button>
-          <button onClick={() => handleDelete(params.data.id)} className="merchandise-action-btn">
-            <FaTrash title="Delete" />
+          <button onClick={() => handleDelete(params.data.id)} className="merchandise-delete-action-btn">
+            <FaTrashAlt title="Delete" />
           </button>
         </div>
       ),
@@ -87,30 +85,29 @@ const Merchandise = () => {
 
   return (
     <>
-    <Slider/>
     <div className="merchandise-container">
       <div className="merchandise-header">
         <h2>Merchandise List</h2>
         <button className="merchandise-add-btn" onClick={() => setIsModalOpen(true)}>
-          <FaPlus /> Add
+          <FaPlus /> Add Merchandise
         </button>
       </div>
       <div className="filter-section">
-        <label htmlFor="category-select">Select Category:</label>
+        <label>Select Category:</label>
         <select
           id="category-select"
           value={categoryId || ''}
           onChange={(e) => setCategoryId(e.target.value || null)}
         >
           <option value="">All Categories</option>
-          {categories.map((category) => (
+          {data?.getAllMerchandiseCategories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
           ))}
         </select>
       </div>
-      <div className="ag-theme-alpine-dark">
+      <div className="ag-theme-alpine-dark" style={{ width: '100%', height: '100%' }}>
         <AgGridReact rowData={rowData} 
         columnDefs={columnDefs}
          pagination={true} 
@@ -124,7 +121,7 @@ const Merchandise = () => {
           handleEdit={handleUpdate}
           selectedMerchandise={selectedMerchandise}
           setSelectedMerchandise={setSelectedMerchandise}
-          categories={categories}
+          categories={data?.getAllMerchandiseCategories}
           onClose={() => setIsModalOpen(false)}
           errorMessage={errorMessage}
         />
@@ -133,12 +130,13 @@ const Merchandise = () => {
         <div className="merchandise-view-modal">
           <button className="close-button" onClick={() => setViewMerchandise(null)}>X</button>
           <h2>Merchandise Details</h2>
-          <h3>{viewMerchandise.name}</h3>
-          <p>Price: ${viewMerchandise.price}</p>
-          <p>Status: {viewMerchandise.status}</p>
-          <p>Unit: {viewMerchandise.unit}</p>
-          <p>Description: {viewMerchandise.description}</p>
-          <p>Category: {viewMerchandise.merchandiseCategory.name}</p>
+          <p><strong>ID:</strong> {viewMerchandise.id}</p>
+          <p><strong>Name:</strong> {viewMerchandise.name}</p>
+          <p><strong>Price: $</strong> {viewMerchandise.price}</p>
+          <p><strong>Status: </strong> {viewMerchandise.status}</p>
+          <p><strong>Unit: </strong> {viewMerchandise.unit}</p>
+          <p><strong>Description: </strong> {viewMerchandise.description}</p>
+          <p><strong>Category: </strong> {viewMerchandise.merchandiseCategory.name}</p>
         </div>
       )}
     </div>

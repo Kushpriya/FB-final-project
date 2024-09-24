@@ -15,7 +15,6 @@ const MerchandiseCategoryView = ({ categoryId, onClose }) => {
   const category = data?.getMerchandiseCategoryById;
 
   return (
-    <div className="category-view-overlay">
       <div className="category-view-container">
         <button className="close-button" onClick={onClose}>X</button>
         <h2>Category Details</h2>
@@ -24,14 +23,13 @@ const MerchandiseCategoryView = ({ categoryId, onClose }) => {
             <p><strong>ID:</strong> {category.id}</p>
             <p><strong>Name:</strong> {category.name}</p>
             <p><strong>Description:</strong> {category.description}</p>
-            <p><strong>Created At:</strong> {category.createdAt}</p>
-            <p><strong>Updated At:</strong> {category.updatedAt}</p>
+            <p><strong>Created At:</strong> {new Date(category.createdAt).toLocaleString()}</p>
+            <p><strong>Updated At:</strong> {new Date(category.updatedAt).toLocaleString()}</p>
           </div>
         ) : (
           <p>No category data available.</p>
         )}
       </div>
-    </div>
   );
 };
 

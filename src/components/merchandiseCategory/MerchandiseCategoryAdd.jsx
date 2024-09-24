@@ -3,10 +3,13 @@ import "../../assets/css/MerchandiseCategory.css";
 
 const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, onClose }) => {
   const [category, setCategory] = useState({ name: "", description: "" });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (editingCategory) {
       setCategory(editingCategory);
+    } else {
+      setCategory({ name: "", description: "" });
     }
   }, [editingCategory]);
 
@@ -17,10 +20,24 @@ const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, 
     });
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!category.name.trim()) newErrors.name = "Category name is required.";
+    if (!category.description.trim()) newErrors.description = "Category description is required.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    editingCategory ? updateCategory(category) : addCategory(category);
-    onClose();
+    if (validate()) {
+      if (editingCategory) {
+        updateCategory(editingCategory, category);
+      } else {
+        addCategory(category);
+      }
+      onClose();
+    }
   };
 
   return (
@@ -38,6 +55,8 @@ const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, 
             placeholder="Category Name"
             required
           />
+          {errors.name && <p className="error-message">{errors.name}</p>}
+
           <label>Description</label>
           <textarea
             name="description"
@@ -46,6 +65,8 @@ const MerchandiseCategoryAdd = ({ addCategory, editingCategory, updateCategory, 
             placeholder="Category Description"
             required
           />
+          {errors.description && <p className="error-message">{errors.description}</p>}
+
           <button type="submit">{editingCategory ? "Update Category" : "Add Category"}</button>
         </form>
       </div>

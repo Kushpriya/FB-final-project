@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { FaBars, FaSearch } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../assets/css/Navbar.css';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -21,65 +20,24 @@ const Navbar = () => {
         setSearchQuery(event.target.value);
     };
 
-
-    const handleOptionChange = (event) => {
-        const value = event.target.value;
-        if (value === 'Pricing') {
-            navigate('/pricing'); 
-        }
+    const showSignInAlert = () => {
+        alert('Please sign in first');
     };
 
     return (
-        <div>
+        <div className="navbar-container">
             <nav className="navbar">
                 <div className="navbar-logo">
-                    <a href="/"><img src="src/assets/Images/logo.png" alt="Logo" /></a>
+                    <img src="src/assets/Images/logo.png" alt="Logo" />
                     <FaBars className="navbar-menu-icon" onClick={toggleMenu} />
                 </div>
                 <ul className={`navbar-links ${isMenuOpen ? 'show' : ''}`}>
-                    <li>
-                        <select>
-                            <option>Product</option>
-                            <option>View</option>
-                            <option>Create</option>
-                        </select>
-                    </li>
-                    <li>
-                        <select>
-                            <option>Orders</option>
-                            <option>Load</option>
-                            <option>Delivery</option>
-                            <option>Transfer</option>
-                            <option>Extraction</option>
-                        </select>
-                    </li>
-                    <li>
-                        <select>
-                            <option>Customers</option>
-                            <option>View</option>
-                            <option>Add</option>
-                        </select>
-                    </li>
-                    <li>
-                        <select>
-                            <option>Solutions</option>
-                            <option>View</option>
-                            <option>Manage</option>
-                        </select>
-                    </li>
-                    <li>
-                        <select>
-                            <option>Dispatch</option>
-                            <option>View</option>
-                            <option>Update</option>
-                        </select>
-                    </li>
-                    <li>
-                        <select onChange={handleOptionChange}>
-                            <option>Pricing</option>
-                            <option value="Pricing">View</option>
-                        </select>
-                    </li>
+                    <li><a href="#" onClick={showSignInAlert}>Product</a></li>
+                    <li><a href="#" onClick={showSignInAlert}>Orders</a></li>
+                    <li><a href="#" onClick={showSignInAlert}>Customers</a></li>
+                    <li><a href="#" onClick={showSignInAlert}>Solutions</a></li>
+                    <li><a href="#" onClick={showSignInAlert}>Dispatch</a></li>
+                    <li><Link to="/pricing" onClick={showSignInAlert}>Pricing</Link></li>
                 </ul>
 
                 <div className="navbar-search-container">
@@ -87,21 +45,24 @@ const Navbar = () => {
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder="Search or jump to..."
+                        placeholder="Search ..."
                         className={`navbar-search-input ${isSearchOpen ? 'open' : ''}`}
                     />
                     <FaSearch className="navbar-search-icon" onClick={toggleSearch} />
                 </div>
 
                 <div className="navbar-auth">
-                    <a href="/signin">
-                        Sign In
-                    </a>
-                    <a href="/signup">
-                      Sign Up
-                    </a>
+                    <button><Link to="/signin">Sign In</Link></button>
+                    <button><Link to="/signup">Sign Up</Link></button>
+                    {/* <Button>Sign Up</Button> */}
+                    {/* <Link to="/signin">Sign In</Link> */}
+                    {/* <Link to="/signup">Sign Up</Link> */}
                 </div>
             </nav>
+
+            {/* <div className="intro-text">
+                <h1>Welcome to FuelPanda</h1>
+            </div> */}
         </div>
     );
 };

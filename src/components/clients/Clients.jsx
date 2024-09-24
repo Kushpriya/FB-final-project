@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
-import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEye, FaEdit, FaPlus, FaCodeBranch, FaTrashAlt } from 'react-icons/fa';
 import { GET_ALL_CLIENTS } from '../../graphql/queries/ClientQueries';
 import { useAddClient, useEditClient, useDeleteClient } from './ClientHandler';
 import ClientForm from './ClientForm';
 import ClientView from './ClientView';
 import '../../assets/css/Clients.css';
-import Slider from '../../components/Slider';
 
 const Clients = () => {
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_ALL_CLIENTS);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formOpen, setformOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [viewClientId, setViewClientId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleAdd = useAddClient(refetch, setIsModalOpen, setErrorMessage);
-  const handleUpdate = useEditClient(refetch, setIsModalOpen, setErrorMessage);
+  const handleAdd = useAddClient(refetch, setformOpen, setErrorMessage);
+  const handleUpdate = useEditClient(refetch, setformOpen, setErrorMessage);
   const handleDelete = useDeleteClient(refetch);
 
   const handleShowClick = (clientId) => {
@@ -36,42 +35,39 @@ const Clients = () => {
       headerName: 'Actions',
       cellRenderer: (params) => (
         <div className="client-action-icon">
-          <button onClick={() => handleView(params.data.id)} className="view-action-btn">
+          
+          <button onClick={() => handleShowClick(params.data.id)} className="client-branch-action-btn">
+          <FaCodeBranch title='Venue'/>
+        </button>
+
+          <button onClick={() => setViewClientId(params.data.id)} className="client-view-action-btn">
             <FaEye title="View" />
           </button>
           <button
             onClick={() => {
               setSelectedClient(params.data);
-              setIsModalOpen(true);
+              setformOpen(true);
             }}
-            className="edit-action-btn"
+            className="client-edit-action-btn"
           >
             <FaEdit title="Edit" />
+
           </button>
-          <button onClick={() => handleDelete(params.data.id)} className="delete-action-btn">
-            <FaTrash title="Delete" />
+          <button onClick={() => handleDelete(params.data.id)} className="client-delete-action-btn">
+            <FaTrashAlt title="Delete" />
           </button>
         </div>
       ),
     },
-    { headerName: 'Branch details', field: 'branch',
-      cellRenderer: (params) => (
-        <button onClick={() => handleShowClick(params.data.id)}>
-          show
-        </button>
-      )
-     },
-
   ];
 
   if (loading) return <p>Loading clients...</p>;
-  if (error) return <p>Error loading clients: {error.message}</p>;
+  if (error) return <p className="error-message">Error loading clients: {error.message}</p>;
 
   return (
     <>
-      <Slider />
       <div className="clients-container">
-        <button onClick={() => setIsModalOpen(true)} className="client-add-btn">
+        <button onClick={() => setformOpen(true)} className="client-add-btn">
           <FaPlus /> Add Client
         </button>
         <div className="ag-theme-alpine-dark">
@@ -81,15 +77,14 @@ const Clients = () => {
             pagination={true}
             paginationPageSize={10}
             domLayout="autoHeight"
-            // onRowClicked={(event) => handleRowClick(event.data.id)} // Handle row click
           />
         </div>
 
-        {isModalOpen && (
+        {formOpen && (
           <ClientForm
             selectedClient={selectedClient}
             onClose={() => {
-              setIsModalOpen(false);
+              setformOpen(false);
               setSelectedClient(null);
             }}
             onAdd={handleAdd}
@@ -98,15 +93,13 @@ const Clients = () => {
           />
         )}
 
-        {viewClientId && (
-          <ClientView
-            clientId={viewClientId}
-            onClose={() => setViewClientId(null)}
-          />
-        )}
+        {viewClientId && <ClientView 
+        clientId={viewClientId} 
+        onClose={() => setViewClientId(null)}
+        />}
       </div>
     </>
   );
-}
+};
 
 export default Clients;
