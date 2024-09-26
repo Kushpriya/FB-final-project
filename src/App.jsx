@@ -14,6 +14,7 @@ import OrderGroup from './components/orders/OrderGroup';
 import './App.css';
 import 'ag-grid-community/styles/ag-grid.css';      
 import 'ag-grid-community/styles/ag-theme-alpine.css'; 
+import ChildrenRecurringOrder from './components/orders/ChildrenRecurringOrder';
 
 const AppWrapper = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ const AppWrapper = () => {
           <Route path="/venue/:clientId" element={<Venue />} />
           <Route path="/transport" element={<Transport />} />
           <Route path="/ordergroup" element={<OrderGroup />} />
+          <Route path="/childrenrecurringorder/:mainRecurringOrderId" element={<ChildrenRecurringOrder />}/>
         </Routes>
       </div>
     </div>

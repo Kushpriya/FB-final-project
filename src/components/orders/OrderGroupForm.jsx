@@ -37,8 +37,6 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
     quantity: '',
   });
 
-
-
   const [errors, setErrors] = useState({});
   const [selectedClient, setSelectedClient] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
@@ -52,12 +50,10 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
 
   useEffect(() => {
     if (selectedOrderGroup) {
-      setFormData(prev => ({
-        ...prev,
+      setFormData({
         client: selectedOrderGroup.client || { name: '' },
         venue: selectedOrderGroup.venue || { name: '' },
         deliveryOrderAttributes: {
-          ...prev.deliveryOrderAttributes,
           source: selectedOrderGroup.deliveryOrderAttributes?.source || '',
           transportId: selectedOrderGroup.deliveryOrderAttributes?.transportId || '',
           vehicleType: selectedOrderGroup.deliveryOrderAttributes?.vehicleType || '',
@@ -69,7 +65,9 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
           startDate: selectedOrderGroup.recurring?.startDate || '',
           endDate: selectedOrderGroup.recurring?.endDate || '',
         },
-      }));
+      });
+    } else {
+      setFormData(initialFormData); 
     }
   }, [selectedOrderGroup]);
 
@@ -130,22 +128,61 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
   const validate = () => {
     const newErrors = {};
     const { deliveryOrderAttributes, client, venue, recurring } = formData;
-
-    if (!deliveryOrderAttributes.source.trim()) newErrors.deliveryOrderAttributesSource = 'Source is required.';
-    if (!client.name) newErrors.client = 'Client is required.';
-    if (!venue.name) newErrors.venue = 'Venue is required.';
-    if (deliveryOrderAttributes.lineItemsAttributes.length === 0) newErrors.lineItemsAttributes = 'At least one line item is required.';
-
-    if (recurring.frequency) {
-      if (!recurring.frequency) newErrors.frequency = 'Frequency is required.';
-      if (!recurring.startDate) newErrors.startDate = 'Start date is required.';
-      if (!recurring.endDate) newErrors.endDate = 'End date is required.';
+  
+    if (!deliveryOrderAttributes?.source?.trim()) {
+      newErrors.deliveryOrderAttributesSource = 'Source is required.';
     }
-
+    if (!deliveryOrderAttributes?.vehicleType?.trim()) {
+      newErrors.deliveryOrderAttributesVehicleType = 'Vehicle Type is required.';
+    }
+    if (!deliveryOrderAttributes?.transportId) {
+      newErrors.deliveryOrderAttributesTransportId = 'Transport ID is required.';
+    }
+    if (!deliveryOrderAttributes?.courierId) {
+      newErrors.deliveryOrderAttributesCourierId = 'Courier ID is required.';
+    }
+  
+    if (!deliveryOrderAttributes?.lineItemsAttributes || deliveryOrderAttributes.lineItemsAttributes.length === 0) {
+      newErrors.lineItemsAttributes = 'At least one line item is required.';
+    } else {
+      deliveryOrderAttributes.lineItemsAttributes.forEach((item, index) => {
+        if (!item?.merchandiseCategoryId) {
+          newErrors[`lineItemsAttributes${index}Category`] = 'Merchandise category is required for line item.';
+        }
+        if (!item?.merchandiseId) {
+          newErrors[`lineItemsAttributes${index}Merchandise`] = 'Merchandise is required for line item.';
+        }
+        if (!item?.quantity || isNaN(item.quantity)) {
+          newErrors[`lineItemsAttributes${index}Quantity`] = 'Quantity is required and must be a number.';
+        }
+        if (!item?.price || isNaN(item.price)) {
+          newErrors[`lineItemsAttributes${index}Price`] = 'Price is required and must be a valid number.';
+        }
+        if (!item?.unit?.trim()) {
+          newErrors[`lineItemsAttributes${index}Unit`] = 'Unit is required for line item.';
+        }
+      });
+    }
+  
+    if (recurring?.frequency) {
+      if (!recurring.frequency?.trim()) {
+        newErrors.recurringFrequency = 'Frequency is required if recurring.';
+      }
+      if (!recurring.startDate) {
+        newErrors.recurringStartDate = 'Start date is required if recurring.';
+      }
+      if (!recurring.endDate) {
+        newErrors.recurringEndDate = 'End date is required if recurring.';
+      }
+    }
+  
+    if (!client?.id || client.id === '') newErrors.client = 'Client is required.';
+    if (!venue?.id || venue.id === '') newErrors.venue = 'Venue is required.';
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  
   const handleAddOrUpdateLineItem = () => {
     const updatedlineItemsAttributes = editingIndex !== null
       ? formData.deliveryOrderAttributes.lineItemsAttributes.map((item, index) => (index === editingIndex ? lineItem : item))
@@ -184,16 +221,12 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
   };
 
   const handleEditLineItem = (index) => {
-    if (!window.confirm('Are you sure you want to edit this line item?')) return;
-
     const selectedItem = formData.deliveryOrderAttributes.lineItemsAttributes[index];
     setLineItem(selectedItem);
     setEditingIndex(index);
   };
 
   const handleDeleteLineItem = (index) => {
-    if (!window.confirm('Are you sure you want to delete this line item?')) return;
-
     const updatedlineItemsAttributes = formData.deliveryOrderAttributes.lineItemsAttributes.filter((_, i) => i !== index);
     setFormData(prev => ({
       ...prev,
@@ -247,7 +280,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     const data = {
       clientId: formData.client.id || '',
       venueId: formData.venue.id || '',
@@ -293,7 +326,6 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
         <form onSubmit={handleSubmit}>
           <fieldset>
             <legend>Delivery Order</legend>
-            <div className='delivery'>
             <label>
               Source:
               <input
@@ -303,15 +335,15 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 onChange={(e) => handleInputChange('deliveryOrderAttributes', e)}
                 placeholder="Enter Source"
               />
-              {errors.deliveryOrderAttributesSource && <p className="error-message">{errors.deliveryOrderAttributesSource}</p>}
+              {/* {errors.deliveryOrderAttributesSource && <p className="error-message">{errors.deliveryOrderAttributesSource}</p>} */}
             </label>
 
             <label>Courier:
               <select
                 id="courier"
                 name="courier"
-                value={formData.deliveryOrderAttributes.courierId}  // Bind courierId from formData
-                onChange={handleCourierChange}  // Handle selection
+                value={formData.deliveryOrderAttributes.courierId}  
+                onChange={handleCourierChange}  
               >
                 <option value="">Select a Courier</option>
                 {courierData?.getAllCourier?.map((courier) => (
@@ -320,18 +352,16 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                   </option>
                 ))}
               </select>
-            </label> 
-            </div>   
+            </label>    
 
             <fieldset>
               <legend>Transport</legend>
-            <div className='delivery'>
               <label>
                 Vehicle Type:
                 <select
                   id="vehicleType"
                   name="vehicleType"
-                  value={formData.deliveryOrderAttributes.vehicleType || ''}  // Ensure it falls back to an empty string if undefined
+                  value={formData.deliveryOrderAttributes.vehicleType || ''}  
                   onChange={handleVehicleTypeChange}
                 >
                   <option value="">All Vehicles</option>
@@ -340,7 +370,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                   <option value="truck">Truck</option>
                   <option value="semi_truck">Semi Truck</option>
                 </select>
-                {errors.vehicleType && <p className="error-message">{errors.vehicleType}</p>}
+                {/* {errors.vehicleType && <p className="error-message">{errors.vehicleType}</p>} */}
               </label>
 
               <label>
@@ -359,14 +389,12 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                     </option>
                   ))}
                 </select>
-                {errors.transportName && <p className="error-message">{errors.transportName}</p>}
+                {/* {errors.transportName && <p className="error-message">{errors.transportName}</p>} */}
               </label>
-              </div>
             </fieldset>
 
           <fieldset>
             <legend>Client</legend>
-            <div className='delivery'>
             <label>
               Client Name:
               <select
@@ -410,14 +438,12 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
                 </option>
               ))}
             </select>
-            {errors.venue && <p className="error-message">{errors.venue}</p>}
+            {/* {errors.venue && <p className="error-message">{errors.venue}</p>} */}
           </label>
-          </div>
           </fieldset>
           <fieldset>
         <legend>Recurring</legend>
-        <div className='delivery'>
-        <label>
+        <label className="radio-label">
           <input
             type="radio"
             name="recurring"
@@ -427,7 +453,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
           />
           Yes
         </label>
-        <label>
+        <label className="radio-label">
           <input
             type="radio"
             name="recurring"
@@ -474,10 +500,9 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </label>
           </>
         )}
-            </div>
       </fieldset>
 
-<div className='delivery'>
+<div className='lineitem-list'>
           <fieldset >
             <legend>Line Items</legend>
             <label>
@@ -495,7 +520,7 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </option>
           ))}
         </select>
-        {errors.category && <p className="error-message">{errors.category}</p>}
+        {/* {errors.category && <p className="error-message">{errors.category}</p>} */}
       </label>
 
           <label>
@@ -588,7 +613,6 @@ const OrderGroupForm = ({ selectedOrderGroup, onClose, onAdd, onUpdate, errorMes
             </tbody>
           </table>
           </fieldset> 
-
           </fieldset>
           <button type="submit">{selectedOrderGroup ? 'Update' : 'Add'} Order Group</button>
         </form>

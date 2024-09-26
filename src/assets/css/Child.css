@@ -1,0 +1,76 @@
+.child-group-container {
+    padding: 0px;
+    margin-top: 80px;
+    color: #fff;
+    max-width: 100%;
+    /* margin: 0 auto; */
+  }
+  
+  .child-group-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #e0e0e0;
+  }
+  
+
+  .child-group-action-icon {
+    background: transparent;
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+  }
+  
+  .child-view-action-btn, 
+  .child-edit-action-btn, 
+  .child-delete-action-btn,
+  .child-show-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  
+  .child-view-action-btn{
+    color:rgb(71, 71, 251);
+  }
+  .child-edit-action-btn{
+    color:rgb(245, 245, 38);
+  }
+  
+  .child-delete-action-btn{
+    color: rgb(253, 55, 55);
+  }
+  .child-view-action-btn:hover {
+    color: #007bff;
+  }
+  
+  .child-edit-action-btn:hover {
+    color: #ffc107;
+  }
+  
+  .child-delete-action-btn:hover {
+    color: #dc3545;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .child-group-container {
+      padding: 10px;
+    }
+  
+    .ag-theme-alpine-dark .ag-header-cell-text {
+      font-size: 12px;
+    }
+  
+    .ag-theme-alpine-dark .ag-cell {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .child-group-action-icon button {
+      padding: 3px;
+    }
+  }
+  

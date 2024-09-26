@@ -3,7 +3,8 @@ import { useQuery } from '@apollo/client';
 import { AgGridReact } from 'ag-grid-react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { GET_CHILDREN_RECURRING_ORDERS } from '../../graphql/queries/OrderGroupQueries';
-import '../../assets/css/OrderGroup.css';
+import '../../assets/css/Child.css';
+import { useParams } from 'react-router-dom';
 
 const flattenChildrenRecurringOrderData = (orders) => {
   return orders.map(order => ({
@@ -25,18 +26,18 @@ const flattenChildrenRecurringOrderData = (orders) => {
   }));
 };
 
-const ChildrenRecurringOrderGroup = ({ mainRecurringOrderId }) => {
+const ChildrenRecurringOrder = () => {
+  const { mainRecurringOrderId } = useParams(); 
   const { loading, error, data } = useQuery(GET_CHILDREN_RECURRING_ORDERS, {
     variables: { mainRecurringOrderId },
   });
 
   const columnDefs = [
     { headerName: 'ID', field: 'id' },
-    { headerName: 'Main Order Group ID', field: 'mainOrderGroupId' },
+    // { headerName: 'Main Order Group ID', field: 'mainOrderGroupId' },
     { headerName: 'Start On', field: 'startOn' },
     { headerName: 'Completed On', field: 'completedOn' },
     { headerName: 'Status', field: 'status' },
-    { headerName: 'Client ID', field: 'clientId' },
     { headerName: 'Client Name', field: 'clientName' },
     { headerName: 'Client Email', field: 'clientEmail' },
     { headerName: 'Delivery Source', field: 'deliverySource' },
@@ -44,19 +45,17 @@ const ChildrenRecurringOrderGroup = ({ mainRecurringOrderId }) => {
     { headerName: 'Line Item Quantity', field: 'lineItemQuantity' },
     { headerName: 'Line Item Unit', field: 'lineItemUnit' },
     { headerName: 'Price', field: 'price' },
-    { headerName: 'Tenant ID', field: 'tenantId' },
-    { headerName: 'Venue ID', field: 'venueId' },
     {
       headerName: 'Actions',
       cellRenderer: (params) => (
-        <div className="order-group-action-icon">
-          <button className="order-view-action-btn">
+        <div className="child-group-action-icon">
+          <button className="child-view-action-btn">
             <FaEye title="View" />
           </button>
-          <button className="order-edit-action-btn">
+          <button className="child-edit-action-btn">
             <FaEdit title="Edit" />
           </button>
-          <button className="order-delete-action-btn">
+          <button className="child-delete-action-btn">
             <FaTrashAlt title="Delete" />
           </button>
         </div>
@@ -70,7 +69,7 @@ const ChildrenRecurringOrderGroup = ({ mainRecurringOrderId }) => {
   if (error) return <p className="error-message">Error loading children recurring orders: {error.message}</p>;
 
   return (
-    <div className="order-group-container">
+    <div className="child-group-container">
       <h2>Children Recurring Orders List</h2>
       <div className="ag-theme-alpine-dark" style={{ height: '500px', width: '100%' }}>
         <AgGridReact
@@ -84,4 +83,4 @@ const ChildrenRecurringOrderGroup = ({ mainRecurringOrderId }) => {
   );
 };
 
-export default ChildrenRecurringOrderGroup;
+export default ChildrenRecurringOrder;
