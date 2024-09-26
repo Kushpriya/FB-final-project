@@ -48,8 +48,6 @@ export const CREATE_ORDER_GROUP = gql`
         client {
           name
         }
-        # completedOn
-        # id
         venue {
           name
         }

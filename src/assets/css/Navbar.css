@@ -49,7 +49,7 @@ body {
     color: #f5f3f3;
     padding: 5px 10px;
     border-radius: 3px;
-    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease; /* Add transform for scale effect */
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
     position: relative;
 }
 

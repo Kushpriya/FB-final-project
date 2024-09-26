@@ -54,15 +54,10 @@ const Navbar = () => {
                 <div className="navbar-auth">
                     <button><Link to="/signin">Sign In</Link></button>
                     <button><Link to="/signup">Sign Up</Link></button>
-                    {/* <Button>Sign Up</Button> */}
-                    {/* <Link to="/signin">Sign In</Link> */}
-                    {/* <Link to="/signup">Sign Up</Link> */}
+                   
                 </div>
             </nav>
 
-            {/* <div className="intro-text">
-                <h1>Welcome to FuelPanda</h1>
-            </div> */}
         </div>
     );
 };

@@ -74,7 +74,7 @@ export const useDeleteClient = (refetch) => {
       try {
         const { data } = await deleteClient({ variables: { clientId: String(clientId).trim() } });
         if (data.deleteClient.message === 'Client deleted successfully') {
-        alert('Client deletted successfully.');
+        alert('Client deleted successfully.');
         refetch();
         } else {
           console.error('Delete failed:', data.deleteClient.message || 'Unknown error');
