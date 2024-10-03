@@ -1,0 +1,72 @@
+.client-action-icon {
+    background: transparent;
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+.client-edit-action-btn,
+.client-delete-action-btn,
+.client-branch-action-btn,
+.client-view-action-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.client-branch-action-btn {
+    color: #28a745;
+}
+
+.client-view-action-btn {
+    color: rgb(38, 38, 232);
+}
+
+.client-edit-action-btn {
+    color: rgb(209, 209, 8);
+}
+
+.client-delete-action-btn {
+    color: rgb(253, 55, 55);
+}
+
+.client-branch-action-btn:hover {
+    color: #31d20c;
+}
+
+.client-view-action-btn:hover {
+    color: #007bff;
+}
+
+.client-edit-action-btn:hover {
+    color: #ffc107;
+}
+
+.client-delete-action-btn:hover {
+    color: #dc3545;
+}
+
+.ag-theme-alpine {
+    width: 98%;
+    font-size: 15px;
+    --ag-foreground-color: rgb(0, 0, 0);
+      --ag-background-color: rgba(255, 251, 251, 0.982);
+      --ag-header-foreground-color: rgb(255, 255, 255);
+      --ag-header-background-color: rgba(7, 11, 78, 0.829);
+      --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+      --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+      --ag-font-size: 15px;
+      --ag-font-family: Arial;
+      --ag-row-border-width: 1px;
+      --ag-row-border-color: rgb(232, 230, 230);
+      --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+  } 
+
+@media (max-width: 768px) {
+    .ag-theme-alpine {
+        height: auto;
+    }
+}
+

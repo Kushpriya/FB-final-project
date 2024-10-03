@@ -1,0 +1,51 @@
+.client-container {
+  padding: 10px;
+  margin-top: 60px;
+  background-color: transparent;
+}
+
+.client-add-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  width: 150px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 15px;
+  margin-left: 85%;
+}
+
+.client-add-btn:hover {
+  background-color: #218838;
+}
+
+
+@media (max-width: 1200px) {
+  .client-container {
+      margin-left: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .client-container {
+      margin-left: 0;
+      width: 100%;
+      padding: 10px;
+  }
+
+  .client-add-btn {
+      width: 120px;
+      padding: 0.4rem 0.8rem;
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-add-btn {
+      width: 100px;
+      padding: 0.3rem 0.6rem;
+      font-size: 12px;
+  }
+}

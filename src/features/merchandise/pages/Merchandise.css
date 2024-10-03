@@ -1,0 +1,64 @@
+.merchandise-container {
+  margin-top: 70px;
+}
+
+.merchandise-filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.merchandise-filter-section select{
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #323232;
+  background-color: #fbf7f7;
+  color: #0f0d0d;
+  width: 100%;
+  max-width: 150px; 
+}
+
+.total-merchandise{
+  font-size: 1.2rem; 
+    font-weight: bold;
+    flex: 1;
+    color: #182c1d;
+    margin: 10px;
+    margin-left: 50px;
+}
+
+.merchandise-add-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 1rem;
+  margin-right: 40px; 
+}
+
+.merchandise-add-btn:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .merchandise-container {
+      margin: 10px;
+      padding: 10px;
+  }
+
+  .merchandise-header {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .merchandise-add-btn {
+      padding: 0.5rem;
+      font-size: 14px;
+  }
+}

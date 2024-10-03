@@ -1,0 +1,215 @@
+.signup-wrapper {
+    width: 25%;
+    margin: 30px auto;
+    background-color: rgba(253, 251, 251, 0.2);
+    border: 1px solid rgba(229, 226, 226, 0.8);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 60px; 
+    height: auto;
+}
+
+.icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    font-size: 2em;
+    color: rgb(16, 14, 14);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.signup-form-box {
+    width: 100%;
+}
+
+.signup-form-box h2 {
+    font-size: 2em;
+    color: #050404;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 55px;
+    border-bottom: 2px solid #0e0d0d;
+    margin: 20px 0;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 35px;
+    transform: translateY(-5%);
+    font-size: 1em;
+    color: #636161;
+    font-weight: 600;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label,
+.input-box select:focus ~ label {
+    top: -5px;
+    font-size: 15px;
+    /* color: #1f16a1; */
+}
+
+.input-box input,
+.input-box select {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.1em;
+    color: #0f0e0e;
+    padding-left: 35px;
+    margin-top: 15px;
+}
+
+.input-box .icon {
+    position: absolute;
+    left: 0;
+    top: 80%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: #131212;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 0;
+    top: 80%;
+    transform: translateY(-50%);
+    padding: 10px;
+    cursor: pointer;
+    color: #060505;
+    font-size: 1.2em;
+}
+
+.remember-forgot {
+    font-size: 1em;
+    color: #040404;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-forgot input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.signup-btn {
+    width: 100%;
+    height: 45px;
+    background: #075cb6;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    color: white;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.signup-btn:hover {
+    background-color: #1679e3;
+}
+
+.login-register {
+    font-size: 1em;
+    color: #0f0f0f;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+.login-register a {
+    color: #0554a9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-register a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: rgb(205, 1, 1);
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .signup-wrapper {
+        width: 90%;
+        max-width: 350px;
+        padding: 30px;
+    }
+
+    .signup-form-box h2 {
+        font-size: 1.8em;
+    }
+
+    .input-box {
+        margin: 20px 0;
+    }
+
+    .signup-btn {
+        height: 40px;
+        font-size: 0.9em;
+    }
+
+    .login-register {
+        margin-top: 15px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-wrapper {
+        width: 95%;
+        max-width: 320px;
+        padding: 20px;
+    }
+
+    .signup-form-box h2 {
+        font-size: 1.6em;
+    }
+
+    .signup-btn {
+        height: 35px;
+        font-size: 0.8em;
+    }
+
+    .login-register {
+        margin-top: 10px;
+        font-size: 0.8em;
+    }
+}

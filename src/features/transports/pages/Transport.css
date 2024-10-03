@@ -1,0 +1,70 @@
+.transport-container {
+  margin-top: 70px ;
+  }
+  
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .filter-section select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #323232;
+    background-color: #fbf7f7;
+    color: #0f0d0d;
+    width: 100%;
+    max-width: 150px; 
+  }
+  
+  .total-transports {
+    font-size: 1.2rem; 
+    font-weight: bold;
+    flex: 1;
+    color: #182c1d;
+    margin: 10px;
+    margin-left: 50px; 
+/* background-color: #28a745; */
+  }
+
+.add-transport-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 1rem;
+    margin-right: 370px; 
+  }
+  
+  .add-transport-btn:hover {
+    background-color: #218838;
+  }
+  
+  @media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column;
+      }
+      
+      .total-transports {
+        font-size: 0.9rem;
+      }
+    
+    .add-transport-btn {
+      width: 100%; 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .total-transports {
+      font-size: 0.9rem; 
+    }
+
+  }
+  
