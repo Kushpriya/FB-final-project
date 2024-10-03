@@ -17,7 +17,7 @@ export const useLoginHandlers = (dispatch, login) => {
           user: data.login.user,
         }));
         
-        toast.success(`Welcome, ${data.login.user.name}!`);
+        // toast.success(`Welcome, ${data.login.user.name}!`);
         setTimeout(() => {
           window.location.href = APP_URL.DASHBOARD;
         }, 1500);
