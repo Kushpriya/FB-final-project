@@ -1,0 +1,69 @@
+
+.merchandise-action-icon {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.merch-view-action-btn, 
+.merch-edit-action-btn, 
+.merch-delete-action-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.merch-view-action-btn {
+  color: #050587;
+}
+
+.merch-edit-action-btn {
+  color: rgb(196, 166, 0);
+}
+
+.merch-delete-action-btn {
+  color: rgb(223, 44, 44);
+}
+
+.merch-view-action-btn:hover {
+  color: #007bff;
+}
+
+.merch-edit-action-btn:hover {
+  color: #ffc107;
+}
+
+.merch-delete-action-btn:hover {
+  color: #f44758;
+}
+
+.ag-theme-alpine {
+  font-size: 15px;
+  --ag-foreground-color: rgb(0, 0, 0);
+    --ag-background-color: rgba(255, 251, 251, 0.982);
+    --ag-header-foreground-color: rgb(255, 255, 255);
+    --ag-header-background-color: rgba(7, 11, 78, 0.829);
+    --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+    --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+
+    --ag-font-size: 15px;
+    --ag-font-family: Arial;
+    --ag-row-border-width: 1px;
+    --ag-row-border-color: rgb(232, 230, 230);
+    --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+} 
+
+@media (max-width: 768px) {
+  .merch-view-action-btn, 
+  .merch-edit-action-btn, 
+  .merch-delete-action-btn {
+    font-size: 1.2rem;
+
+  }
+  .ag-theme-alpine {
+    font-size: 14px;
+  }
+}

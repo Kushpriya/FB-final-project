@@ -1,0 +1,104 @@
+.child-group-container {
+    padding: 10px;
+    margin-top: 80px;
+  }
+  
+  .child-group-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #080707;
+  }
+  
+
+  .child-group-action-icon {
+    background: transparent;
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+  }
+  
+  .child-view-action-btn, 
+  .child-edit-action-btn, 
+  .child-delete-action-btn,
+  .child-show-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  
+  .child-view-action-btn{
+    color:rgb(71, 71, 251);
+  }
+ 
+  .child-view-action-btn:hover {
+    color: #007bff;
+  }
+ 
+  .ag-theme-alpine {
+    font-size: 15px;
+    --ag-foreground-color: rgb(0, 0, 0);
+      --ag-background-color: rgba(255, 251, 251, 0.982);
+      --ag-header-foreground-color: rgb(255, 255, 255);
+      --ag-header-background-color: rgba(7, 11, 78, 0.829);
+      --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+      --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+  
+      --ag-font-size: 15px;
+      --ag-font-family: Arial;
+      --ag-row-border-width: 1px;
+      --ag-row-border-color: rgb(232, 230, 230);
+      --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+  } 
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #f9fafa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    width: 30%;
+  }
+.modal-content .close-btn {
+    background: none;
+  border: none;
+  color: #2d2d3f;
+  font-size: 2.5rem;
+  font-weight: 600; 
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  cursor: pointer;
+  }
+  
+  .close-btn:hover {
+    color: #b00101;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+    color: #2d2d3f;
+    font-size: 1.5rem; 
+    text-align: center;
+  }
+  
+  

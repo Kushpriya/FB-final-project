@@ -1,0 +1,140 @@
+.merchandise-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.merchandise-form-container {
+    background-color: #f9fafa;
+  padding: 30px;
+  width: 90%; 
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.merchandise-form-container h2 {
+    margin-bottom: 20px;
+  color: #2d2d3f;
+  font-size: 1.5rem; 
+  text-align: center;
+}
+
+.merchandise-form-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2d2d3f;
+    font-weight: bold;
+}
+
+.merchandise-form-container .close-button {
+    background: none;
+    border: none;
+    color: #2d2d3f;
+    font-size: 1.5rem;
+    font-weight: 600; 
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .close-button:hover {
+    color: #b00101;
+  }
+
+.merchandise-form-container input,
+.merchandise-form-container textarea {
+    width: 94%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #fbf7f7;
+  margin-bottom: 15px;
+font-size: 1rem;
+}
+.merchandise-form-container select{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #fbf7f7;
+    color: #2d2d3f;
+    border: 1px solid #555;
+    border-radius: 5px;
+    font-size: 1rem; 
+}
+
+
+.merchandise-form-container button[type="submit"] {
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.merchandise-form-container button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #d20505;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
+
+@media (max-width: 768px) {
+    .merchandise-form-container {
+        width: 90%;
+        margin: 0 20px;
+        padding: 20px;
+    }
+
+    .merchandise-form-container input,
+    .merchandise-form-container select,
+    .merchandise-form-container textarea {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .merchandise-form-container button[type="submit"] {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .merchandise-form-container input,
+    .merchandise-form-container select,
+    .merchandise-form-container textarea {
+        font-size: 12px;
+    }
+}

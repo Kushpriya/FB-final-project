@@ -1,0 +1,128 @@
+.order-group-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.order-group-view-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #f9fafa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  width: 40%;
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+.order-group-view-modal .close-button {
+  background: none;
+border: none;
+color: #2d2d3f;
+font-size: 1.5rem;
+font-weight: 600; 
+position: absolute;
+top: 10px;
+right: 10px;
+cursor: pointer;
+}
+
+.close-button:hover {
+  color: #b00101;
+}
+
+.order-group-view-modal h2 {
+  margin-bottom: 20px;
+  color: #2d2d3f;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.order-group-view-modal p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #100f0f;
+}
+
+.order-group-view-modal p strong {
+  font-weight: bold;
+}
+
+.order-group-view-modal table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.order-group-view-modal table th,
+.order-group-view-modal table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.order-group-view-modal table th {
+  background-color: #c5c887;
+  font-weight: bold;
+}
+
+.order-group-view-modal table td {
+  background-color: #fff;
+}
+
+.order-group-view-modal legend {
+  font-weight: 900;
+  /* padding: 0 10px; */
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-options {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 50px;
+}
+
+.status-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #666;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.status-label.active-delivered {
+  background-color: #4caf50; 
+  color: white;
+  font-weight: bold;
+}
+
+.status-label.active-cancelled {
+  background-color: #f44336; 
+  color: white;
+  font-weight: bold;
+}
+
+.status-label input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}

@@ -1,0 +1,32 @@
+.category-container {
+  margin-top: 80px;
+}
+
+.category-button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 1rem;
+  margin-left: 28%;
+}
+
+.category-button:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .category-container {
+    padding: 15px;
+  }
+
+  .category-button {
+    padding: 8px 15px;
+    font-size: 12px;
+    justify-content: center;
+  }
+}

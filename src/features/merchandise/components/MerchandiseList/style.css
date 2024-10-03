@@ -1,0 +1,63 @@
+.merchandise-status-available {
+    color: #32cd32;
+    font-weight: bold;
+}
+
+.merchandise-status-out-of-stock {
+    color: #ff6347;
+    font-weight: bold;
+}
+.merchandise-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.merchandise-view-action-btn,
+.merchandise-edit-action-btn,
+.merchandise-delete-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.merchandise-view-action-btn {
+    color: rgb(42, 42, 238);
+}
+
+.merchandise-edit-action-btn {
+    color: #ffc107;
+}
+
+.merchandise-delete-action-btn {
+    color: rgb(253, 55, 55);
+}
+
+.merchandise-view-action-btn:hover {
+    color: #007bff;
+}
+
+.merchandise-edit-action-btn:hover {
+    color: #e0c21a;
+}
+
+.merchandise-delete-action-btn:hover {
+    color: #dc3545;
+}
+
+.ag-theme-alpine {
+    width: 100%;
+    font-size: 15px;
+    --ag-foreground-color: rgb(0, 0, 0);
+      --ag-background-color: rgba(255, 251, 251, 0.982);
+      --ag-header-foreground-color: rgb(255, 255, 255);
+      --ag-header-background-color: rgba(7, 11, 78, 0.829);
+      --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+      --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+      --ag-font-size: 15px;
+      --ag-font-family: Arial;
+      --ag-row-border-width: 1px;
+      --ag-row-border-color: rgb(232, 230, 230);
+      --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+  } 

@@ -1,0 +1,56 @@
+.view-transport-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.view-transport-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #f9fafa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    width: 20%; 
+    /* max-width: 500px; */
+  }
+
+  .view-transport-modal h2 {
+    margin-bottom: 20px;
+    color: #2d2d3f;
+    font-size: 1.5rem; 
+    text-align: center;
+  }
+  
+  .view-transport-modal .close-button {
+    background: none;
+  border: none;
+  color: #2d2d3f;
+  font-size: 1.5rem;
+  font-weight: 600; 
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  }
+  
+  .close-button:hover {
+    color: #b00101;
+  }
+  
+  @media (max-width: 768px) {
+    .view-transport-modal h2 {
+      font-size: 1.2rem; 
+    }
+  }
+  

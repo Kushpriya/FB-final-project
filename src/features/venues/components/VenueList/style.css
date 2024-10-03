@@ -1,0 +1,54 @@
+  .venue-action-icon {
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .venue-edit-action-btn,
+  .venue-delete-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  
+  .venue-edit-action-btn {
+    color: rgb(213, 213, 20);
+  }
+  
+  .venue-delete-action-btn {
+    color: rgb(253, 55, 55);
+  }
+  
+  .venue-edit-action-btn:hover {
+    color: #ffc107;
+  }
+  
+  .venue-delete-action-btn:hover {
+    color: #dc3545;
+  }
+
+  .ag-theme-alpine-venue {
+    font-size: 15px;
+    --ag-foreground-color: rgb(0, 0, 0);
+      --ag-background-color: rgba(255, 251, 251, 0.982);
+      --ag-header-foreground-color: rgb(255, 255, 255);
+      --ag-header-background-color: rgba(7, 11, 78, 0.829);
+      --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+      --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+      --ag-font-size: 15px;
+      --ag-font-family: Arial;
+      --ag-row-border-width: 1px;
+      --ag-row-border-color: rgb(232, 230, 230);
+      --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+  } 
+  
+  @media (max-width: 768px) {
+    .venues-container {
+      width: 100%;
+      padding: 20px;
+    }
+  }
+  

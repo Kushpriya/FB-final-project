@@ -1,0 +1,84 @@
+ .transport-status-available {
+    color: #03cc32;
+  }
+  
+  .transport-status-in_use {
+    color: #f7f7f6;
+  }
+  
+  .transport-status-maintenance {
+    color: rgb(234, 183, 17);
+  }
+  
+  .transport-status-out-of-service {
+    color: #dc3545;
+  }
+  
+  .transport-status-default {
+    color: #ffffff;
+  }
+  
+  .transport-action-icon {
+    display: flex;
+    gap: 20px;
+  }
+
+.transport-view-action-btn,
+.transport-edit-action-btn,
+.transport-delete-action-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.transport-view-action-btn {
+    color: #050587;
+}
+
+.transport-edit-action-btn {
+    color: rgb(196, 166, 0);
+}
+
+.transport-delete-action-btn {
+    color: rgb(223, 44, 44);
+}
+
+.transport-view-action-btn:hover {
+    color: #007bff;
+}
+
+.transport-edit-action-btn:hover {
+    color: #ffc107;
+}
+
+.transport-delete-action-btn:hover {
+    color: #f44758;
+}
+
+.ag-theme-alpine {
+  font-size: 15px;
+  --ag-foreground-color: rgb(0, 0, 0);
+    --ag-background-color: rgba(255, 251, 251, 0.982);
+    --ag-header-foreground-color: rgb(255, 255, 255);
+    --ag-header-background-color: rgba(7, 11, 78, 0.829);
+    --ag-odd-row-background-color: rgb(0, 0, 0, 0.01);
+    --ag-header-column-resize-handle-color: rgb(255, 255, 255);
+
+    --ag-font-size: 15px;
+    --ag-font-family: Arial;
+    --ag-row-border-width: 1px;
+    --ag-row-border-color: rgb(232, 230, 230);
+    --ag-cell-horizontal-border: solid rgb(225, 225, 232);
+} 
+
+  
+  @media (max-width: 768px) {
+    .transport-view-action-btn,
+    .transport-edit-action-btn,
+    .transport-delete-action-btn {
+      font-size: 1.2rem;
+    }
+  }
+  
