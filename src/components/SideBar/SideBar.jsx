@@ -7,9 +7,8 @@ import {
 import './SideBar.css';
 import Logout from '../../features/logout/pages/Logout';
 import { APP_URL } from '../../constants/APP_URL';
-import { useSelector } from 'react-redux';
 
-function SideBar({ user, login }) {
+function SideBar({ user }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const location = useLocation();
   
@@ -57,11 +56,9 @@ function SideBar({ user, login }) {
               <div className="nav_side-user-container">
                 <div className="profile-icon">
                   <FaUser className="nav_side-user-icon" />
-                  {/* Check if user exists and display the name */}
                   {isSidebarOpen && user && user.name && (
                     <span className="user-name">{user.name}</span>
                   )}
-                  {/* Tooltip for username */}
                   <div className="user-name-tooltip">
                     {user && user.name}
                   </div>
